@@ -1,9 +1,11 @@
+import 'package:dishdash/app/core/routes/router.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:dishdash/app/shared/shared.dart';
 import 'package:dishdash/app/shared/widgets/auth_textfield_widget.dart';
 import 'package:dishdash/app/shared/widgets/auth_button_widget.dart';
-import 'package:dishdash/app/shared/widgets/status_bar_widget.dart';
 
+@RoutePage()
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
@@ -195,8 +197,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        // TODO: Navigate to sign up screen
-                      },
+    context.router.push(const SignUpRoute()); // Add this line
+  },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: Size.zero,

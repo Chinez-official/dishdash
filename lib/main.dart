@@ -1,30 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:dishdash/app/shared/shared.dart';
+import 'package:dishdash/app/core/routes/router.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:dishdash/app/shared/shared.dart';
-import 'package:dishdash/app/features/auth/sign_in/sign_in_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
   runApp(
     // Wrap the entire app with ProviderScope
-    ProviderScope(child: const MyApp()),
+    ProviderScope(child: MyApp()),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final _appRouter = AppRouter();
+
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
+    return MaterialApp.router(
       title: 'DishDash',
       theme: AppTheme.themeData,
-      home: const SignInScreen(),
+      routerConfig: _appRouter.config(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
