@@ -1,6 +1,7 @@
 import 'package:dishdash/app/core/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_svg/flutter_svg.dart'; // Add this import
 import 'package:dishdash/app/shared/shared.dart';
 import 'package:dishdash/app/shared/widgets/auth_textfield_widget.dart';
 import 'package:dishdash/app/shared/widgets/auth_button_widget.dart';
@@ -95,7 +96,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   alignment: Alignment.centerLeft,
                   child: TextButton(
                     onPressed: () {
-                      // TODO: Navigate to forgot password screen
+                      context.router.push(const ForgotPasswordRoute());
                     },
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
@@ -152,7 +153,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                 const YMargin(24),
 
-                // Google Sign In Button
+                // Google Sign In Button - Updated to use SvgPicture
                 Center(
                   child: Container(
                     height: 56,
@@ -171,7 +172,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         },
                         borderRadius: BorderRadius.circular(12),
                         child: Center(
-                          child: Image.asset(
+                          child: SvgPicture.asset(
                             Images.googleIcon,
                             width: 24,
                             height: 24,
@@ -197,8 +198,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-    context.router.push(const SignUpRoute()); // Add this line
-  },
+                        context.router.push(const SignUpRoute());
+                      },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: Size.zero,

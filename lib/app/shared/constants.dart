@@ -1,11 +1,12 @@
 class Images {
   static const String arrowDown = 'assets/icons/arrow-down.png';
-  static const String arrowRight = 'assets/icons/arrow-right.png';
+  static const String arrowLeft = 'assets/icons/arrow-left.png';
+  static const String arrowRight = 'assets/icons/Arrow-Right.svg';
   static const String arrowUp = 'assets/icons/arrow-up.png';
   static const String documentFavorite = 'assets/icons/document-favorite.png';
   static const String documentText = 'assets/icons/document-text.png';
   static const String filter = 'assets/icons/filter.png';
-  static const String googleIcon = 'assets/icons/google-icon.png';
+  static const String googleIcon = 'assets/icons/Google-Icon.svg';
   static const String home = 'assets/icons/home.png';
   static const String inactive = 'assets/icons/inactive.png';
   static const String location = 'assets/icons/location.png';

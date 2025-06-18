@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dishdash/app/shared/shared.dart';
 
 class AuthButtonWidget extends StatelessWidget {
@@ -59,11 +60,14 @@ class AuthButtonWidget extends StatelessWidget {
                           top: 0,
                           bottom: 0,
                           child: Center(
-                            child: Image.asset(
+                            child: SvgPicture.asset(
                               Images.arrowRight,
                               width: 20,
                               height: 20,
-                              color: textColor ?? Colors.white,
+                              colorFilter: ColorFilter.mode(
+                                textColor ?? Colors.white,
+                                BlendMode.srcIn,
+                              ),
                             ),
                           ),
                         ),
