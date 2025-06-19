@@ -89,7 +89,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   obscureText: true,
                 ),
 
-                const YMargin(16),
+                const YMargin(24),
 
                 // Forgot Password
                 Align(
@@ -113,7 +113,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
 
-                const YMargin(32),
+                const YMargin(24),
 
                 // Sign In Button
                 AuthButtonWidget(
@@ -137,7 +137,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          'Or Sign In With',
+                          'Or Sign in With',
                           style: textStylew400.copyWith(
                             fontSize: 14,
                             color: AppColors.grey2,
@@ -153,7 +153,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                 const YMargin(24),
 
-                // Google Sign In Button - Updated to use SvgPicture
+                // Google Sign In Button - Updated with Drop Shadow
                 Center(
                   child: Container(
                     height: 56,
@@ -161,7 +161,16 @@ class _SignInScreenState extends State<SignInScreen> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.grey4, width: 1),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: const Offset(0, 0), // Position X: 0, Y: 0
+                          blurRadius: 5, // Blur: 5
+                          spreadRadius: 3, // Spread: 3
+                          color: const Color(0xff696969).withValues(
+                            alpha: 0.1,
+                          ), // Color: 696969, Opacity: 10%
+                        ),
+                      ],
                     ),
                     child: Material(
                       color: Colors.transparent,
