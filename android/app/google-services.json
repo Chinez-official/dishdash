@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "516098197552",
+    "project_id": "dishdash-25b0d",
+    "storage_bucket": "dishdash-25b0d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516098197552:android:021843aec8b6e6de2c05f5",
+        "android_client_info": {
+          "package_name": "com.chinez.dishdash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8MqO4oRcgpAmkTcGp_h9sYTcNS5nFzkg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
