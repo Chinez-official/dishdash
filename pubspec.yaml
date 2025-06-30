@@ -73,7 +73,7 @@ flutter:
     - assets/fonts/
 
   fonts:
-    - family: Satoshi
+    - family: Poppins
       fonts:
         - asset: assets/fonts/Poppins-Black.ttf
         - asset: assets/fonts/Poppins-BlackItalic.ttf
