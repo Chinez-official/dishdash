@@ -1,9 +1,14 @@
-import 'package:dishdash/app/shared/extensions/string_extensions.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:dishdash/app/core/usecases/auth_use_case.dart';
+import 'package:dishdash/app/shared/extensions/string_extensions.dart';
 import 'sign_up_state.dart';
 
 class SignUpNotifier extends StateNotifier<SignUpState> {
-  SignUpNotifier() : super(const SignUpState.initial());
+  final AuthUseCase _authUseCase;
+
+  SignUpNotifier({required AuthUseCase authUseCase})
+    : _authUseCase = authUseCase,
+      super(const SignUpState.initial());
 
   Future<void> signUp({
     required String fullName,
@@ -28,18 +33,21 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
         return;
       }
 
-      // TODO: Implement Firebase sign up logic here
-      // For now, simulate API call
-      await Future.delayed(const Duration(seconds: 2));
+      // Call Firebase sign up through use case
+      final result = await _authUseCase.signUp(
+        email: email.trim(),
+        password: password,
+        fullName: fullName.trim(),
+      );
 
-      // Extract first name for local storage
-      final firstName = _extractFirstName(fullName);
-
-      // TODO: Store firstName locally using OfflineClient
-      // TODO: Handle Firebase authentication
-
-      // Set success state
-      state = SignUpState.success(firstName);
+      result.when(
+        success: (user) {
+          state = SignUpState.success(user.firstName);
+        },
+        error: (message) {
+          state = SignUpState.error(message ?? 'Sign up failed');
+        },
+      );
     } catch (e) {
       state = SignUpState.error('Sign up failed: ${e.toString()}');
     }
