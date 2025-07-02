@@ -6,7 +6,7 @@ part of 'user.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_User _$UserFromJson(Map<String, dynamic> json) => _User(
+User _$UserFromJson(Map<String, dynamic> json) => User(
   uid: json['uid'] as String,
   email: json['email'] as String,
   fullName: json['fullName'] as String,
@@ -19,12 +19,13 @@ _User _$UserFromJson(Map<String, dynamic> json) => _User(
           : DateTime.parse(json['createdAt'] as String),
 );
 
-Map<String, dynamic> _$UserToJson(_User instance) => <String, dynamic>{
+Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
   'uid': instance.uid,
   'email': instance.email,
   'fullName': instance.fullName,
   'firstName': instance.firstName,
-  'photoUrl': instance.photoUrl,
+  if (instance.photoUrl case final value?) 'photoUrl': value,
   'isEmailVerified': instance.isEmailVerified,
-  'createdAt': instance.createdAt?.toIso8601String(),
+  if (instance.createdAt?.toIso8601String() case final value?)
+    'createdAt': value,
 };

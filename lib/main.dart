@@ -8,11 +8,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
   WidgetsFlutterBinding.ensureInitialized();
 
-// Setup service locator (dependency injection)
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Setup service locator (dependency injection)
   await setupServiceLocator();
 
   SystemChrome.setPreferredOrientations([

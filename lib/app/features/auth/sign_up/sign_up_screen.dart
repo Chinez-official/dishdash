@@ -193,7 +193,7 @@ class SignUpScreen extends HookConsumerWidget {
                 ),
                 const YMargin(32),
 
-                // Sign Up Button
+                // Sign Up Button1
                 signUpState.when(
                   initial:
                       () => AuthButtonWidget(

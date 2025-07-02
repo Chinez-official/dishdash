@@ -1,8 +1,11 @@
 import 'package:dishdash/app/features/auth/notifiers/sign_up/sign_up_notifier.dart';
 import 'package:dishdash/app/features/auth/notifiers/sign_up/sign_up_state.dart';
+import 'package:dishdash/providers/use_case_providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final signUpNotifierProvider =
     StateNotifierProvider<SignUpNotifier, SignUpState>(
-      (ref) => SignUpNotifier(),
+      (ref) => SignUpNotifier(
+        authUseCase: ref.read(authUseCaseProvider),
+      ),
     );

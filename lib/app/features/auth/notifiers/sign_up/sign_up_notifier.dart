@@ -78,10 +78,6 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     return null;
   }
 
-  String _extractFirstName(String fullName) {
-    return fullName.trim().split(' ').first;
-  }
-
   void resetState() {
     state = const SignUpState.initial();
   }

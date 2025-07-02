@@ -160,7 +160,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final firebaseUser = _firebaseAuth.currentUser;
     if (firebaseUser != null) {
       final token = await firebaseUser.getIdToken();
-      await _offlineClient.setString(StorageKeys.userToken, token);
+      await _offlineClient.setString(StorageKeys.userToken, token!);
     }
   }
 
