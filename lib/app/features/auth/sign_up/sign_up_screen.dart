@@ -20,6 +20,12 @@ class SignUpScreen extends HookConsumerWidget {
     final passwordController = useTextEditingController();
     final confirmPasswordController = useTextEditingController();
 
+    // Focus nodes for better keyboard management
+    final nameFocusNode = useFocusNode();
+    final emailFocusNode = useFocusNode();
+    final passwordFocusNode = useFocusNode();
+    final confirmPasswordFocusNode = useFocusNode();
+
     final signUpState = ref.watch(signUpNotifierProvider);
     final signUpNotifier = ref.read(signUpNotifierProvider.notifier);
 
@@ -89,171 +95,181 @@ class SignUpScreen extends HookConsumerWidget {
     }
 
     return StatusBarWidget(
-      child: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const YMargin(20), // Top spacing to match UI
-                  
-                  // Header section
-                  Text(
-                    'Create an account',
-                    style: textStylew600.copyWith(
-                      fontSize: 20,
-                      color: AppColors.textMain,
+      child: GestureDetector(
+        // Add tap detection to dismiss keyboard when tapping outside
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const YMargin(20), // Top spacing to match UI
+                    // Header section
+                    Text(
+                      'Create an account',
+                      style: textStylew600.copyWith(
+                        fontSize: 20,
+                        color: AppColors.textMain,
+                      ),
                     ),
-                  ),
-                  const YMargin(8),
-                  Text(
-                    'Let\'s help you set up your account,\nit won\'t take long.',
-                    style: textStylew400.copyWith(
-                      fontSize: 11,
-                      color: AppColors.textLabel,
-                    ),
-                  ),
-                  const YMargin(20),
-
-                  // Name Field
-                  Text(
-                    'Name',
-                    style: textStylew400.copyWith(
-                      fontSize: 14,
-                      color: AppColors.textLabel,
-                    ),
-                  ),
-                  const YMargin(8),
-                  AuthTextFieldWidget(
-                    hintText: 'Enter Name',
-                    controller: nameController,
-                  ),
-                  const YMargin(20),
-
-                  // Email Field
-                  Text(
-                    'Email',
-                    style: textStylew400.copyWith(
-                      fontSize: 14,
-                      color: AppColors.textLabel,
-                    ),
-                  ),
-                  const YMargin(8),
-                  AuthTextFieldWidget(
-                    hintText: 'Enter Email',
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  const YMargin(20),
-
-                  // Password Field
-                  Text(
-                    'Password',
-                    style: textStylew400.copyWith(
-                      fontSize: 14,
-                      color: AppColors.textLabel,
-                    ),
-                  ),
-                  const YMargin(8),
-                  AuthTextFieldWidget(
-                    hintText: 'Enter Password',
-                    controller: passwordController,
-                    obscureText: true,
-                  ),
-
-                  // Password validation message
-                  if (passwordErrorMessage.value != null) ...[
                     const YMargin(8),
                     Text(
-                      passwordErrorMessage.value!,
+                      'Let\'s help you set up your account,\nit won\'t take long.',
                       style: textStylew400.copyWith(
-                        fontSize: 12,
-                        color:
-                            isPasswordValid.value
-                                ? AppColors.primary100
-                                : Colors.red,
+                        fontSize: 11,
+                        color: AppColors.textLabel,
                       ),
                     ),
-                  ],
+                    const YMargin(20),
 
-                  const YMargin(20),
-
-                  // Confirm Password Field
-                  Text(
-                    'Confirm Password',
-                    style: textStylew400.copyWith(
-                      fontSize: 14,
-                      color: AppColors.textLabel,
+                    // Name Field
+                    Text(
+                      'Name',
+                      style: textStylew400.copyWith(
+                        fontSize: 14,
+                        color: AppColors.textLabel,
+                      ),
                     ),
-                  ),
-                  const YMargin(8),
-                  AuthTextFieldWidget(
-                    hintText: 'Retype Password',
-                    controller: confirmPasswordController,
-                    obscureText: true,
-                  ),
-                  const YMargin(40),
+                    const YMargin(8),
+                    AuthTextFieldWidget(
+                      hintText: 'Enter Name',
+                      controller: nameController,
+                      focusNode: nameFocusNode,
+                      autofocus: false, // Explicitly set to false
+                    ),
+                    const YMargin(20),
 
-                  // Sign Up Button
-                  signUpState.when(
-                    initial:
-                        () => AuthButtonWidget(
-                          text: 'Sign Up',
-                          onPressed: handleSignUp,
-                          showArrow: true,
-                          backgroundColor: AppColors.primary100,
-                        ),
-                    loading:
-                        () => AuthButtonWidget(
-                          text: 'Creating Account...',
-                          onPressed: null, // Disabled during loading
-                          showArrow: false,
-                          backgroundColor: AppColors.grey2,
-                        ),
-                    success:
-                        (_) => AuthButtonWidget(
-                          text: 'Account Created!',
-                          onPressed: null,
-                          showArrow: false,
-                          backgroundColor: AppColors.primary100,
-                        ),
-                    error:
-                        (_) => AuthButtonWidget(
-                          text: 'Try Again',
-                          onPressed: handleSignUp,
-                          showArrow: true,
-                          backgroundColor: AppColors.primary100,
-                        ),
-                  ),
-                  const YMargin(30),
+                    // Email Field
+                    Text(
+                      'Email',
+                      style: textStylew400.copyWith(
+                        fontSize: 14,
+                        color: AppColors.textLabel,
+                      ),
+                    ),
+                    const YMargin(8),
+                    AuthTextFieldWidget(
+                      hintText: 'Enter Email',
+                      controller: emailController,
+                      focusNode: emailFocusNode,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const YMargin(20),
 
-                  // Sign In Link
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    // Password Field
+                    Text(
+                      'Password',
+                      style: textStylew400.copyWith(
+                        fontSize: 14,
+                        color: AppColors.textLabel,
+                      ),
+                    ),
+                    const YMargin(8),
+                    AuthTextFieldWidget(
+                      hintText: 'Enter Password',
+                      controller: passwordController,
+                      focusNode: passwordFocusNode,
+                      obscureText: true,
+                    ),
+
+                    // Password validation message
+                    if (passwordErrorMessage.value != null) ...[
+                      const YMargin(8),
                       Text(
-                        'Already a member? ',
-                        style: textStylew600.copyWith(
-                          fontSize: 11,
-                          color: AppColors.textMain,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: navigateToSignIn,
-                        child: Text(
-                          'Sign In',
-                          style: textStylew600.copyWith(
-                            fontSize: 11,
-                            color: AppColors.secondary100,
-                          ),
+                        passwordErrorMessage.value!,
+                        style: textStylew400.copyWith(
+                          fontSize: 12,
+                          color:
+                              isPasswordValid.value
+                                  ? AppColors.primary100
+                                  : Colors.red,
                         ),
                       ),
                     ],
-                  ),
-                  const YMargin(40), // Bottom spacing
-                ],
+
+                    const YMargin(20),
+
+                    // Confirm Password Field
+                    Text(
+                      'Confirm Password',
+                      style: textStylew400.copyWith(
+                        fontSize: 14,
+                        color: AppColors.textLabel,
+                      ),
+                    ),
+                    const YMargin(8),
+                    AuthTextFieldWidget(
+                      hintText: 'Retype Password',
+                      controller: confirmPasswordController,
+                      focusNode: confirmPasswordFocusNode,
+                      obscureText: true,
+                    ),
+                    const YMargin(40),
+
+                    // Sign Up Button
+                    signUpState.when(
+                      initial:
+                          () => AuthButtonWidget(
+                            text: 'Sign Up',
+                            onPressed: handleSignUp,
+                            showArrow: true,
+                            backgroundColor: AppColors.primary100,
+                          ),
+                      loading:
+                          () => AuthButtonWidget(
+                            text: 'Creating Account...',
+                            onPressed: null, // Disabled during loading
+                            showArrow: false,
+                            backgroundColor: AppColors.grey2,
+                          ),
+                      success:
+                          (_) => AuthButtonWidget(
+                            text: 'Account Created!',
+                            onPressed: null,
+                            showArrow: false,
+                            backgroundColor: AppColors.primary100,
+                          ),
+                      error:
+                          (_) => AuthButtonWidget(
+                            text: 'Try Again',
+                            onPressed: handleSignUp,
+                            showArrow: true,
+                            backgroundColor: AppColors.primary100,
+                          ),
+                    ),
+                    const YMargin(30),
+
+                    // Sign In Link
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Already a member? ',
+                          style: textStylew500.copyWith(
+                            fontSize: 11,
+                            color: AppColors.textMain,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: navigateToSignIn,
+                          child: Text(
+                            'Sign In',
+                            style: textStylew500.copyWith(
+                              fontSize: 11,
+                              color: AppColors.secondary100,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const YMargin(40), // Bottom spacing
+                  ],
+                ),
               ),
             ),
           ),

@@ -6,6 +6,9 @@ class AuthTextFieldWidget extends StatelessWidget {
   final bool obscureText;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
+  final FocusNode? focusNode;
+  final VoidCallback? onTap;
+  final bool autofocus;
 
   const AuthTextFieldWidget({
     super.key,
@@ -13,6 +16,9 @@ class AuthTextFieldWidget extends StatelessWidget {
     this.obscureText = false,
     this.controller,
     this.keyboardType,
+    this.focusNode,
+    this.onTap,
+    this.autofocus = false, // Default to false so fields aren't focused initially
   });
 
   @override
@@ -26,8 +32,11 @@ class AuthTextFieldWidget extends StatelessWidget {
       ),
       child: TextField(
         controller: controller,
+        focusNode: focusNode,
         obscureText: obscureText,
         keyboardType: keyboardType,
+        autofocus: autofocus,
+        onTap: onTap,
         style: textStylew400.copyWith(fontSize: 16, color: AppColors.textMain),
         decoration: InputDecoration(
           hintText: hintText,
