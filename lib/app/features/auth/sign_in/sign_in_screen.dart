@@ -73,7 +73,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     Text(
                       'Email',
                       style: textStylew400.copyWith(
-                        fontSize: 16,
+                        fontSize: 14,
                         color: AppColors.textMain,
                       ),
                     ),
@@ -92,7 +92,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     Text(
                       'Enter Password',
                       style: textStylew400.copyWith(
-                        fontSize: 16,
+                        fontSize: 14,
                         color: AppColors.textMain,
                       ),
                     ),
