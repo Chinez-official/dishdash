@@ -31,183 +31,73 @@ class _SignInScreenState extends State<SignInScreen> {
       child: Scaffold(
         backgroundColor: AppColors.backgroundBody,
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const YMargin(48),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const YMargin(48),
 
-                // Welcome Text
-                Text(
-                  'Hello,',
-                  style: textStylew700.copyWith(
-                    fontSize: 32,
-                    color: AppColors.textMain,
-                  ),
-                ),
-                const YMargin(4),
-                Text(
-                  'Welcome Back!',
-                  style: textStylew400.copyWith(
-                    fontSize: 18,
-                    color: AppColors.textMain,
-                  ),
-                ),
-
-                const YMargin(48),
-
-                // Email Field
-                Text(
-                  'Email',
-                  style: textStylew500.copyWith(
-                    fontSize: 16,
-                    color: AppColors.textMain,
-                  ),
-                ),
-                const YMargin(8),
-                AuthTextFieldWidget(
-                  hintText: 'Enter Email',
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                ),
-
-                const YMargin(24),
-
-                // Password Field
-                Text(
-                  'Enter Password',
-                  style: textStylew500.copyWith(
-                    fontSize: 16,
-                    color: AppColors.textMain,
-                  ),
-                ),
-                const YMargin(8),
-                AuthTextFieldWidget(
-                  hintText: 'Enter Password',
-                  controller: _passwordController,
-                  obscureText: true,
-                ),
-
-                const YMargin(24),
-
-                // Forgot Password
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                    onPressed: () {
-                      context.router.push(const ForgotPasswordRoute());
-                    },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    child: Text(
-                      'Forgot Password?',
-                      style: textStylew500.copyWith(
-                        fontSize: 14,
-                        color: AppColors.secondary100,
-                      ),
+                  // Welcome Text
+                  Text(
+                    'Hello,',
+                    style: textStylew600.copyWith(
+                      fontSize: 30,
+                      color: AppColors.textMain,
                     ),
                   ),
-                ),
-
-                const YMargin(24),
-
-                // Sign In Button
-                AuthButtonWidget(
-                  text: 'Sign In',
-                  showArrow: true,
-                  onPressed: () {
-                    // TODO: Handle sign in
-                  },
-                ),
-
-                const YMargin(32),
-
-                // Or Sign In With
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(height: 1, color: AppColors.grey4),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          'Or Sign in With',
-                          style: textStylew400.copyWith(
-                            fontSize: 14,
-                            color: AppColors.grey2,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(height: 1, color: AppColors.grey4),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const YMargin(24),
-
-                // Google Sign In Button - Updated with Drop Shadow
-                Center(
-                  child: Container(
-                    height: 56,
-                    width: 56,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: const Offset(0, 0), // Position X: 0, Y: 0
-                          blurRadius: 5, // Blur: 5
-                          spreadRadius: 3, // Spread: 3
-                          color: const Color(0xff696969).withValues(
-                            alpha: 0.1,
-                          ), // Color: 696969, Opacity: 10%
-                        ),
-                      ],
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(12),
-                      child: InkWell(
-                        onTap: () {
-                          // TODO: Handle Google sign in
-                        },
-                        borderRadius: BorderRadius.circular(12),
-                        child: Center(
-                          child: SvgPicture.asset(
-                            Images.googleIcon,
-                            width: 24,
-                            height: 24,
-                          ),
-                        ),
-                      ),
+                  const YMargin(4),
+                  Text(
+                    'Welcome Back!',
+                    style: textStylew400.copyWith(
+                      fontSize: 20,
+                      color: AppColors.textMain,
                     ),
                   ),
-                ),
 
-                const YMargin(24),
+                  const YMargin(48),
 
-                // Sign Up Text
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have an account? ",
-                      style: textStylew400.copyWith(
-                        fontSize: 14,
-                        color: AppColors.textMain,
-                      ),
+                  // Email Field
+                  Text(
+                    'Email',
+                    style: textStylew400.copyWith(
+                      fontSize: 16,
+                      color: AppColors.textMain,
                     ),
-                    TextButton(
+                  ),
+                  const YMargin(8),
+                  AuthTextFieldWidget(
+                    hintText: 'Enter Email',
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+
+                  const YMargin(24),
+
+                  // Password Field
+                  Text(
+                    'Enter Password',
+                    style: textStylew400.copyWith(
+                      fontSize: 16,
+                      color: AppColors.textMain,
+                    ),
+                  ),
+                  const YMargin(8),
+                  AuthTextFieldWidget(
+                    hintText: 'Enter Password',
+                    controller: _passwordController,
+                    obscureText: true,
+                  ),
+
+                  const YMargin(24),
+
+                  // Forgot Password
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton(
                       onPressed: () {
-                        context.router.push(const SignUpRoute());
+                        context.router.push(const ForgotPasswordRoute());
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
@@ -215,18 +105,130 @@ class _SignInScreenState extends State<SignInScreen> {
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       child: Text(
-                        'Sign up',
-                        style: textStylew500.copyWith(
-                          fontSize: 14,
+                        'Forgot Password?',
+                        style: textStylew400.copyWith(
+                          fontSize: 11,
                           color: AppColors.secondary100,
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
 
-                const YMargin(24),
-              ],
+                  const YMargin(24),
+
+                  // Sign In Button
+                  AuthButtonWidget(
+                    text: 'Sign In',
+                    showArrow: true,
+                    onPressed: () {
+                      // TODO: Handle sign in
+                    },
+                  ),
+
+                  const YMargin(32),
+
+                  // Or Sign In With
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(height: 1, color: AppColors.grey4),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            'Or Sign in With',
+                            style: textStylew500.copyWith(
+                              fontSize: 11,
+                              color: AppColors.grey4,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(height: 1, color: AppColors.grey4),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const YMargin(24),
+
+                  // Google Sign In Button - Updated with Drop Shadow
+                  Center(
+                    child: Container(
+                      height: 44,
+                      width: 44,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: const Offset(0, 0), // Position X: 0, Y: 0
+                            blurRadius: 5, // Blur: 5
+                            spreadRadius: 3, // Spread: 3
+                            color: const Color(0xff696969).withValues(
+                              alpha: 0.1,
+                            ), // Color: 696969, Opacity: 10%
+                          ),
+                        ],
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                        child: InkWell(
+                          onTap: () {
+                            // TODO: Handle Google sign in
+                          },
+                          borderRadius: BorderRadius.circular(12),
+                          child: Center(
+                            child: SvgPicture.asset(
+                              Images.googleIcon,
+                              width: 24,
+                              height: 24,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const YMargin(24),
+
+                  // Sign Up Text
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Don't have an account? ",
+                        style: textStylew500.copyWith(
+                          fontSize: 11,
+                          color: AppColors.textMain,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          context.router.push(const SignUpRoute());
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: Text(
+                          'Sign up',
+                          style: textStylew500.copyWith(
+                            fontSize: 11,
+                            color: AppColors.secondary100,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const YMargin(24),
+                ],
+              ),
             ),
           ),
         ),

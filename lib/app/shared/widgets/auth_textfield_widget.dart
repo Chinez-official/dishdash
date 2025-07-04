@@ -32,13 +32,13 @@ class AuthTextFieldWidget extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: textStylew400.copyWith(
-            fontSize: 16,
-            color: AppColors.grey3,
+            fontSize: 11,
+            color: AppColors.grey4
           ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
-            vertical: 16,
+            vertical: 13,
           ),
         ),
       ),
