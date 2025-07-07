@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class OfflineClient {
@@ -9,6 +10,7 @@ abstract class OfflineClient {
   Future<bool> remove(String key);
 }
 
+@LazySingleton(as: OfflineClient)
 class OfflineClientImpl implements OfflineClient {
   static OfflineClientImpl? _instance;
   static SharedPreferences? _preferences;
@@ -37,15 +39,14 @@ class OfflineClientImpl implements OfflineClient {
   Future<bool> clearStorage() async => await _preferences?.clear() ?? false;
 
   @override
-  Future<bool> remove(String key) async => await _preferences?.remove(key) ?? false;
+  Future<bool> remove(String key) async =>
+      await _preferences?.remove(key) ?? false;
 
   // Static getters for quick access
   static String get userFirstName =>
       _preferences?.getString('USER_FIRST_NAME') ?? '';
-      
-  static String get userToken =>
-      _preferences?.getString('USER_TOKEN') ?? '';
-      
-  static bool get isLoggedIn =>
-      _preferences?.getBool('IS_LOGGED_IN') ?? false;
+
+  static String get userToken => _preferences?.getString('USER_TOKEN') ?? '';
+
+  static bool get isLoggedIn => _preferences?.getBool('IS_LOGGED_IN') ?? false;
 }

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dishdash/app/core/routes/router.dart';
 import 'package:dishdash/app/features/auth/notifiers/sign_up/sign_up_state.dart';
 import 'package:dishdash/providers/notifier_providers.dart';
 import 'package:flutter/material.dart';
@@ -66,8 +67,9 @@ class SignUpScreen extends HookConsumerWidget {
               backgroundColor: AppColors.primary100,
             ),
           );
-          // TODO: Navigate to home screen
-          // context.router.pushAndClearStack(const HomeRoute());
+
+          // Navigate to home screen and clear the navigation stack
+          context.router.replaceAll([const HomeRoute()]);
         },
         error: (message) {
           // Show error message

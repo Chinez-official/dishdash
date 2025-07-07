@@ -1,4 +1,4 @@
-import 'package:dishdash/app/core/config/service_locator.dart';
+import 'package:dishdash/app/core/config/injector.dart';
 import 'package:flutter/material.dart';
 import 'package:dishdash/app/shared/shared.dart';
 import 'package:dishdash/app/core/routes/router.dart';
@@ -9,25 +9,21 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Setup service locator (dependency injection)
-  await setupServiceLocator();
+  // Setup dependency injection
+  await serviceLocator();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  runApp(
-    // Wrap the entire app with ProviderScope
-    ProviderScope(child: MyApp()),
-  );
+
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   final _appRouter = AppRouter();
-
   MyApp({super.key});
 
   @override

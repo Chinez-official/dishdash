@@ -1,7 +1,9 @@
+import 'package:injectable/injectable.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:dishdash/app/core/models/user/user.dart';
 import 'package:dishdash/app/core/services/storage/offline_client.dart';
 import 'package:dishdash/app/core/services/storage/storage_keys.dart';
+import 'package:dishdash/app/core/custom_printer.dart';
 
 abstract class AuthRepository {
   Future<User?> signUpWithEmailAndPassword({
@@ -22,15 +24,12 @@ abstract class AuthRepository {
   User? getCurrentUser();
 }
 
+@LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final OfflineClient _offlineClient;
 
-  AuthRepositoryImpl({
-    required firebase_auth.FirebaseAuth firebaseAuth,
-    required OfflineClient offlineClient,
-  }) : _firebaseAuth = firebaseAuth,
-       _offlineClient = offlineClient;
+  AuthRepositoryImpl(this._firebaseAuth, this._offlineClient);
 
   @override
   Future<User?> signUpWithEmailAndPassword({
@@ -39,6 +38,8 @@ class AuthRepositoryImpl implements AuthRepository {
     required String fullName,
   }) async {
     try {
+      debug('Attempting sign up for: $email');
+
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -65,12 +66,18 @@ class AuthRepositoryImpl implements AuthRepository {
         // Store user data locally
         await _storeUserLocally(user);
 
+        info('Sign up successful for: $email');
         return user;
       }
+
+      error('Sign up failed for: $email - Firebase user is null');
       return null;
     } on firebase_auth.FirebaseAuthException catch (e) {
+      error('Firebase Auth Exception - Code: ${e.code}, Message: ${e.message}');
+      error('Sign up failed for: $email - ${e.message}');
       throw _handleFirebaseAuthException(e);
     } catch (e) {
+      error('Unexpected error in signUpWithEmailAndPassword: ${e.toString()}');
       throw Exception('An unexpected error occurred: ${e.toString()}');
     }
   }
@@ -81,6 +88,8 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
   }) async {
     try {
+      debug('Attempting sign in for: $email');
+
       final credential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -100,12 +109,18 @@ class AuthRepositoryImpl implements AuthRepository {
         );
 
         await _storeUserLocally(user);
+        info('Sign in successful for: $email');
         return user;
       }
+
+      error('Sign in failed for: $email - Firebase user is null');
       return null;
     } on firebase_auth.FirebaseAuthException catch (e) {
+      error('Firebase Auth Exception - Code: ${e.code}, Message: ${e.message}');
+      error('Sign in failed for: $email - ${e.message}');
       throw _handleFirebaseAuthException(e);
     } catch (e) {
+      error('Unexpected error in signInWithEmailAndPassword: ${e.toString()}');
       throw Exception('An unexpected error occurred: ${e.toString()}');
     }
   }
@@ -113,9 +128,14 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> signOut() async {
     try {
+      debug('Attempting sign out');
+
       await _firebaseAuth.signOut();
       await _clearUserData();
+
+      info('Sign out successful');
     } catch (e) {
+      error('Sign out failed - Error: ${e.toString()}');
       throw Exception('Failed to sign out: ${e.toString()}');
     }
   }
@@ -124,7 +144,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<bool> isUserLoggedIn() async {
     final firebaseUser = _firebaseAuth.currentUser;
     final isStoredLoggedIn = _offlineClient.getBool(StorageKeys.isLoggedIn);
-    return firebaseUser != null && isStoredLoggedIn;
+    final isLoggedIn = firebaseUser != null && isStoredLoggedIn;
+
+    debug(
+      'User logged in status: $isLoggedIn (Firebase: ${firebaseUser != null}, Local: $isStoredLoggedIn)',
+    );
+
+    return isLoggedIn;
   }
 
   @override
@@ -132,6 +158,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final firebaseUser = _firebaseAuth.currentUser;
     if (firebaseUser != null) {
       final firstName = _offlineClient.getString(StorageKeys.userFirstName);
+      debug('Retrieved current user: ${firebaseUser.email}');
       return User(
         uid: firebaseUser.uid,
         email: firebaseUser.email!,
@@ -142,6 +169,8 @@ class AuthRepositoryImpl implements AuthRepository {
         createdAt: DateTime.now(),
       );
     }
+
+    debug('No current user found');
     return null;
   }
 
@@ -152,23 +181,37 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   Future<void> _storeUserLocally(User user) async {
-    await _offlineClient.setString(StorageKeys.userFirstName, user.firstName);
-    await _offlineClient.setString(StorageKeys.userEmail, user.email);
-    await _offlineClient.setBool(StorageKeys.isLoggedIn, true);
+    try {
+      await _offlineClient.setString(StorageKeys.userFirstName, user.firstName);
+      await _offlineClient.setString(StorageKeys.userEmail, user.email);
+      await _offlineClient.setBool(StorageKeys.isLoggedIn, true);
 
-    // Get and store the Firebase ID token
-    final firebaseUser = _firebaseAuth.currentUser;
-    if (firebaseUser != null) {
-      final token = await firebaseUser.getIdToken();
-      await _offlineClient.setString(StorageKeys.userToken, token!);
+      // Get and store the Firebase ID token
+      final firebaseUser = _firebaseAuth.currentUser;
+      if (firebaseUser != null) {
+        final token = await firebaseUser.getIdToken();
+        await _offlineClient.setString(StorageKeys.userToken, token!);
+      }
+
+      debug('User data stored locally for: ${user.email}');
+    } catch (e) {
+      error('Error storing user data locally: ${e.toString()}');
+      rethrow;
     }
   }
 
   Future<void> _clearUserData() async {
-    await _offlineClient.remove(StorageKeys.userFirstName);
-    await _offlineClient.remove(StorageKeys.userEmail);
-    await _offlineClient.remove(StorageKeys.userToken);
-    await _offlineClient.setBool(StorageKeys.isLoggedIn, false);
+    try {
+      await _offlineClient.remove(StorageKeys.userFirstName);
+      await _offlineClient.remove(StorageKeys.userEmail);
+      await _offlineClient.remove(StorageKeys.userToken);
+      await _offlineClient.setBool(StorageKeys.isLoggedIn, false);
+
+      debug('User data cleared from local storage');
+    } catch (e) {
+      error('Error clearing user data: ${e.toString()}');
+      rethrow;
+    }
   }
 
   Exception _handleFirebaseAuthException(
@@ -195,4 +238,12 @@ class AuthRepositoryImpl implements AuthRepository {
         return Exception('Authentication failed: ${e.message}');
     }
   }
+}
+
+// Register FirebaseAuth as a singleton
+@module
+abstract class FirebaseAuthModule {
+  @lazySingleton
+  firebase_auth.FirebaseAuth get firebaseAuth =>
+      firebase_auth.FirebaseAuth.instance;
 }

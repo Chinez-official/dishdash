@@ -1,7 +1,9 @@
+import 'package:injectable/injectable.dart';
 import 'package:dishdash/app/core/models/data.dart';
 import 'package:dishdash/app/core/models/user/user.dart';
 import 'package:dishdash/app/core/repositories/auth_repository.dart';
 
+@lazySingleton
 class AuthUseCase {
   final AuthRepository _repository;
 
