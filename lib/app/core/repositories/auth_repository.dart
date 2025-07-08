@@ -21,7 +21,7 @@ abstract class AuthRepository {
 
   Future<bool> isUserLoggedIn();
 
-  User? getCurrentUser();
+  Future<User?> getCurrentUser();
 }
 
 @LazySingleton(as: AuthRepository)
@@ -141,38 +141,38 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<bool> isUserLoggedIn() async {
-    final firebaseUser = _firebaseAuth.currentUser;
-    final isStoredLoggedIn = _offlineClient.getBool(StorageKeys.isLoggedIn);
-    final isLoggedIn = firebaseUser != null && isStoredLoggedIn;
+Future<bool> isUserLoggedIn() async {
+  final firebaseUser = _firebaseAuth.currentUser;
+  final isStoredLoggedIn = await _offlineClient.getBool(StorageKeys.isLoggedIn);
+  final isLoggedIn = firebaseUser != null && isStoredLoggedIn;
 
-    debug(
-      'User logged in status: $isLoggedIn (Firebase: ${firebaseUser != null}, Local: $isStoredLoggedIn)',
+  debug(
+    'User logged in status: $isLoggedIn (Firebase: ${firebaseUser != null}, Local: $isStoredLoggedIn)',
+  );
+
+  return isLoggedIn;
+}
+
+@override
+Future<User?> getCurrentUser() async {
+  final firebaseUser = _firebaseAuth.currentUser;
+  if (firebaseUser != null) {
+    final firstName = await _offlineClient.getString(StorageKeys.userFirstName);
+    debug('Retrieved current user: ${firebaseUser.email}');
+    return User(
+      uid: firebaseUser.uid,
+      email: firebaseUser.email!,
+      fullName: firebaseUser.displayName ?? '',
+      firstName: firstName,
+      photoUrl: firebaseUser.photoURL,
+      isEmailVerified: firebaseUser.emailVerified,
+      createdAt: DateTime.now(),
     );
-
-    return isLoggedIn;
   }
 
-  @override
-  User? getCurrentUser() {
-    final firebaseUser = _firebaseAuth.currentUser;
-    if (firebaseUser != null) {
-      final firstName = _offlineClient.getString(StorageKeys.userFirstName);
-      debug('Retrieved current user: ${firebaseUser.email}');
-      return User(
-        uid: firebaseUser.uid,
-        email: firebaseUser.email!,
-        fullName: firebaseUser.displayName ?? '',
-        firstName: firstName,
-        photoUrl: firebaseUser.photoURL,
-        isEmailVerified: firebaseUser.emailVerified,
-        createdAt: DateTime.now(),
-      );
-    }
-
-    debug('No current user found');
-    return null;
-  }
+  debug('No current user found');
+  return null;
+}
 
   // Private helper methods
   String _extractFirstName(String fullName) {

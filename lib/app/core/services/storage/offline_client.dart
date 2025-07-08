@@ -1,52 +1,105 @@
 import 'package:injectable/injectable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:drift/drift.dart';
+import 'database.dart';
 
 abstract class OfflineClient {
   Future<bool> setString(String key, String value);
-  String getString(String key);
+  Future<String> getString(String key);
   Future<bool> setBool(String key, bool value);
-  bool getBool(String key);
+  Future<bool> getBool(String key);
   Future<bool> clearStorage();
   Future<bool> remove(String key);
 }
 
 @LazySingleton(as: OfflineClient)
 class OfflineClientImpl implements OfflineClient {
-  static OfflineClientImpl? _instance;
-  static SharedPreferences? _preferences;
+  final AppDatabase _database;
 
-  static Future<OfflineClientImpl> getInstance() async {
-    _instance ??= OfflineClientImpl();
-    _preferences ??= await SharedPreferences.getInstance();
-    return _instance!;
+  OfflineClientImpl(this._database);
+
+  @override
+  Future<bool> setString(String key, String value) async {
+    try {
+      await _database
+          .into(_database.storageEntries)
+          .insertOnConflictUpdate(
+            StorageEntriesCompanion.insert(
+              key: key,
+              value: value,
+              type: 'string',
+              updatedAt: Value(DateTime.now()),
+            ),
+          );
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   @override
-  String getString(String key) => _preferences?.getString(key) ?? '';
+  Future<String> getString(String key) async {
+    try {
+      final query = _database.select(_database.storageEntries)
+        ..where((tbl) => tbl.key.equals(key) & tbl.type.equals('string'));
+
+      final result = await query.getSingleOrNull();
+      return result?.value ?? '';
+    } catch (e) {
+      return '';
+    }
+  }
 
   @override
-  Future<bool> setString(String key, String value) async =>
-      await _preferences?.setString(key, value) ?? false;
+  Future<bool> setBool(String key, bool value) async {
+    try {
+      await _database
+          .into(_database.storageEntries)
+          .insertOnConflictUpdate(
+            StorageEntriesCompanion.insert(
+              key: key,
+              value: value.toString(),
+              type: 'bool',
+              updatedAt: Value(DateTime.now()),
+            ),
+          );
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   @override
-  bool getBool(String key) => _preferences?.getBool(key) ?? false;
+  Future<bool> getBool(String key) async {
+    try {
+      final query = _database.select(_database.storageEntries)
+        ..where((tbl) => tbl.key.equals(key) & tbl.type.equals('bool'));
+
+      final result = await query.getSingleOrNull();
+      return result?.value.toLowerCase() == 'true';
+    } catch (e) {
+      return false;
+    }
+  }
 
   @override
-  Future<bool> setBool(String key, bool value) async =>
-      await _preferences?.setBool(key, value) ?? false;
+  Future<bool> clearStorage() async {
+    try {
+      await _database.delete(_database.storageEntries).go();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   @override
-  Future<bool> clearStorage() async => await _preferences?.clear() ?? false;
-
-  @override
-  Future<bool> remove(String key) async =>
-      await _preferences?.remove(key) ?? false;
-
-  // Static getters for quick access
-  static String get userFirstName =>
-      _preferences?.getString('USER_FIRST_NAME') ?? '';
-
-  static String get userToken => _preferences?.getString('USER_TOKEN') ?? '';
-
-  static bool get isLoggedIn => _preferences?.getBool('IS_LOGGED_IN') ?? false;
+  Future<bool> remove(String key) async {
+    try {
+      final rowsAffected =
+          await (_database.delete(_database.storageEntries)
+            ..where((tbl) => tbl.key.equals(key))).go();
+      return rowsAffected > 0;
+    } catch (e) {
+      return false;
+    }
+  } 
 }

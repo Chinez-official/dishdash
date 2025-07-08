@@ -68,7 +68,7 @@ class AuthUseCase {
     }
   }
 
-  User? getCurrentUser() {
+  Future<User?>? getCurrentUser() {
     try {
       return _repository.getCurrentUser();
     } catch (e) {
