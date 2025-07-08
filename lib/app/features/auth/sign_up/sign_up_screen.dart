@@ -30,18 +30,42 @@ class SignUpScreen extends HookConsumerWidget {
     final signUpState = ref.watch(signUpNotifierProvider);
     final signUpNotifier = ref.read(signUpNotifierProvider.notifier);
 
-    // Password validation state
+    // Real-time validation states
+    final isNameValid = useState(true);
+    final nameErrorMessage = useState<String?>(null);
     final isPasswordValid = useState(true);
     final passwordErrorMessage = useState<String?>(null);
+
+    // Listen to name changes for real-time validation
+    useEffect(() {
+      void onNameChanged() {
+        final name = nameController.text;
+        if (name.isNotEmpty) {
+          final isValid = name.trim().isValidName;
+          isNameValid.value = isValid;
+          nameErrorMessage.value =
+              isValid
+                  ? null
+                  : 'Please enter a valid name (at least 2 characters)';
+        } else {
+          isNameValid.value = true;
+          nameErrorMessage.value = null;
+        }
+      }
+
+      nameController.addListener(onNameChanged);
+      return () => nameController.removeListener(onNameChanged);
+    }, [nameController]);
 
     // Listen to password changes for real-time validation
     useEffect(() {
       void onPasswordChanged() {
         final password = passwordController.text;
         if (password.isNotEmpty) {
-          final message = password.passwordStrengthMessage;
-          isPasswordValid.value = password.isPasswordStrong;
-          passwordErrorMessage.value = isPasswordValid.value ? null : message;
+          final isValid = password.isPasswordStrong;
+          isPasswordValid.value = isValid;
+          passwordErrorMessage.value =
+              isValid ? null : password.passwordStrengthMessage;
         } else {
           isPasswordValid.value = true;
           passwordErrorMessage.value = null;
@@ -144,6 +168,19 @@ class SignUpScreen extends HookConsumerWidget {
                       focusNode: nameFocusNode,
                       autofocus: false, // Explicitly set to false
                     ),
+
+                    // Name validation message
+                    if (nameErrorMessage.value != null) ...[
+                      const YMargin(8),
+                      Text(
+                        nameErrorMessage.value!,
+                        style: textStylew400.copyWith(
+                          fontSize: 12,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+
                     const YMargin(20),
 
                     // Email Field
@@ -186,10 +223,7 @@ class SignUpScreen extends HookConsumerWidget {
                         passwordErrorMessage.value!,
                         style: textStylew400.copyWith(
                           fontSize: 12,
-                          color:
-                              isPasswordValid.value
-                                  ? AppColors.primary100
-                                  : Colors.red,
+                          color: Colors.red,
                         ),
                       ),
                     ],

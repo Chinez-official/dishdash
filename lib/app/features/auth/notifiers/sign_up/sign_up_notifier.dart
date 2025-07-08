@@ -59,18 +59,26 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     required String password,
     required String confirmPassword,
   }) {
+    // Name validation - now using isValidName extension
     if (fullName.trim().isEmpty) {
       return 'Name is required';
     }
 
+    if (!fullName.trim().isValidName) {
+      return 'Please enter a valid name (at least 2 characters)';
+    }
+
+    // Email validation
     if (!email.isValidEmail) {
       return 'Please enter a valid email address';
     }
 
-    if (!password.isStrongPassword) {
-      return 'Password must be at least 8 characters long';
+    // Password validation - now using isPasswordStrong for consistency
+    if (!password.isPasswordStrong) {
+      return password.passwordStrengthMessage;
     }
 
+    // Confirm password validation
     if (password != confirmPassword) {
       return 'Passwords do not match';
     }
