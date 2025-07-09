@@ -9,6 +9,7 @@ class AuthButtonWidget extends StatelessWidget {
   final Color? backgroundColor;
   final Color? textColor;
   final bool isOutlined;
+  final bool isLoading;
 
   const AuthButtonWidget({
     super.key,
@@ -18,6 +19,7 @@ class AuthButtonWidget extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.isOutlined = false,
+    this.isLoading = false,
   });
 
   @override
@@ -38,12 +40,22 @@ class AuthButtonWidget extends StatelessWidget {
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
-          onTap: onPressed,
+          onTap: isLoading ? null : onPressed,
           borderRadius: BorderRadius.circular(12),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child:
-                showArrow
+            child: isLoading
+                ? const Center(
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    ),
+                  )
+                : showArrow
                     ? Stack(
                       children: [
                         Center(

@@ -1,38 +1,67 @@
 import 'package:dishdash/app/core/routes/router.dart';
+import 'package:dishdash/app/features/auth/notifiers/sign_in/sign_in_state.dart';
+import 'package:dishdash/providers/notifier_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dishdash/app/shared/shared.dart';
 import 'package:dishdash/app/shared/widgets/auth_textfield_widget.dart';
 import 'package:dishdash/app/shared/widgets/auth_button_widget.dart';
 
 @RoutePage()
-class SignInScreen extends StatefulWidget {
+class SignInScreen extends HookConsumerWidget {
   const SignInScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Use hooks for controllers and focus nodes
+    final emailController = useTextEditingController();
+    final passwordController = useTextEditingController();
+    final emailFocusNode = useFocusNode();
+    final passwordFocusNode = useFocusNode();
 
-class _SignInScreenState extends State<SignInScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+    final signInState = ref.watch(signInNotifierProvider);
+    final signInNotifier = ref.read(signInNotifierProvider.notifier);
 
-  // Focus nodes for better keyboard management
-  final FocusNode _emailFocusNode = FocusNode();
-  final FocusNode _passwordFocusNode = FocusNode();
+    // Listen to state changes
+    ref.listen<SignInState>(signInNotifierProvider, (previous, next) {
+      next.when(
+        initial: () {},
+        loading: () {},
+        googleLoading: () {},
+        success: (firstName) {
+          // Navigate to home screen or dashboard
+          context.router.replaceAll([const HomeRoute()]);
+          // Show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Welcome back, $firstName!'),
+              backgroundColor: AppColors.success,
+            ),
+          );
+        },
+        googleSuccess: (firstName) {
+          // Navigate to home screen or dashboard
+         context.router.replaceAll([const HomeRoute()]);
+          // Show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Welcome back, $firstName!'),
+              backgroundColor: AppColors.success,
+            ),
+          );
+        },
+        error: (message) {
+          // Show error message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message), backgroundColor: AppColors.error),
+          );
+        },
+      );
+    });
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _emailFocusNode.dispose();
-    _passwordFocusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return StatusBarWidget(
       child: GestureDetector(
         // Add tap detection to dismiss keyboard when tapping outside
@@ -80,8 +109,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     const YMargin(8),
                     AuthTextFieldWidget(
                       hintText: 'Enter Email',
-                      controller: _emailController,
-                      focusNode: _emailFocusNode,
+                      controller: emailController,
+                      focusNode: emailFocusNode,
                       keyboardType: TextInputType.emailAddress,
                       autofocus: false, // Explicitly set to false
                     ),
@@ -99,8 +128,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     const YMargin(8),
                     AuthTextFieldWidget(
                       hintText: 'Enter Password',
-                      controller: _passwordController,
-                      focusNode: _passwordFocusNode,
+                      controller: passwordController,
+                      focusNode: passwordFocusNode,
                       obscureText: true,
                     ),
 
@@ -134,10 +163,19 @@ class _SignInScreenState extends State<SignInScreen> {
                     AuthButtonWidget(
                       text: 'Sign In',
                       showArrow: true,
+                      isLoading: signInState.maybeWhen(
+                        loading: () => true,
+                        orElse: () => false,
+                      ),
                       onPressed: () {
                         // Dismiss keyboard before handling sign in
                         FocusScope.of(context).unfocus();
-                        // TODO: Handle sign in
+
+                        // Handle sign in
+                        signInNotifier.signIn(
+                          email: emailController.text,
+                          password: passwordController.text,
+                        );
                       },
                     ),
 
@@ -170,7 +208,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                     const YMargin(24),
 
-                    // Google Sign In Button - Updated with Drop Shadow
+                    // Google Sign In Button - Updated with Drop Shadow and Loading State
                     Center(
                       child: Container(
                         height: 44,
@@ -193,15 +231,36 @@ class _SignInScreenState extends State<SignInScreen> {
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(12),
                           child: InkWell(
-                            onTap: () {
-                              // TODO: Handle Google sign in
-                            },
+                            onTap: signInState.maybeWhen(
+                              googleLoading: () => null,
+                              loading: () => null,
+                              orElse:
+                                  () => () {
+                                    // Handle Google sign in
+                                    signInNotifier.signInWithGoogle();
+                                  },
+                            ),
                             borderRadius: BorderRadius.circular(12),
                             child: Center(
-                              child: SvgPicture.asset(
-                                Images.googleIcon,
-                                width: 24,
-                                height: 24,
+                              child: signInState.maybeWhen(
+                                googleLoading:
+                                    () => const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                              AppColors.secondary100,
+                                            ),
+                                      ),
+                                    ),
+                                orElse:
+                                    () => SvgPicture.asset(
+                                      Images.googleIcon,
+                                      width: 24,
+                                      height: 24,
+                                    ),
                               ),
                             ),
                           ),
