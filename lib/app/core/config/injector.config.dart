@@ -11,6 +11,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:get_it/get_it.dart' as _i174;
+import 'package:google_sign_in/google_sign_in.dart' as _i116;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../repositories/auth_repository.dart' as _i1002;
@@ -27,15 +28,17 @@ _i174.GetIt $initGetIt(
 }) {
   final gh = _i526.GetItHelper(getIt, environment, environmentFilter);
   final databaseModule = _$DatabaseModule();
-  final firebaseAuthModule = _$FirebaseAuthModule();
+  final authModule = _$AuthModule();
   gh.lazySingleton<_i363.AppDatabase>(() => databaseModule.database);
-  gh.lazySingleton<_i59.FirebaseAuth>(() => firebaseAuthModule.firebaseAuth);
+  gh.lazySingleton<_i59.FirebaseAuth>(() => authModule.firebaseAuth);
+  gh.lazySingleton<_i116.GoogleSignIn>(() => authModule.googleSignIn);
   gh.lazySingleton<_i548.OfflineClient>(
     () => _i548.OfflineClientImpl(gh<_i363.AppDatabase>()),
   );
   gh.lazySingleton<_i1002.AuthRepository>(
     () => _i1002.AuthRepositoryImpl(
       gh<_i59.FirebaseAuth>(),
+      gh<_i116.GoogleSignIn>(),
       gh<_i548.OfflineClient>(),
     ),
   );
@@ -47,4 +50,4 @@ _i174.GetIt $initGetIt(
 
 class _$DatabaseModule extends _i811.DatabaseModule {}
 
-class _$FirebaseAuthModule extends _i1002.FirebaseAuthModule {}
+class _$AuthModule extends _i1002.AuthModule {}

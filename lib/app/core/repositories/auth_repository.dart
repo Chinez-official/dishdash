@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:dishdash/app/core/models/user/user.dart';
 import 'package:dishdash/app/core/services/storage/offline_client.dart';
 import 'package:dishdash/app/core/services/storage/storage_keys.dart';
@@ -17,6 +18,8 @@ abstract class AuthRepository {
     required String password,
   });
 
+  Future<User?> signInWithGoogle();
+
   Future<void> signOut();
 
   Future<bool> isUserLoggedIn();
@@ -27,9 +30,14 @@ abstract class AuthRepository {
 @LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
+  final GoogleSignIn _googleSignIn;
   final OfflineClient _offlineClient;
 
-  AuthRepositoryImpl(this._firebaseAuth, this._offlineClient);
+  AuthRepositoryImpl(
+    this._firebaseAuth,
+    this._googleSignIn,
+    this._offlineClient,
+  );
 
   @override
   Future<User?> signUpWithEmailAndPassword({
@@ -126,11 +134,75 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<User?> signInWithGoogle() async {
+    try {
+      debug('Attempting Google sign in');
+
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      if (googleUser == null) {
+        // User cancelled the sign-in
+        debug('Google sign in cancelled by user');
+        return null;
+      }
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Create a new credential
+      final credential = firebase_auth.GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in to Firebase with the Google credential
+      final firebase_auth.UserCredential userCredential = await _firebaseAuth
+          .signInWithCredential(credential);
+
+      final firebaseUser = userCredential.user;
+      if (firebaseUser != null) {
+        final firstName = _extractFirstName(firebaseUser.displayName ?? '');
+        final user = User(
+          uid: firebaseUser.uid,
+          email: firebaseUser.email!,
+          fullName: firebaseUser.displayName ?? '',
+          firstName: firstName,
+          photoUrl: firebaseUser.photoURL,
+          isEmailVerified: firebaseUser.emailVerified,
+          createdAt: DateTime.now(),
+        );
+
+        await _storeUserLocally(user);
+        info('Google sign in successful for: ${firebaseUser.email}');
+        return user;
+      }
+
+      error('Google sign in failed - Firebase user is null');
+      return null;
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      error(
+        'Firebase Auth Exception during Google sign in - Code: ${e.code}, Message: ${e.message}',
+      );
+      throw _handleFirebaseAuthException(e);
+    } catch (e) {
+      error('Unexpected error in signInWithGoogle: ${e.toString()}');
+      throw Exception('Google sign in failed: ${e.toString()}');
+    }
+  }
+
+  @override
   Future<void> signOut() async {
     try {
       debug('Attempting sign out');
 
+      // Sign out from Firebase
       await _firebaseAuth.signOut();
+
+      // Sign out from Google
+      await _googleSignIn.signOut();
+
       await _clearUserData();
 
       info('Sign out successful');
@@ -238,16 +310,34 @@ class AuthRepositoryImpl implements AuthRepository {
         return Exception('Too many requests. Please try again later.');
       case 'operation-not-allowed':
         return Exception('Email/password accounts are not enabled.');
+      case 'account-exists-with-different-credential':
+        return Exception(
+          'An account already exists with a different credential.',
+        );
+      case 'invalid-credential':
+        return Exception(
+          'The credential received is malformed or has expired.',
+        );
+      case 'network-request-failed':
+        return Exception(
+          'Network error. Please check your connection and try again.',
+        );
       default:
         return Exception('Authentication failed: ${e.message}');
     }
   }
 }
 
-// Register FirebaseAuth as a singleton
+// Register FirebaseAuth and GoogleSignIn as singletons
 @module
-abstract class FirebaseAuthModule {
+abstract class AuthModule {
   @lazySingleton
   firebase_auth.FirebaseAuth get firebaseAuth =>
       firebase_auth.FirebaseAuth.instance;
+
+  @lazySingleton
+  GoogleSignIn get googleSignIn => GoogleSignIn(
+    // Optional: Add scopes if needed
+    scopes: ['email', 'profile'],
+  );
 }

@@ -14,7 +14,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
-  
+
   // Focus node for better keyboard management
   final FocusNode _emailFocusNode = FocusNode();
 

@@ -12,7 +12,20 @@
           "package_name": "com.chinez.dishdash"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "516098197552-qqksbmll3k0a1q4ke4deer0op8n7lf5m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chinez.dishdash",
+            "certificate_hash": "fdf833a95db0b15c0db23796c31431c7cfe7267c"
+          }
+        },
+        {
+          "client_id": "516098197552-f000escvu4gbs2lqphvtg4iudsfcu4d1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyB8MqO4oRcgpAmkTcGp_h9sYTcNS5nFzkg"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "516098197552-f000escvu4gbs2lqphvtg4iudsfcu4d1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

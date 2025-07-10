@@ -51,6 +51,20 @@ class AuthUseCase {
     }
   }
 
+  Future<Data<User>> signInWithGoogle() async {
+    try {
+      final user = await _repository.signInWithGoogle();
+
+      if (user != null) {
+        return Data.success(data: user);
+      }
+
+      return const Data.error(message: 'Google sign in was cancelled');
+    } catch (e) {
+      return Data.error(message: e.toString());
+    }
+  }
+
   Future<Data<void>> signOut() async {
     try {
       await _repository.signOut();
