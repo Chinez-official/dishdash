@@ -1,14 +1,19 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:dishdash/app/core/routes/router.dart';
+import 'package:dishdash/providers/use_case_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dishdash/app/shared/shared.dart';
 
 @RoutePage()
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Access the auth use case for sign out
+    final authUseCase = ref.read(authUseCaseProvider);
+
     return StatusBarWidget(
       child: Scaffold(
         appBar: AppBar(
@@ -129,13 +134,63 @@ class HomeScreen extends StatelessWidget {
 
                 const Spacer(),
 
-                // Temporary sign out button for testing
+                // Proper sign out button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // For now, just navigate back to sign in
-                      context.router.replaceAll([const SignInRoute()]);
+                    onPressed: () async {
+                      try {
+                        // Show loading indicator
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder:
+                              (context) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                        );
+
+                        // Call proper sign out
+                        final result = await authUseCase.signOut();
+
+                        // Hide loading indicator
+                        Navigator.of(context).pop();
+
+                        result.when(
+                          success: (_) {
+                            // Navigate to sign in screen
+                            context.router.replaceAll([const SignInRoute()]);
+
+                            // Show success message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Signed out successfully'),
+                                backgroundColor: AppColors.success,
+                              ),
+                            );
+                          },
+                          error: (message) {
+                            // Show error message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(message ?? 'Sign out failed'),
+                                backgroundColor: AppColors.error,
+                              ),
+                            );
+                          },
+                        );
+                      } catch (e) {
+                        // Hide loading indicator if still showing
+                        Navigator.of(context).pop();
+
+                        // Show error message
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Sign out failed: ${e.toString()}'),
+                            backgroundColor: AppColors.error,
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.grey4,

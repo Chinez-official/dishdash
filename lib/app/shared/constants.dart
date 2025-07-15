@@ -17,7 +17,7 @@ class Images {
   static const String search = 'assets/icons/Search.svg';
   static const String setting = 'assets/icons/Setting.svg';
   static const String share = 'assets/icons/Share.svg';
-  static const String splashBackground = 'assets/icons/Splash-Background.svg';
+  static const String splashBackground = 'assets/images/Splash-Background.png';
   static const String star = 'assets/icons/Star.svg';
   static const String timer = 'assets/icons/Timer.svg';
 }

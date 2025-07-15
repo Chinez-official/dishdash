@@ -203,6 +203,7 @@ class AuthRepositoryImpl implements AuthRepository {
       // Sign out from Google
       await _googleSignIn.signOut();
 
+      // Clear user data (this will set isLoggedIn to false)
       await _clearUserData();
 
       info('Sign out successful');
@@ -214,40 +215,79 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<bool> isUserLoggedIn() async {
-    final firebaseUser = _firebaseAuth.currentUser;
-    final isStoredLoggedIn = await _offlineClient.getBool(
-      StorageKeys.isLoggedIn,
-    );
-    final isLoggedIn = firebaseUser != null && isStoredLoggedIn;
+    try {
+      // First check local storage - this is our source of truth
+      final isStoredLoggedIn = await _offlineClient.getBool(
+        StorageKeys.isLoggedIn,
+      );
 
-    debug(
-      'User logged in status: $isLoggedIn (Firebase: ${firebaseUser != null}, Local: $isStoredLoggedIn)',
-    );
+      debug('Local storage isLoggedIn: $isStoredLoggedIn');
 
-    return isLoggedIn;
+      // If local storage says user is not logged in, return false immediately
+      if (!isStoredLoggedIn) {
+        debug('User not logged in according to local storage');
+        return false;
+      }
+
+      // If local storage says user is logged in, verify with Firebase
+      final firebaseUser = _firebaseAuth.currentUser;
+      final isFirebaseLoggedIn = firebaseUser != null;
+
+      debug('Firebase user exists: $isFirebaseLoggedIn');
+
+      // Both conditions must be true for the user to be considered logged in
+      final isLoggedIn = isStoredLoggedIn && isFirebaseLoggedIn;
+
+      debug('Final logged in status: $isLoggedIn');
+
+      // If there's a mismatch (local says true but Firebase says false),
+      // clear the local data to maintain consistency
+      if (isStoredLoggedIn && !isFirebaseLoggedIn) {
+        debug('Mismatch detected - clearing local data');
+        await _clearUserData();
+        return false;
+      }
+
+      return isLoggedIn;
+    } catch (e) {
+      error('Error checking login status: ${e.toString()}');
+      return false;
+    }
   }
 
   @override
   Future<User?> getCurrentUser() async {
-    final firebaseUser = _firebaseAuth.currentUser;
-    if (firebaseUser != null) {
-      final firstName = await _offlineClient.getString(
-        StorageKeys.userFirstName,
-      );
-      debug('Retrieved current user: ${firebaseUser.email}');
-      return User(
-        uid: firebaseUser.uid,
-        email: firebaseUser.email!,
-        fullName: firebaseUser.displayName ?? '',
-        firstName: firstName,
-        photoUrl: firebaseUser.photoURL,
-        isEmailVerified: firebaseUser.emailVerified,
-        createdAt: DateTime.now(),
-      );
-    }
+    try {
+      // First check if user is logged in according to our logic
+      final isLoggedIn = await isUserLoggedIn();
+      if (!isLoggedIn) {
+        debug('User is not logged in');
+        return null;
+      }
 
-    debug('No current user found');
-    return null;
+      final firebaseUser = _firebaseAuth.currentUser;
+      if (firebaseUser != null) {
+        final firstName = await _offlineClient.getString(
+          StorageKeys.userFirstName,
+        );
+        debug('Retrieved current user: ${firebaseUser.email}');
+        return User(
+          uid: firebaseUser.uid,
+          email: firebaseUser.email!,
+          fullName: firebaseUser.displayName ?? '',
+          firstName: firstName,
+          photoUrl: firebaseUser.photoURL,
+          isEmailVerified: firebaseUser.emailVerified,
+          createdAt: DateTime.now(),
+        );
+      }
+
+      debug('No current user found');
+      return null;
+    } catch (e) {
+      error('Error getting current user: ${e.toString()}');
+      return null;
+    }
   }
 
   // Private helper methods

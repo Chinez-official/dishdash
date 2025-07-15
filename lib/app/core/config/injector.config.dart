@@ -14,6 +14,7 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:google_sign_in/google_sign_in.dart' as _i116;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../../features/splash/notifiers/get_user_notifier.dart' as _i566;
 import '../repositories/auth_repository.dart' as _i1002;
 import '../services/storage/database.dart' as _i363;
 import '../services/storage/offline_client.dart' as _i548;
@@ -44,6 +45,9 @@ _i174.GetIt $initGetIt(
   );
   gh.lazySingleton<_i67.AuthUseCase>(
     () => _i67.AuthUseCase(gh<_i1002.AuthRepository>()),
+  );
+  gh.lazySingleton<_i566.GetUserNotifier>(
+    () => _i566.GetUserNotifier(authUseCase: gh<_i67.AuthUseCase>()),
   );
   return getIt;
 }

@@ -32,7 +32,7 @@ class SignInScreen extends HookConsumerWidget {
         loading: () {},
         googleLoading: () {},
         success: (firstName) {
-          // Navigate to home screen or dashboard
+          // Navigate to home screen
           context.router.replaceAll([const HomeRoute()]);
           // Show success message
           ScaffoldMessenger.of(context).showSnackBar(
@@ -43,8 +43,8 @@ class SignInScreen extends HookConsumerWidget {
           );
         },
         googleSuccess: (firstName) {
-          // Navigate to home screen or dashboard
-         context.router.replaceAll([const HomeRoute()]);
+          // Navigate to home screen
+          context.router.replaceAll([const HomeRoute()]);
           // Show success message
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -112,7 +112,7 @@ class SignInScreen extends HookConsumerWidget {
                       controller: emailController,
                       focusNode: emailFocusNode,
                       keyboardType: TextInputType.emailAddress,
-                      autofocus: false, // Explicitly set to false
+                      autofocus: false,
                     ),
 
                     const YMargin(24),
@@ -208,7 +208,7 @@ class SignInScreen extends HookConsumerWidget {
 
                     const YMargin(24),
 
-                    // Google Sign In Button - Updated with Drop Shadow and Loading State
+                    // Google Sign In Button
                     Center(
                       child: Container(
                         height: 44,
@@ -218,12 +218,12 @@ class SignInScreen extends HookConsumerWidget {
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
-                              offset: const Offset(0, 0), // Position X: 0, Y: 0
-                              blurRadius: 5, // Blur: 5
-                              spreadRadius: 3, // Spread: 3
-                              color: const Color(0xff696969).withValues(
-                                alpha: 0.1,
-                              ), // Color: 696969, Opacity: 10%
+                              offset: const Offset(0, 0),
+                              blurRadius: 5,
+                              spreadRadius: 3,
+                              color: const Color(
+                                0xff696969,
+                              ).withValues(alpha: 0.1),
                             ),
                           ],
                         ),
@@ -236,7 +236,6 @@ class SignInScreen extends HookConsumerWidget {
                               loading: () => null,
                               orElse:
                                   () => () {
-                                    // Handle Google sign in
                                     signInNotifier.signInWithGoogle();
                                   },
                             ),
