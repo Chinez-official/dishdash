@@ -53,8 +53,8 @@ class SplashScreen extends HookConsumerWidget {
                 // App Name
                 Text(
                   'DishDash',
-                  style: textStylew700.copyWith(
-                    fontSize: 48,
+                  style: textStylew600.copyWith(
+                    fontSize: 50,
                     color: Colors.white,
                     letterSpacing: 1.2,
                   ),
