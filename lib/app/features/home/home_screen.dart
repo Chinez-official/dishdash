@@ -2,17 +2,21 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dishdash/app/core/routes/router.dart';
 import 'package:dishdash/providers/use_case_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dishdash/app/shared/shared.dart';
 
 @RoutePage()
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Access the auth use case for sign out
     final authUseCase = ref.read(authUseCaseProvider);
+    
+    // Use a state hook to manage loading state
+    final isSigningOut = useState(false);
 
     return StatusBarWidget(
       child: Scaffold(
@@ -138,60 +142,64 @@ class HomeScreen extends ConsumerWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        // Show loading indicator
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder:
-                              (context) => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                        );
+                    onPressed: isSigningOut.value 
+                        ? null 
+                        : () async {
+                            try {
+                              // Set loading state
+                              isSigningOut.value = true;
 
-                        // Call proper sign out
-                        final result = await authUseCase.signOut();
+                              // Call proper sign out
+                              final result = await authUseCase.signOut();
 
-                        // Hide loading indicator
-                        Navigator.of(context).pop();
+                              result.when(
+                                success: (_) {
+                                  // Check if widget is still mounted before using context
+                                  if (context.mounted) {
+                                    // Navigate to sign in screen
+                                    context.router.replaceAll([const SignInRoute()]);
 
-                        result.when(
-                          success: (_) {
-                            // Navigate to sign in screen
-                            context.router.replaceAll([const SignInRoute()]);
+                                    // Show success message
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Signed out successfully'),
+                                        backgroundColor: AppColors.success,
+                                      ),
+                                    );
+                                  }
+                                },
+                                error: (message) {
+                                  // Reset loading state
+                                  isSigningOut.value = false;
+                                  
+                                  // Check if widget is still mounted before using context
+                                  if (context.mounted) {
+                                    // Show error message
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(message ?? 'Sign out failed'),
+                                        backgroundColor: AppColors.error,
+                                      ),
+                                    );
+                                  }
+                                },
+                              );
+                            } catch (e) {
+                              // Reset loading state
+                              isSigningOut.value = false;
 
-                            // Show success message
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Signed out successfully'),
-                                backgroundColor: AppColors.success,
-                              ),
-                            );
+                              // Check if widget is still mounted before using context
+                              if (context.mounted) {
+                                // Show error message
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Sign out failed: ${e.toString()}'),
+                                    backgroundColor: AppColors.error,
+                                  ),
+                                );
+                              }
+                            }
                           },
-                          error: (message) {
-                            // Show error message
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(message ?? 'Sign out failed'),
-                                backgroundColor: AppColors.error,
-                              ),
-                            );
-                          },
-                        );
-                      } catch (e) {
-                        // Hide loading indicator if still showing
-                        Navigator.of(context).pop();
-
-                        // Show error message
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Sign out failed: ${e.toString()}'),
-                            backgroundColor: AppColors.error,
-                          ),
-                        );
-                      }
-                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.grey4,
                       foregroundColor: AppColors.textMain,
@@ -200,10 +208,19 @@ class HomeScreen extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Text(
-                      'Sign Out',
-                      style: textStylew500.copyWith(fontSize: 16),
-                    ),
+                    child: isSigningOut.value 
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.textMain),
+                            ),
+                          )
+                        : Text(
+                            'Sign Out',
+                            style: textStylew500.copyWith(fontSize: 16),
+                          ),
                   ),
                 ),
               ],

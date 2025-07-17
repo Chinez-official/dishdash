@@ -33,8 +33,16 @@ class SignUpScreen extends HookConsumerWidget {
     // Real-time validation states
     final isNameValid = useState(true);
     final nameErrorMessage = useState<String?>(null);
+    final isEmailValid = useState(true);
+    final emailErrorMessage = useState<String?>(null);
     final isPasswordValid = useState(true);
     final passwordErrorMessage = useState<String?>(null);
+    final isConfirmPasswordValid = useState(true);
+    final confirmPasswordErrorMessage = useState<String?>(null);
+
+    // Password obscure state
+    final isPasswordObscured = useState(true);
+    final isConfirmPasswordObscured = useState(true);
 
     // Listen to name changes for real-time validation
     useEffect(() {
@@ -57,6 +65,25 @@ class SignUpScreen extends HookConsumerWidget {
       return () => nameController.removeListener(onNameChanged);
     }, [nameController]);
 
+    // Listen to email changes for real-time validation
+    useEffect(() {
+      void onEmailChanged() {
+        final email = emailController.text;
+        if (email.isNotEmpty) {
+          final isValid = email.isValidEmail;
+          isEmailValid.value = isValid;
+          emailErrorMessage.value =
+              isValid ? null : 'Please enter a valid email address';
+        } else {
+          isEmailValid.value = true;
+          emailErrorMessage.value = null;
+        }
+      }
+
+      emailController.addListener(onEmailChanged);
+      return () => emailController.removeListener(onEmailChanged);
+    }, [emailController]);
+
     // Listen to password changes for real-time validation
     useEffect(() {
       void onPasswordChanged() {
@@ -75,6 +102,26 @@ class SignUpScreen extends HookConsumerWidget {
       passwordController.addListener(onPasswordChanged);
       return () => passwordController.removeListener(onPasswordChanged);
     }, [passwordController]);
+
+    // Listen to confirm password changes for real-time validation
+    useEffect(() {
+      void onConfirmPasswordChanged() {
+        final confirmPassword = confirmPasswordController.text;
+        final password = passwordController.text;
+        if (confirmPassword.isNotEmpty) {
+          final isValid = confirmPassword == password;
+          isConfirmPasswordValid.value = isValid;
+          confirmPasswordErrorMessage.value =
+              isValid ? null : 'Passwords do not match';
+        } else {
+          isConfirmPasswordValid.value = true;
+          confirmPasswordErrorMessage.value = null;
+        }
+      }
+
+      confirmPasswordController.addListener(onConfirmPasswordChanged);
+      return () => confirmPasswordController.removeListener(onConfirmPasswordChanged);
+    }, [confirmPasswordController, passwordController]);
 
     // Handle state changes
     ref.listen<SignUpState>(signUpNotifierProvider, (previous, next) {
@@ -167,6 +214,7 @@ class SignUpScreen extends HookConsumerWidget {
                       controller: nameController,
                       focusNode: nameFocusNode,
                       autofocus: false, // Explicitly set to false
+                      hasError: !isNameValid.value,
                     ),
 
                     // Name validation message
@@ -197,7 +245,23 @@ class SignUpScreen extends HookConsumerWidget {
                       controller: emailController,
                       focusNode: emailFocusNode,
                       keyboardType: TextInputType.emailAddress,
+                      autofillHints: const [AutofillHints.email],
+                      enableSuggestions: true,
+                      hasError: !isEmailValid.value,
                     ),
+
+                    // Email validation message
+                    if (emailErrorMessage.value != null) ...[
+                      const YMargin(8),
+                      Text(
+                        emailErrorMessage.value!,
+                        style: textStylew400.copyWith(
+                          fontSize: 12,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+
                     const YMargin(20),
 
                     // Password Field
@@ -213,7 +277,12 @@ class SignUpScreen extends HookConsumerWidget {
                       hintText: 'Enter Password',
                       controller: passwordController,
                       focusNode: passwordFocusNode,
-                      obscureText: true,
+                      obscureText: isPasswordObscured.value,
+                      hasError: !isPasswordValid.value,
+                      showPasswordToggle: true,
+                      onPasswordToggle: () {
+                        isPasswordObscured.value = !isPasswordObscured.value;
+                      },
                     ),
 
                     // Password validation message
@@ -243,8 +312,26 @@ class SignUpScreen extends HookConsumerWidget {
                       hintText: 'Retype Password',
                       controller: confirmPasswordController,
                       focusNode: confirmPasswordFocusNode,
-                      obscureText: true,
+                      obscureText: isConfirmPasswordObscured.value,
+                      hasError: !isConfirmPasswordValid.value,
+                      showPasswordToggle: true,
+                      onPasswordToggle: () {
+                        isConfirmPasswordObscured.value = !isConfirmPasswordObscured.value;
+                      },
                     ),
+
+                    // Confirm Password validation message
+                    if (confirmPasswordErrorMessage.value != null) ...[
+                      const YMargin(8),
+                      Text(
+                        confirmPasswordErrorMessage.value!,
+                        style: textStylew400.copyWith(
+                          fontSize: 12,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+
                     const YMargin(40),
 
                     // Sign Up Button

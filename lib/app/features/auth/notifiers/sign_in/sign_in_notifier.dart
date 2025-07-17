@@ -80,8 +80,8 @@ class SignInNotifier extends StateNotifier<SignInState> {
 
     // Note: For sign in, we don't need to validate password strength
     // since the user is using their existing password
-    if (password.length < 6) {
-      return 'Password must be at least 6 characters';
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters';
     }
 
     return null;

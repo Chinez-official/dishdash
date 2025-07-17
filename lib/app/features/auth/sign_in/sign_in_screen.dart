@@ -9,6 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dishdash/app/shared/shared.dart';
 import 'package:dishdash/app/shared/widgets/auth_textfield_widget.dart';
 import 'package:dishdash/app/shared/widgets/auth_button_widget.dart';
+import 'package:dishdash/app/shared/extensions/string_extensions.dart';
 
 @RoutePage()
 class SignInScreen extends HookConsumerWidget {
@@ -25,6 +26,53 @@ class SignInScreen extends HookConsumerWidget {
     final signInState = ref.watch(signInNotifierProvider);
     final signInNotifier = ref.read(signInNotifierProvider.notifier);
 
+    // Real-time validation states
+    final isEmailValid = useState(true);
+    final emailErrorMessage = useState<String?>(null);
+    final isPasswordValid = useState(true);
+    final passwordErrorMessage = useState<String?>(null);
+
+    // Password obscure state
+    final isPasswordObscured = useState(true);
+
+    // Listen to email changes for real-time validation
+    useEffect(() {
+      void onEmailChanged() {
+        final email = emailController.text;
+        if (email.isNotEmpty) {
+          final isValid = email.isValidEmail;
+          isEmailValid.value = isValid;
+          emailErrorMessage.value =
+              isValid ? null : 'Please enter a valid email address';
+        } else {
+          isEmailValid.value = true;
+          emailErrorMessage.value = null;
+        }
+      }
+
+      emailController.addListener(onEmailChanged);
+      return () => emailController.removeListener(onEmailChanged);
+    }, [emailController]);
+
+    // Listen to password changes for real-time validation
+    useEffect(() {
+      void onPasswordChanged() {
+        final password = passwordController.text;
+        if (password.isNotEmpty) {
+          final isValid = password.length >= 8;
+          isPasswordValid.value = isValid;
+          passwordErrorMessage.value =
+              isValid ? null : 'Password must be at least 8 characters';
+        } else {
+          isPasswordValid.value = true;
+          passwordErrorMessage.value = null;
+        }
+      }
+
+      passwordController.addListener(onPasswordChanged);
+      return () => passwordController.removeListener(onPasswordChanged);
+    }, [passwordController]);
+
     // Listen to state changes
     ref.listen<SignInState>(signInNotifierProvider, (previous, next) {
       next.when(
@@ -34,29 +82,29 @@ class SignInScreen extends HookConsumerWidget {
         success: (firstName) {
           // Navigate to home screen
           context.router.replaceAll([const HomeRoute()]);
-          // Show success message
+          // Show success message with consistent success color
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Welcome back, $firstName!'),
-              backgroundColor: AppColors.success,
+              backgroundColor: AppColors.primary100,
             ),
           );
         },
         googleSuccess: (firstName) {
           // Navigate to home screen
           context.router.replaceAll([const HomeRoute()]);
-          // Show success message
+          // Show success message with consistent success color
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Welcome back, $firstName!'),
-              backgroundColor: AppColors.success,
+              backgroundColor: AppColors.primary100,
             ),
           );
         },
         error: (message) {
-          // Show error message
+          // Show error message with consistent error color
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message), backgroundColor: AppColors.error),
+            SnackBar(content: Text(message), backgroundColor: Colors.red),
           );
         },
       );
@@ -113,7 +161,22 @@ class SignInScreen extends HookConsumerWidget {
                       focusNode: emailFocusNode,
                       keyboardType: TextInputType.emailAddress,
                       autofocus: false,
+                      autofillHints: const [AutofillHints.email],
+                      enableSuggestions: true,
+                      hasError: !isEmailValid.value,
                     ),
+
+                    // Email validation message
+                    if (emailErrorMessage.value != null) ...[
+                      const YMargin(8),
+                      Text(
+                        emailErrorMessage.value!,
+                        style: textStylew400.copyWith(
+                          fontSize: 12,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
 
                     const YMargin(24),
 
@@ -130,8 +193,27 @@ class SignInScreen extends HookConsumerWidget {
                       hintText: 'Enter Password',
                       controller: passwordController,
                       focusNode: passwordFocusNode,
-                      obscureText: true,
+                      obscureText: isPasswordObscured.value,
+                      autofillHints: const [AutofillHints.password],
+                      enableSuggestions: false,
+                      hasError: !isPasswordValid.value,
+                      showPasswordToggle: true,
+                      onPasswordToggle: () {
+                        isPasswordObscured.value = !isPasswordObscured.value;
+                      },
                     ),
+
+                    // Password validation message
+                    if (passwordErrorMessage.value != null) ...[
+                      const YMargin(8),
+                      Text(
+                        passwordErrorMessage.value!,
+                        style: textStylew400.copyWith(
+                          fontSize: 12,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
 
                     const YMargin(24),
 
