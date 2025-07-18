@@ -1,32 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dishdash/app/shared/shared.dart';
 import 'package:dishdash/app/shared/widgets/auth_textfield_widget.dart';
 import 'package:dishdash/app/shared/widgets/auth_button_widget.dart';
+import 'package:dishdash/app/features/auth/notifiers/forgot_password/forgot_password_state.dart';
+import 'package:dishdash/providers/notifier_providers.dart';
 
 @RoutePage()
-class ForgotPasswordScreen extends StatefulWidget {
+class ForgotPasswordScreen extends HookConsumerWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final emailController = useTextEditingController();
+    final emailFocusNode = useFocusNode();
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final TextEditingController _emailController = TextEditingController();
+    final forgotPasswordState = ref.watch(forgotPasswordNotifierProvider);
+    final forgotPasswordNotifier = ref.read(
+      forgotPasswordNotifierProvider.notifier,
+    );
 
-  // Focus node for better keyboard management
-  final FocusNode _emailFocusNode = FocusNode();
+    // Real-time validation states
+    final isEmailValid = useState(true);
+    final emailErrorMessage = useState<String?>(null);
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _emailFocusNode.dispose();
-    super.dispose();
-  }
+    // Listen to email changes for real-time validation
+    useEffect(() {
+      void onEmailChanged() {
+        final email = emailController.text;
+        if (email.isNotEmpty) {
+          final errorMessage = forgotPasswordNotifier.validateEmailRealTime(email);
+          isEmailValid.value = errorMessage == null;
+          emailErrorMessage.value = errorMessage;
+        } else {
+          isEmailValid.value = true;
+          emailErrorMessage.value = null;
+        }
+      }
 
-  @override
-  Widget build(BuildContext context) {
+      emailController.addListener(onEmailChanged);
+      return () => emailController.removeListener(onEmailChanged);
+    }, [emailController]);
+
+    // Listen to state changes for UI feedback
+    ref.listen<ForgotPasswordState>(forgotPasswordNotifierProvider, (
+      previous,
+      next,
+    ) {
+      next.when(
+        initial: () {},
+        loading: () {},
+        success: (email) {
+          // Show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Password reset email sent to $email. Please check your inbox.',
+              ),
+              backgroundColor: Colors.green,
+            ),
+          );
+        },
+        error: (message) {
+          // Show error message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message), backgroundColor: Colors.red),
+          );
+        },
+      );
+    });
+
     return StatusBarWidget(
       child: GestureDetector(
         // Add tap detection to dismiss keyboard when tapping outside
@@ -66,11 +111,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     const YMargin(8),
                     AuthTextFieldWidget(
                       hintText: 'Enter Email',
-                      controller: _emailController,
-                      focusNode: _emailFocusNode,
+                      controller: emailController,
+                      focusNode: emailFocusNode,
                       keyboardType: TextInputType.emailAddress,
-                      autofocus: false, // Explicitly set to false
+                      autofocus: false,
+                      autofillHints: const [AutofillHints.email],
+                      enableSuggestions: true,
+                      hasError: !isEmailValid.value,
                     ),
+
+                    // Email validation message
+                    if (emailErrorMessage.value != null) ...[
+                      const YMargin(8),
+                      Text(
+                        emailErrorMessage.value!,
+                        style: textStylew400.copyWith(
+                          fontSize: 12,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
 
                     const YMargin(32),
 
@@ -78,10 +138,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     AuthButtonWidget(
                       text: 'Recover Password',
                       showArrow: true,
+                      isLoading: forgotPasswordState.maybeWhen(
+                        loading: () => true,
+                        orElse: () => false,
+                      ),
                       onPressed: () {
                         // Dismiss keyboard before handling password recovery
                         FocusScope.of(context).unfocus();
-                        // TODO: Handle password recovery
+
+                        // Send password reset email
+                        forgotPasswordNotifier.sendPasswordResetEmail(
+                          email: emailController.text,
+                        );
                       },
                     ),
 

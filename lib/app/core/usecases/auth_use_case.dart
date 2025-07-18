@@ -74,6 +74,24 @@ class AuthUseCase {
     }
   }
 
+  Future<Data<void>> sendPasswordResetEmail({required String email}) async {
+    try {
+      await _repository.sendPasswordResetEmail(email: email);
+      return const Data.success(data: null);
+    } catch (e) {
+      return Data.error(message: e.toString());
+    }
+  }
+
+  Future<Data<bool>> isUserRegistered({required String email}) async {
+    try {
+      final isRegistered = await _repository.isUserRegistered(email: email);
+      return Data.success(data: isRegistered);
+    } catch (e) {
+      return Data.error(message: e.toString());
+    }
+  }
+
   Future<bool> isUserLoggedIn() async {
     try {
       return await _repository.isUserLoggedIn();

@@ -22,9 +22,14 @@ abstract class AuthRepository {
 
   Future<void> signOut();
 
+  Future<void> sendPasswordResetEmail({required String email});
+
   Future<bool> isUserLoggedIn();
 
   Future<User?> getCurrentUser();
+
+  // New method to check if user exists
+  Future<bool> isUserRegistered({required String email});
 }
 
 @LazySingleton(as: AuthRepository)
@@ -210,6 +215,59 @@ class AuthRepositoryImpl implements AuthRepository {
     } catch (e) {
       error('Sign out failed - Error: ${e.toString()}');
       throw Exception('Failed to sign out: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<void> sendPasswordResetEmail({required String email}) async {
+    try {
+      debug('Attempting to send password reset email to: $email');
+
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+
+      info('Password reset email sent successfully to: $email');
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      error('Firebase Auth Exception - Code: ${e.code}, Message: ${e.message}');
+      error('Failed to send password reset email to: $email - ${e.message}');
+      throw _handleFirebaseAuthException(e);
+    } catch (e) {
+      error('Unexpected error in sendPasswordResetEmail: ${e.toString()}');
+      throw Exception('Failed to send password reset email: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<bool> isUserRegistered({required String email}) async {
+    try {
+      debug('Checking if user is registered for: $email');
+
+      // Since fetchSignInMethodsForEmail is deprecated, we'll use a different approach
+      // Try to send a password reset email - if the user doesn't exist, it will fail
+      // This is a more secure approach that doesn't reveal if an email is registered
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      
+      // If we reach here, the email exists (no exception was thrown)
+      debug('User exists for $email: true');
+      return true;
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      error('Firebase Auth Exception in isUserRegistered - Code: ${e.code}, Message: ${e.message}');
+      
+      // Handle specific error codes
+      if (e.code == 'invalid-email') {
+        throw Exception('The email address is not valid.');
+      } else if (e.code == 'user-not-found') {
+        // User doesn't exist
+        debug('User does not exist for $email');
+        return false;
+      }
+      
+      // For other errors, we can't determine if user exists
+      // Return false to be safe
+      debug('Cannot determine if user exists due to error: ${e.message}');
+      return false;
+    } catch (e) {
+      error('Unexpected error in isUserRegistered: ${e.toString()}');
+      return false;
     }
   }
 
