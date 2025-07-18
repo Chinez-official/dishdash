@@ -31,7 +31,9 @@ class ForgotPasswordScreen extends HookConsumerWidget {
       void onEmailChanged() {
         final email = emailController.text;
         if (email.isNotEmpty) {
-          final errorMessage = forgotPasswordNotifier.validateEmailRealTime(email);
+          final errorMessage = forgotPasswordNotifier.validateEmailRealTime(
+            email,
+          );
           isEmailValid.value = errorMessage == null;
           emailErrorMessage.value = errorMessage;
         } else {

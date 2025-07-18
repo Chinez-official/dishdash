@@ -120,7 +120,8 @@ class SignUpScreen extends HookConsumerWidget {
       }
 
       confirmPasswordController.addListener(onConfirmPasswordChanged);
-      return () => confirmPasswordController.removeListener(onConfirmPasswordChanged);
+      return () =>
+          confirmPasswordController.removeListener(onConfirmPasswordChanged);
     }, [confirmPasswordController, passwordController]);
 
     // Handle state changes
@@ -316,7 +317,8 @@ class SignUpScreen extends HookConsumerWidget {
                       hasError: !isConfirmPasswordValid.value,
                       showPasswordToggle: true,
                       onPasswordToggle: () {
-                        isConfirmPasswordObscured.value = !isConfirmPasswordObscured.value;
+                        isConfirmPasswordObscured.value =
+                            !isConfirmPasswordObscured.value;
                       },
                     ),
 
