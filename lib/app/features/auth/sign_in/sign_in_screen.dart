@@ -168,10 +168,24 @@ class SignInScreen extends HookConsumerWidget {
           // First tap or too much time has passed
           lastBackPressed.value = now;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Press back again to exit'),
-              duration: Duration(seconds: 2),
-              backgroundColor: AppColors.primary100,
+            SnackBar(
+              content: Row(
+                mainAxisSize:
+                    MainAxisSize
+                        .min, // To make the row only take necessary space
+                children: [
+                  Image.asset(
+                    Images.iconLauncher, // Using your app icon from constants
+                    width: 24, // Adjust size as needed
+                    height: 24,
+                  ),
+                  const SizedBox(width: 8),
+                  const Text('Press back again to exit the app'),
+                ],
+              ),
+              duration: const Duration(seconds: 2),
+              // You can also add a behavior to position it differently, e.g., SnackBarBehavior.floating
+              behavior: SnackBarBehavior.floating,
             ),
           );
         } else {

@@ -8,6 +8,7 @@ class Images {
   static const String filter = 'assets/icons/Filter.svg';
   static const String googleIcon = 'assets/icons/Google-Icon.svg';
   static const String home = 'assets/icons/Home.svg';
+  static const String iconLauncher = 'assets/images/icon_launcher.png';
   static const String inactive = 'assets/icons/Inactive.svg';
   static const String location = 'assets/icons/location.svg';
   static const String message = 'assets/icons/Message.svg';
