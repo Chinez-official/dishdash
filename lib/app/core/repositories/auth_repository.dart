@@ -224,7 +224,9 @@ class AuthRepositoryImpl implements AuthRepository {
 
       // Always attempt to send email - Firebase will handle non-existent users silently
       // This prevents user enumeration attacks (Security fix #1)
-      await _firebaseAuth.sendPasswordResetEmail(email: email.trim()); // Consistent sanitization (fix #7)
+      await _firebaseAuth.sendPasswordResetEmail(
+        email: email.trim(),
+      ); // Consistent sanitization (fix #7)
 
       info('Password reset email request processed for: $email');
     } on firebase_auth.FirebaseAuthException catch (e) {
@@ -365,9 +367,13 @@ class AuthRepositoryImpl implements AuthRepository {
       case 'invalid-email':
         return Exception('The email address is not valid.');
       case 'user-not-found':
-        return Exception('Invalid email or password. Please check your credentials and try again.');
+        return Exception(
+          'Invalid email or password. Please check your credentials and try again.',
+        );
       case 'wrong-password':
-        return Exception('Invalid email or password. Please check your credentials and try again.');
+        return Exception(
+          'Invalid email or password. Please check your credentials and try again.',
+        );
       case 'user-disabled':
         return Exception('This user account has been disabled.');
       case 'too-many-requests':
@@ -395,17 +401,11 @@ class AuthRepositoryImpl implements AuthRepository {
           'This credential is already associated with a different user account.',
         );
       case 'invalid-verification-code':
-        return Exception(
-          'The verification code is invalid. Please try again.',
-        );
+        return Exception('The verification code is invalid. Please try again.');
       case 'invalid-verification-id':
-        return Exception(
-          'The verification ID is invalid. Please try again.',
-        );
+        return Exception('The verification ID is invalid. Please try again.');
       case 'session-expired':
-        return Exception(
-          'Your session has expired. Please sign in again.',
-        );
+        return Exception('Your session has expired. Please sign in again.');
       default:
         return Exception('Authentication failed. Please try again.');
     }

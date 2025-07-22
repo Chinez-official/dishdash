@@ -80,7 +80,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
               duration: const Duration(seconds: 3),
             ),
           );
-          
+
           // Automatically navigate back to sign-in after a short delay
           Future.delayed(const Duration(milliseconds: 500), () {
             if (context.mounted) {

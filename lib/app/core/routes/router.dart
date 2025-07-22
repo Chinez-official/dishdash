@@ -18,7 +18,7 @@ class AppRouter extends RootStackRouter {
       page: SplashRoute.page,
       initial: true,
     ),
-    
+
     // Auth Routes
     CustomRoute(
       path: '/sign-in',
@@ -35,14 +35,14 @@ class AppRouter extends RootStackRouter {
       transitionsBuilder: TransitionsBuilders.slideBottom,
       page: ForgotPasswordRoute.page,
     ),
-    
+
     // Home Route
     CustomRoute(
       path: '/home',
       transitionsBuilder: TransitionsBuilders.slideLeft,
       page: HomeRoute.page,
     ),
-    
+
     // Add other routes as needed
   ];
 }

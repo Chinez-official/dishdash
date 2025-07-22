@@ -101,5 +101,5 @@ class OfflineClientImpl implements OfflineClient {
     } catch (e) {
       return false;
     }
-  } 
+  }
 }

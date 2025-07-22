@@ -11,7 +11,7 @@ class SignInNotifier extends StateNotifier<SignInState> {
       super(const SignInState.initial());
 
   Future<void> signIn({
-    required String email, 
+    required String email,
     required String password,
     required Function(String?, String?) onValidationError,
   }) async {

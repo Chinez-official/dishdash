@@ -75,10 +75,7 @@ class _AuthTextFieldWidgetState extends State<AuthTextFieldWidget> {
       decoration: BoxDecoration(
         color: AppColors.backgroundBody,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: _getBorderColor(),
-          width: 1,
-        ),
+        border: Border.all(color: _getBorderColor(), width: 1),
       ),
       child: Row(
         children: [

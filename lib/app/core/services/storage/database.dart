@@ -11,7 +11,7 @@ class StorageEntries extends Table {
   TextColumn get type => text()(); // 'string', 'bool', 'int', 'double'
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
-  
+
   @override
   Set<Column> get primaryKey => {key};
 }

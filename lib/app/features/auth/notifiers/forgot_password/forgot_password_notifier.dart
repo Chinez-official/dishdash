@@ -57,7 +57,7 @@ class ForgotPasswordNotifier extends StateNotifier<ForgotPasswordState> {
   String? _validateEmail(String email) {
     // Consistent input sanitization (fix #7)
     final trimmedEmail = email.trim();
-    
+
     // Email validation
     if (trimmedEmail.isEmpty) {
       return 'Email is required';

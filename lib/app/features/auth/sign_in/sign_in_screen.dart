@@ -67,7 +67,9 @@ class SignInScreen extends HookConsumerWidget {
         final password = passwordController.text;
         if (password.isNotEmpty) {
           hasPasswordBeenUsed.value = true;
-          final errorMessage = signInNotifier.validatePasswordRealTime(password);
+          final errorMessage = signInNotifier.validatePasswordRealTime(
+            password,
+          );
           isPasswordValid.value = errorMessage == null;
           passwordErrorMessage.value = errorMessage;
         } else {
@@ -85,7 +87,7 @@ class SignInScreen extends HookConsumerWidget {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         // Always clear focus when returning to this screen
         FocusScope.of(context).unfocus();
-        
+
         // Clear the focus nodes to prevent auto-focus
         emailFocusNode.unfocus();
         passwordFocusNode.unfocus();
@@ -109,7 +111,7 @@ class SignInScreen extends HookConsumerWidget {
 
       emailFocusNode.addListener(onEmailFocusChange);
       passwordFocusNode.addListener(onPasswordFocusChange);
-      
+
       return () {
         emailFocusNode.removeListener(onEmailFocusChange);
         passwordFocusNode.removeListener(onPasswordFocusChange);
@@ -157,11 +159,12 @@ class SignInScreen extends HookConsumerWidget {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
-        
+
         final now = DateTime.now();
         final lastPressed = lastBackPressed.value;
-        
-        if (lastPressed == null || now.difference(lastPressed) > const Duration(seconds: 2)) {
+
+        if (lastPressed == null ||
+            now.difference(lastPressed) > const Duration(seconds: 2)) {
           // First tap or too much time has passed
           lastBackPressed.value = now;
           ScaffoldMessenger.of(context).showSnackBar(
@@ -176,271 +179,118 @@ class SignInScreen extends HookConsumerWidget {
         }
       },
       child: StatusBarWidget(
-      child: GestureDetector(
-        // Add tap detection to dismiss keyboard when tapping outside
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Scaffold(
-          backgroundColor: AppColors.backgroundBody,
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const YMargin(48),
+        child: GestureDetector(
+          // Add tap detection to dismiss keyboard when tapping outside
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Scaffold(
+            backgroundColor: AppColors.backgroundBody,
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const YMargin(48),
 
-                    // Welcome Text
-                    Text(
-                      'Hello,',
-                      style: textStylew600.copyWith(
-                        fontSize: 30,
-                        color: AppColors.textMain,
-                      ),
-                    ),
-                    const YMargin(4),
-                    Text(
-                      'Welcome Back!',
-                      style: textStylew400.copyWith(
-                        fontSize: 20,
-                        color: AppColors.textMain,
-                      ),
-                    ),
-
-                    const YMargin(48),
-
-                    // Email Field
-                    Text(
-                      'Email',
-                      style: textStylew400.copyWith(
-                        fontSize: 14,
-                        color: AppColors.textMain,
-                      ),
-                    ),
-                    const YMargin(8),
-                    AuthTextFieldWidget(
-                      hintText: 'Enter Email',
-                      controller: emailController,
-                      focusNode: emailFocusNode,
-                      keyboardType: TextInputType.emailAddress,
-                      autofocus: false,
-                      autofillHints: const [AutofillHints.email],
-                      enableSuggestions: true,
-                      hasError: !isEmailValid.value,
-                    ),
-
-                    // Email validation message
-                    if (emailErrorMessage.value != null) ...[
-                      const YMargin(8),
+                      // Welcome Text
                       Text(
-                        emailErrorMessage.value!,
-                        style: textStylew400.copyWith(
-                          fontSize: 12,
-                          color: Colors.red,
+                        'Hello,',
+                        style: textStylew600.copyWith(
+                          fontSize: 30,
+                          color: AppColors.textMain,
                         ),
                       ),
-                    ],
-
-                    const YMargin(24),
-
-                    // Password Field
-                    Text(
-                      'Enter Password',
-                      style: textStylew400.copyWith(
-                        fontSize: 14,
-                        color: AppColors.textMain,
-                      ),
-                    ),
-                    const YMargin(8),
-                    AuthTextFieldWidget(
-                      hintText: 'Enter Password',
-                      controller: passwordController,
-                      focusNode: passwordFocusNode,
-                      obscureText: isPasswordObscured.value,
-                      autofillHints: const [AutofillHints.password],
-                      enableSuggestions: false,
-                      hasError: !isPasswordValid.value,
-                      showPasswordToggle: true,
-                      onPasswordToggle: () {
-                        isPasswordObscured.value = !isPasswordObscured.value;
-                      },
-                    ),
-
-                    // Password validation message
-                    if (passwordErrorMessage.value != null) ...[
-                      const YMargin(8),
+                      const YMargin(4),
                       Text(
-                        passwordErrorMessage.value!,
+                        'Welcome Back!',
                         style: textStylew400.copyWith(
-                          fontSize: 12,
-                          color: Colors.red,
+                          fontSize: 20,
+                          color: AppColors.textMain,
                         ),
                       ),
-                    ],
 
-                    const YMargin(24),
+                      const YMargin(48),
 
-                    // Forgot Password
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton(
-                        onPressed: () {
-                          context.router.push(const ForgotPasswordRoute());
-                        },
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        child: Text(
-                          'Forgot Password?',
-                          style: textStylew400.copyWith(
-                            fontSize: 11,
-                            color: AppColors.secondary100,
-                          ),
+                      // Email Field
+                      Text(
+                        'Email',
+                        style: textStylew400.copyWith(
+                          fontSize: 14,
+                          color: AppColors.textMain,
                         ),
                       ),
-                    ),
-
-                    const YMargin(24),
-
-                    // Sign In Button
-                    AuthButtonWidget(
-                      text: 'Sign In',
-                      showArrow: true,
-                      isLoading: signInState.maybeWhen(
-                        loading: () => true,
-                        orElse: () => false,
+                      const YMargin(8),
+                      AuthTextFieldWidget(
+                        hintText: 'Enter Email',
+                        controller: emailController,
+                        focusNode: emailFocusNode,
+                        keyboardType: TextInputType.emailAddress,
+                        autofocus: false,
+                        autofillHints: const [AutofillHints.email],
+                        enableSuggestions: true,
+                        hasError: !isEmailValid.value,
                       ),
-                      onPressed: () {
-                        // Dismiss keyboard before handling sign in
-                        FocusScope.of(context).unfocus();
 
-                        // Handle sign in with validation callback
-                        signInNotifier.signIn(
-                          email: emailController.text,
-                          password: passwordController.text,
-                          onValidationError: (emailError, passwordError) {
-                            // Force validation display
-                            if (emailError != null) {
-                              isEmailValid.value = false;
-                              emailErrorMessage.value = emailError;
-                            }
-                            if (passwordError != null) {
-                              isPasswordValid.value = false;
-                              passwordErrorMessage.value = passwordError;
-                            }
-                          },
-                        );
-                      },
-                    ),
-
-                    const YMargin(32),
-
-                    // Or Sign In With
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(height: 1, color: AppColors.grey4),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Text(
-                              'Or Sign in With',
-                              style: textStylew500.copyWith(
-                                fontSize: 11,
-                                color: AppColors.grey4,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(height: 1, color: AppColors.grey4),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const YMargin(24),
-
-                    // Google Sign In Button
-                    Center(
-                      child: Container(
-                        height: 44,
-                        width: 44,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              offset: const Offset(0, 0),
-                              blurRadius: 5,
-                              spreadRadius: 3,
-                              color: const Color(
-                                0xff696969,
-                              ).withValues(alpha: 0.1),
-                            ),
-                          ],
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
-                          child: InkWell(
-                            onTap: signInState.maybeWhen(
-                              googleLoading: () => null,
-                              loading: () => null,
-                              orElse:
-                                  () => () {
-                                    signInNotifier.signInWithGoogle();
-                                  },
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                            child: Center(
-                              child: signInState.maybeWhen(
-                                googleLoading:
-                                    () => const SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                              AppColors.secondary100,
-                                            ),
-                                      ),
-                                    ),
-                                orElse:
-                                    () => SvgPicture.asset(
-                                      Images.googleIcon,
-                                      width: 24,
-                                      height: 24,
-                                    ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const YMargin(24),
-
-                    // Sign Up Text
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      // Email validation message
+                      if (emailErrorMessage.value != null) ...[
+                        const YMargin(8),
                         Text(
-                          "Don't have an account? ",
-                          style: textStylew500.copyWith(
-                            fontSize: 11,
-                            color: AppColors.textMain,
+                          emailErrorMessage.value!,
+                          style: textStylew400.copyWith(
+                            fontSize: 12,
+                            color: Colors.red,
                           ),
                         ),
-                        TextButton(
+                      ],
+
+                      const YMargin(24),
+
+                      // Password Field
+                      Text(
+                        'Enter Password',
+                        style: textStylew400.copyWith(
+                          fontSize: 14,
+                          color: AppColors.textMain,
+                        ),
+                      ),
+                      const YMargin(8),
+                      AuthTextFieldWidget(
+                        hintText: 'Enter Password',
+                        controller: passwordController,
+                        focusNode: passwordFocusNode,
+                        obscureText: isPasswordObscured.value,
+                        autofillHints: const [AutofillHints.password],
+                        enableSuggestions: false,
+                        hasError: !isPasswordValid.value,
+                        showPasswordToggle: true,
+                        onPasswordToggle: () {
+                          isPasswordObscured.value = !isPasswordObscured.value;
+                        },
+                      ),
+
+                      // Password validation message
+                      if (passwordErrorMessage.value != null) ...[
+                        const YMargin(8),
+                        Text(
+                          passwordErrorMessage.value!,
+                          style: textStylew400.copyWith(
+                            fontSize: 12,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+
+                      const YMargin(24),
+
+                      // Forgot Password
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
                           onPressed: () {
-                            context.router.push(const SignUpRoute());
+                            context.router.push(const ForgotPasswordRoute());
                           },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
@@ -448,24 +298,185 @@ class SignInScreen extends HookConsumerWidget {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: Text(
-                            'Sign up',
-                            style: textStylew500.copyWith(
+                            'Forgot Password?',
+                            style: textStylew400.copyWith(
                               fontSize: 11,
                               color: AppColors.secondary100,
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
 
-                    const YMargin(24),
-                  ],
+                      const YMargin(24),
+
+                      // Sign In Button
+                      AuthButtonWidget(
+                        text: 'Sign In',
+                        showArrow: true,
+                        isLoading: signInState.maybeWhen(
+                          loading: () => true,
+                          orElse: () => false,
+                        ),
+                        onPressed: () {
+                          // Dismiss keyboard before handling sign in
+                          FocusScope.of(context).unfocus();
+
+                          // Handle sign in with validation callback
+                          signInNotifier.signIn(
+                            email: emailController.text,
+                            password: passwordController.text,
+                            onValidationError: (emailError, passwordError) {
+                              // Force validation display
+                              if (emailError != null) {
+                                isEmailValid.value = false;
+                                emailErrorMessage.value = emailError;
+                              }
+                              if (passwordError != null) {
+                                isPasswordValid.value = false;
+                                passwordErrorMessage.value = passwordError;
+                              }
+                            },
+                          );
+                        },
+                      ),
+
+                      const YMargin(32),
+
+                      // Or Sign In With
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 1,
+                                color: AppColors.grey4,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              child: Text(
+                                'Or Sign in With',
+                                style: textStylew500.copyWith(
+                                  fontSize: 11,
+                                  color: AppColors.grey4,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                height: 1,
+                                color: AppColors.grey4,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const YMargin(24),
+
+                      // Google Sign In Button
+                      Center(
+                        child: Container(
+                          height: 44,
+                          width: 44,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                offset: const Offset(0, 0),
+                                blurRadius: 5,
+                                spreadRadius: 3,
+                                color: const Color(
+                                  0xff696969,
+                                ).withValues(alpha: 0.1),
+                              ),
+                            ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(12),
+                            child: InkWell(
+                              onTap: signInState.maybeWhen(
+                                googleLoading: () => null,
+                                loading: () => null,
+                                orElse:
+                                    () => () {
+                                      signInNotifier.signInWithGoogle();
+                                    },
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                              child: Center(
+                                child: signInState.maybeWhen(
+                                  googleLoading:
+                                      () => const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                AppColors.secondary100,
+                                              ),
+                                        ),
+                                      ),
+                                  orElse:
+                                      () => SvgPicture.asset(
+                                        Images.googleIcon,
+                                        width: 24,
+                                        height: 24,
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const YMargin(24),
+
+                      // Sign Up Text
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Don't have an account? ",
+                            style: textStylew500.copyWith(
+                              fontSize: 11,
+                              color: AppColors.textMain,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.router.push(const SignUpRoute());
+                            },
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            child: Text(
+                              'Sign up',
+                              style: textStylew500.copyWith(
+                                fontSize: 11,
+                                color: AppColors.secondary100,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const YMargin(24),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
-      ),
       ),
     );
   }

@@ -7,10 +7,9 @@ import 'package:dishdash/app/core/usecases/auth_use_case.dart';
 class GetUserNotifier extends StateNotifier<GetUserState> {
   final AuthUseCase _authUseCase;
 
-  GetUserNotifier({
-    required AuthUseCase authUseCase,
-  }) : _authUseCase = authUseCase,
-        super(const GetUserState.initial());
+  GetUserNotifier({required AuthUseCase authUseCase})
+    : _authUseCase = authUseCase,
+      super(const GetUserState.initial());
 
   Future<void> call() async {
     state = const GetUserState.loading();
@@ -18,11 +17,11 @@ class GetUserNotifier extends StateNotifier<GetUserState> {
     try {
       // Check if user is logged in
       final isLoggedIn = await _authUseCase.isUserLoggedIn();
-      
+
       if (isLoggedIn) {
         // Get current user
         final user = await _authUseCase.getCurrentUser();
-        
+
         if (user != null) {
           state = GetUserState.success(user);
         } else {

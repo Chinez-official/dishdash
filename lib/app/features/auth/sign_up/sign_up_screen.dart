@@ -90,7 +90,9 @@ class SignUpScreen extends HookConsumerWidget {
       void onPasswordChanged() {
         final password = passwordController.text;
         if (password.isNotEmpty) {
-          final errorMessage = signUpNotifier.validatePasswordRealTime(password);
+          final errorMessage = signUpNotifier.validatePasswordRealTime(
+            password,
+          );
           isPasswordValid.value = errorMessage == null;
           passwordErrorMessage.value = errorMessage;
         } else {
@@ -163,7 +165,12 @@ class SignUpScreen extends HookConsumerWidget {
         email: emailController.text,
         password: passwordController.text,
         confirmPassword: confirmPasswordController.text,
-        onValidationError: (nameError, emailError, passwordError, confirmPasswordError) {
+        onValidationError: (
+          nameError,
+          emailError,
+          passwordError,
+          confirmPasswordError,
+        ) {
           // Force validation display
           if (nameError != null) {
             isNameValid.value = false;

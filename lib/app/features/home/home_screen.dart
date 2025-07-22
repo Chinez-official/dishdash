@@ -14,7 +14,7 @@ class HomeScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Access the auth use case for sign out
     final authUseCase = ref.read(authUseCaseProvider);
-    
+
     // Use a state hook to manage loading state
     final isSigningOut = useState(false);
 
@@ -142,64 +142,77 @@ class HomeScreen extends HookConsumerWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: isSigningOut.value 
-                        ? null 
-                        : () async {
-                            try {
-                              // Set loading state
-                              isSigningOut.value = true;
+                    onPressed:
+                        isSigningOut.value
+                            ? null
+                            : () async {
+                              try {
+                                // Set loading state
+                                isSigningOut.value = true;
 
-                              // Call proper sign out
-                              final result = await authUseCase.signOut();
+                                // Call proper sign out
+                                final result = await authUseCase.signOut();
 
-                              result.when(
-                                success: (_) {
-                                  // Check if widget is still mounted before using context
-                                  if (context.mounted) {
-                                    // Navigate to sign in screen
-                                    context.router.replaceAll([const SignInRoute()]);
+                                result.when(
+                                  success: (_) {
+                                    // Check if widget is still mounted before using context
+                                    if (context.mounted) {
+                                      // Navigate to sign in screen
+                                      context.router.replaceAll([
+                                        const SignInRoute(),
+                                      ]);
 
-                                    // Show success message
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Signed out successfully'),
-                                        backgroundColor: AppColors.success,
-                                      ),
-                                    );
-                                  }
-                                },
-                                error: (message) {
-                                  // Reset loading state
-                                  isSigningOut.value = false;
-                                  
-                                  // Check if widget is still mounted before using context
-                                  if (context.mounted) {
-                                    // Show error message
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(message ?? 'Sign out failed'),
-                                        backgroundColor: AppColors.error,
-                                      ),
-                                    );
-                                  }
-                                },
-                              );
-                            } catch (e) {
-                              // Reset loading state
-                              isSigningOut.value = false;
+                                      // Show success message
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Signed out successfully',
+                                          ),
+                                          backgroundColor: AppColors.success,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  error: (message) {
+                                    // Reset loading state
+                                    isSigningOut.value = false;
 
-                              // Check if widget is still mounted before using context
-                              if (context.mounted) {
-                                // Show error message
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Sign out failed: ${e.toString()}'),
-                                    backgroundColor: AppColors.error,
-                                  ),
+                                    // Check if widget is still mounted before using context
+                                    if (context.mounted) {
+                                      // Show error message
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            message ?? 'Sign out failed',
+                                          ),
+                                          backgroundColor: AppColors.error,
+                                        ),
+                                      );
+                                    }
+                                  },
                                 );
+                              } catch (e) {
+                                // Reset loading state
+                                isSigningOut.value = false;
+
+                                // Check if widget is still mounted before using context
+                                if (context.mounted) {
+                                  // Show error message
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Sign out failed: ${e.toString()}',
+                                      ),
+                                      backgroundColor: AppColors.error,
+                                    ),
+                                  );
+                                }
                               }
-                            }
-                          },
+                            },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.grey4,
                       foregroundColor: AppColors.textMain,
@@ -208,19 +221,22 @@ class HomeScreen extends HookConsumerWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: isSigningOut.value 
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.textMain),
+                    child:
+                        isSigningOut.value
+                            ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.textMain,
+                                ),
+                              ),
+                            )
+                            : Text(
+                              'Sign Out',
+                              style: textStylew500.copyWith(fontSize: 16),
                             ),
-                          )
-                        : Text(
-                            'Sign Out',
-                            style: textStylew500.copyWith(fontSize: 16),
-                          ),
                   ),
                 ),
               ],
