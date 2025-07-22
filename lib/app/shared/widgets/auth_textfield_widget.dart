@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dishdash/app/shared/shared.dart';
 
-class AuthTextFieldWidget extends StatefulWidget {
+class AuthTextFieldWidget extends HookConsumerWidget {
   final String hintText;
   final bool obscureText;
   final TextEditingController? controller;
@@ -33,69 +35,54 @@ class AuthTextFieldWidget extends StatefulWidget {
     this.enabled = true,
   });
 
-  @override
-  State<AuthTextFieldWidget> createState() => _AuthTextFieldWidgetState();
-}
-
-class _AuthTextFieldWidgetState extends State<AuthTextFieldWidget> {
-  bool _isFocused = false;
-
-  @override
-  void initState() {
-    super.initState();
-    widget.focusNode?.addListener(_onFocusChange);
-  }
-
-  @override
-  void dispose() {
-    widget.focusNode?.removeListener(_onFocusChange);
-    super.dispose();
-  }
-
-  void _onFocusChange() {
-    setState(() {
-      _isFocused = widget.focusNode?.hasFocus ?? false;
-    });
-  }
-
-  Color _getBorderColor() {
-    if (widget.hasError) {
+  Color _getBorderColor(bool isFocused) {
+    if (hasError) {
       return Colors.red;
     }
-    if (_isFocused) {
+    if (isFocused) {
       return AppColors.primary100; // Green border when focused
     }
     return AppColors.grey4; // Default border color
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isFocused = useState(false);
+
+    useEffect(() {
+      void onFocusChange() {
+        isFocused.value = focusNode?.hasFocus ?? false;
+      }
+
+      focusNode?.addListener(onFocusChange);
+      return () => focusNode?.removeListener(onFocusChange);
+    }, [focusNode]);
     return Container(
       height: 56,
       decoration: BoxDecoration(
         color: AppColors.backgroundBody,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: _getBorderColor(), width: 1),
+        border: Border.all(color: _getBorderColor(isFocused.value), width: 1),
       ),
       child: Row(
         children: [
           Expanded(
             child: TextField(
-              controller: widget.controller,
-              focusNode: widget.focusNode,
-              obscureText: widget.obscureText,
-              keyboardType: widget.keyboardType,
-              autofocus: widget.autofocus,
-              onTap: widget.onTap,
-              autofillHints: widget.autofillHints,
-              enableSuggestions: widget.enableSuggestions,
-              enabled: widget.enabled,
+              controller: controller,
+              focusNode: focusNode,
+              obscureText: obscureText,
+              keyboardType: keyboardType,
+              autofocus: autofocus,
+              onTap: onTap,
+              autofillHints: autofillHints,
+              enableSuggestions: enableSuggestions,
+              enabled: enabled,
               style: textStylew400.copyWith(
                 fontSize: 16,
                 color: AppColors.textMain,
               ),
               decoration: InputDecoration(
-                hintText: widget.hintText,
+                hintText: hintText,
                 hintStyle: textStylew400.copyWith(
                   fontSize: 11,
                   color: AppColors.grey4,
@@ -108,13 +95,13 @@ class _AuthTextFieldWidgetState extends State<AuthTextFieldWidget> {
               ),
             ),
           ),
-          if (widget.showPasswordToggle)
+          if (showPasswordToggle)
             IconButton(
               icon: Icon(
-                widget.obscureText ? Icons.visibility_off : Icons.visibility,
+                obscureText ? Icons.visibility_off : Icons.visibility,
                 color: AppColors.grey4,
               ),
-              onPressed: widget.onPasswordToggle,
+              onPressed: onPasswordToggle,
             ),
         ],
       ),
