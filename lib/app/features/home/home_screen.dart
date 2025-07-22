@@ -170,7 +170,7 @@ class HomeScreen extends HookConsumerWidget {
                                           content: Text(
                                             'Signed out successfully',
                                           ),
-                                          backgroundColor: AppColors.success,
+                                          backgroundColor: AppColors.primary100,
                                         ),
                                       );
                                     }

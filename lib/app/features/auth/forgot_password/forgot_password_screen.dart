@@ -76,7 +76,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
               content: Text(
                 'Password reset instructions have been sent to $email. Please check your inbox.',
               ),
-              backgroundColor: Colors.green,
+              backgroundColor: AppColors.primary100,
               duration: const Duration(seconds: 3),
             ),
           );

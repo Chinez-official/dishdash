@@ -171,6 +171,7 @@ class SignInScreen extends HookConsumerWidget {
             const SnackBar(
               content: Text('Press back again to exit'),
               duration: Duration(seconds: 2),
+              backgroundColor: AppColors.primary100,
             ),
           );
         } else {
