@@ -10,19 +10,25 @@ class SignInNotifier extends StateNotifier<SignInState> {
     : _authUseCase = authUseCase,
       super(const SignInState.initial());
 
-  Future<void> signIn({required String email, required String password}) async {
+  Future<void> signIn({
+    required String email, 
+    required String password,
+    required Function(String?, String?) onValidationError,
+  }) async {
+    // Validate inputs first
+    final emailError = validateEmailRealTime(email);
+    final passwordError = validatePasswordRealTime(password);
+
+    if (emailError != null || passwordError != null) {
+      // Trigger validation display in UI
+      onValidationError(emailError, passwordError);
+      return;
+    }
+
     // Set loading state
     state = const SignInState.loading();
 
     try {
-      // Validate inputs
-      final validationError = _validateInputs(email: email, password: password);
-
-      if (validationError != null) {
-        state = SignInState.error(validationError);
-        return;
-      }
-
       // Call Firebase sign in through use case
       final result = await _authUseCase.signIn(
         email: email.trim(),
@@ -34,10 +40,12 @@ class SignInNotifier extends StateNotifier<SignInState> {
           state = SignInState.success(user.firstName);
         },
         error: (message) {
+          // Only show network/authentication errors in snackbar, not validation errors
           state = SignInState.error(message ?? 'Sign in failed');
         },
       );
     } catch (e) {
+      // Only show unexpected errors in snackbar
       state = SignInState.error('Sign in failed: ${e.toString()}');
     }
   }
@@ -63,8 +71,8 @@ class SignInNotifier extends StateNotifier<SignInState> {
     }
   }
 
-  String? _validateInputs({required String email, required String password}) {
-    // Email validation
+  // Methods for real-time validation in UI
+  String? validateEmailRealTime(String email) {
     if (email.trim().isEmpty) {
       return 'Email is required';
     }
@@ -73,13 +81,14 @@ class SignInNotifier extends StateNotifier<SignInState> {
       return 'Please enter a valid email address';
     }
 
-    // Password validation
+    return null;
+  }
+
+  String? validatePasswordRealTime(String password) {
     if (password.isEmpty) {
       return 'Password is required';
     }
 
-    // Note: For sign in, we don't need to validate password strength
-    // since the user is using their existing password
     if (password.length < 8) {
       return 'Password must be at least 8 characters';
     }

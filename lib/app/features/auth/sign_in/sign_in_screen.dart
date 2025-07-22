@@ -2,6 +2,7 @@ import 'package:dishdash/app/core/routes/router.dart';
 import 'package:dishdash/app/features/auth/notifiers/sign_in/sign_in_state.dart';
 import 'package:dishdash/providers/notifier_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -9,7 +10,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dishdash/app/shared/shared.dart';
 import 'package:dishdash/app/shared/widgets/auth_textfield_widget.dart';
 import 'package:dishdash/app/shared/widgets/auth_button_widget.dart';
-import 'package:dishdash/app/shared/extensions/string_extensions.dart';
 
 @RoutePage()
 class SignInScreen extends HookConsumerWidget {
@@ -35,15 +35,22 @@ class SignInScreen extends HookConsumerWidget {
     // Password obscure state
     final isPasswordObscured = useState(true);
 
+    // Double tap back button state
+    final lastBackPressed = useState<DateTime?>(null);
+
+    // Track if text fields have been used before
+    final hasEmailBeenUsed = useState(false);
+    final hasPasswordBeenUsed = useState(false);
+
     // Listen to email changes for real-time validation
     useEffect(() {
       void onEmailChanged() {
         final email = emailController.text;
         if (email.isNotEmpty) {
-          final isValid = email.isValidEmail;
-          isEmailValid.value = isValid;
-          emailErrorMessage.value =
-              isValid ? null : 'Please enter a valid email address';
+          hasEmailBeenUsed.value = true;
+          final errorMessage = signInNotifier.validateEmailRealTime(email);
+          isEmailValid.value = errorMessage == null;
+          emailErrorMessage.value = errorMessage;
         } else {
           isEmailValid.value = true;
           emailErrorMessage.value = null;
@@ -59,10 +66,10 @@ class SignInScreen extends HookConsumerWidget {
       void onPasswordChanged() {
         final password = passwordController.text;
         if (password.isNotEmpty) {
-          final isValid = password.length >= 8;
-          isPasswordValid.value = isValid;
-          passwordErrorMessage.value =
-              isValid ? null : 'Password must be at least 8 characters';
+          hasPasswordBeenUsed.value = true;
+          final errorMessage = signInNotifier.validatePasswordRealTime(password);
+          isPasswordValid.value = errorMessage == null;
+          passwordErrorMessage.value = errorMessage;
         } else {
           isPasswordValid.value = true;
           passwordErrorMessage.value = null;
@@ -73,7 +80,43 @@ class SignInScreen extends HookConsumerWidget {
       return () => passwordController.removeListener(onPasswordChanged);
     }, [passwordController]);
 
-    // Listen to state changes
+    // Clear focus when screen is built and prevent auto-focus on return
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Always clear focus when returning to this screen
+        FocusScope.of(context).unfocus();
+        
+        // Clear the focus nodes to prevent auto-focus
+        emailFocusNode.unfocus();
+        passwordFocusNode.unfocus();
+      });
+      return null;
+    }, []);
+
+    // Listen to focus changes to track usage
+    useEffect(() {
+      void onEmailFocusChange() {
+        if (emailFocusNode.hasFocus) {
+          hasEmailBeenUsed.value = true;
+        }
+      }
+
+      void onPasswordFocusChange() {
+        if (passwordFocusNode.hasFocus) {
+          hasPasswordBeenUsed.value = true;
+        }
+      }
+
+      emailFocusNode.addListener(onEmailFocusChange);
+      passwordFocusNode.addListener(onPasswordFocusChange);
+      
+      return () {
+        emailFocusNode.removeListener(onEmailFocusChange);
+        passwordFocusNode.removeListener(onPasswordFocusChange);
+      };
+    }, [emailFocusNode, passwordFocusNode]);
+
+    // Listen to state changes - only show non-validation errors
     ref.listen<SignInState>(signInNotifierProvider, (previous, next) {
       next.when(
         initial: () {},
@@ -102,7 +145,7 @@ class SignInScreen extends HookConsumerWidget {
           );
         },
         error: (message) {
-          // Show error message with consistent error color
+          // Only show network/authentication errors, not validation errors
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(message), backgroundColor: Colors.red),
           );
@@ -110,7 +153,29 @@ class SignInScreen extends HookConsumerWidget {
       );
     });
 
-    return StatusBarWidget(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        
+        final now = DateTime.now();
+        final lastPressed = lastBackPressed.value;
+        
+        if (lastPressed == null || now.difference(lastPressed) > const Duration(seconds: 2)) {
+          // First tap or too much time has passed
+          lastBackPressed.value = now;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Press back again to exit'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        } else {
+          // Second tap within 2 seconds - exit the app
+          SystemNavigator.pop();
+        }
+      },
+      child: StatusBarWidget(
       child: GestureDetector(
         // Add tap detection to dismiss keyboard when tapping outside
         onTap: () {
@@ -253,10 +318,21 @@ class SignInScreen extends HookConsumerWidget {
                         // Dismiss keyboard before handling sign in
                         FocusScope.of(context).unfocus();
 
-                        // Handle sign in
+                        // Handle sign in with validation callback
                         signInNotifier.signIn(
                           email: emailController.text,
                           password: passwordController.text,
+                          onValidationError: (emailError, passwordError) {
+                            // Force validation display
+                            if (emailError != null) {
+                              isEmailValid.value = false;
+                              emailErrorMessage.value = emailError;
+                            }
+                            if (passwordError != null) {
+                              isPasswordValid.value = false;
+                              passwordErrorMessage.value = passwordError;
+                            }
+                          },
                         );
                       },
                     ),
@@ -389,6 +465,7 @@ class SignInScreen extends HookConsumerWidget {
             ),
           ),
         ),
+      ),
       ),
     );
   }

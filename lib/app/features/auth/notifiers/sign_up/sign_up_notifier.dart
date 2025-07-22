@@ -15,24 +15,24 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     required String email,
     required String password,
     required String confirmPassword,
+    required Function(String?, String?, String?, String?) onValidationError,
   }) async {
+    // Validate inputs first
+    final nameError = validateNameRealTime(fullName);
+    final emailError = validateEmailRealTime(email);
+    final passwordError = validatePasswordRealTime(password);
+    final confirmPasswordError = validateConfirmPasswordRealTime(password, confirmPassword);
+
+    if (nameError != null || emailError != null || passwordError != null || confirmPasswordError != null) {
+      // Trigger validation display in UI
+      onValidationError(nameError, emailError, passwordError, confirmPasswordError);
+      return;
+    }
+
     // Set loading state
     state = const SignUpState.loading();
 
     try {
-      // Validate inputs
-      final validationError = _validateInputs(
-        fullName: fullName,
-        email: email,
-        password: password,
-        confirmPassword: confirmPassword,
-      );
-
-      if (validationError != null) {
-        state = SignUpState.error(validationError);
-        return;
-      }
-
       // Call Firebase sign up through use case
       final result = await _authUseCase.signUp(
         email: email.trim(),
@@ -45,40 +45,58 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
           state = SignUpState.success(user.firstName);
         },
         error: (message) {
+          // Only show network/authentication errors in snackbar, not validation errors
           state = SignUpState.error(message ?? 'Sign up failed');
         },
       );
     } catch (e) {
+      // Only show unexpected errors in snackbar
       state = SignUpState.error('Sign up failed: ${e.toString()}');
     }
   }
 
-  String? _validateInputs({
-    required String fullName,
-    required String email,
-    required String password,
-    required String confirmPassword,
-  }) {
-    // Name validation - now using isValidName extension
-    if (fullName.trim().isEmpty) {
+  // Methods for real-time validation in UI
+  String? validateNameRealTime(String name) {
+    if (name.trim().isEmpty) {
       return 'Name is required';
     }
 
-    if (!fullName.trim().isValidName) {
+    if (!name.trim().isValidName) {
       return 'Please enter a valid name (at least 2 characters)';
     }
 
-    // Email validation
+    return null;
+  }
+
+  String? validateEmailRealTime(String email) {
+    if (email.trim().isEmpty) {
+      return 'Email is required';
+    }
+
     if (!email.isValidEmail) {
       return 'Please enter a valid email address';
     }
 
-    // Password validation - now using isPasswordStrong for consistency
+    return null;
+  }
+
+  String? validatePasswordRealTime(String password) {
+    if (password.isEmpty) {
+      return 'Password is required';
+    }
+
     if (!password.isPasswordStrong) {
       return password.passwordStrengthMessage;
     }
 
-    // Confirm password validation
+    return null;
+  }
+
+  String? validateConfirmPasswordRealTime(String password, String confirmPassword) {
+    if (confirmPassword.isEmpty) {
+      return 'Confirm password is required';
+    }
+
     if (password != confirmPassword) {
       return 'Passwords do not match';
     }

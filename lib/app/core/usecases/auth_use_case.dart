@@ -83,14 +83,7 @@ class AuthUseCase {
     }
   }
 
-  Future<Data<bool>> isUserRegistered({required String email}) async {
-    try {
-      final isRegistered = await _repository.isUserRegistered(email: email);
-      return Data.success(data: isRegistered);
-    } catch (e) {
-      return Data.error(message: e.toString());
-    }
-  }
+  // Removed: isUserRegistered method (security fix #1 & #2)
 
   Future<bool> isUserLoggedIn() async {
     try {

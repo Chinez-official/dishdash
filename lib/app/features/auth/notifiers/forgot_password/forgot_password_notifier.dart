@@ -10,66 +10,60 @@ class ForgotPasswordNotifier extends StateNotifier<ForgotPasswordState> {
     : _authUseCase = authUseCase,
       super(const ForgotPasswordState.initial());
 
-  Future<void> sendPasswordResetEmail({required String email}) async {
+  Future<void> sendPasswordResetEmail({
+    required String email,
+    required Function(String?) onValidationError,
+  }) async {
+    // Validate email first
+    final emailError = validateEmailRealTime(email);
+
+    if (emailError != null) {
+      // Trigger validation display in UI
+      onValidationError(emailError);
+      return;
+    }
+
     // Set loading state
     state = const ForgotPasswordState.loading();
 
     try {
-      // Validate email
-      final validationError = _validateEmail(email);
-      if (validationError != null) {
-        state = ForgotPasswordState.error(validationError);
-        return;
-      }
+      // SECURITY FIX: Always send reset email, don't check user existence first
+      // This prevents user enumeration vulnerability (fix #1)
+      // Firebase handles non-existent users silently
+      final result = await _authUseCase.sendPasswordResetEmail(
+        email: email.trim(),
+      );
 
-      // Check if user is registered before sending reset email
-      final userCheckResult = await _authUseCase.isUserRegistered(email: email.trim());
-      
-      userCheckResult.when(
-        success: (isRegistered) async {
-          if (!isRegistered) {
-            state = const ForgotPasswordState.error(
-              'No account found with this email address. Please check your email or create a new account.',
-            );
-            return;
-          }
-
-          // User exists, proceed with password reset
-          final result = await _authUseCase.sendPasswordResetEmail(
-            email: email.trim(),
-          );
-
-          result.when(
-            success: (data) {
-              state = ForgotPasswordState.success(email.trim());
-            },
-            error: (message) {
-              state = ForgotPasswordState.error(
-                message ?? 'Failed to send password reset email',
-              );
-            },
-          );
+      result.when(
+        success: (data) {
+          // Always show success message regardless of whether user exists (fix #1)
+          state = ForgotPasswordState.success(email.trim());
         },
         error: (message) {
+          // Only show network errors in snackbar, not validation errors
           state = ForgotPasswordState.error(
-            message ?? 'Failed to verify email address',
+            'Failed to send password reset email. Please try again.',
           );
         },
       );
     } catch (e) {
+      // Only show unexpected errors in snackbar
       state = ForgotPasswordState.error(
-        'Failed to send password reset email: ${e.toString()}',
+        'Failed to send password reset email. Please try again.',
       );
     }
   }
 
   String? _validateEmail(String email) {
+    // Consistent input sanitization (fix #7)
+    final trimmedEmail = email.trim();
+    
     // Email validation
-    if (email.trim().isEmpty) {
+    if (trimmedEmail.isEmpty) {
       return 'Email is required';
     }
 
-    if (!email.trim().isValidEmail) {
+    if (!trimmedEmail.isValidEmail) {
       return 'Please enter a valid email address';
     }
 

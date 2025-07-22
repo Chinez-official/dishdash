@@ -26,6 +26,21 @@ class ForgotPasswordScreen extends HookConsumerWidget {
     final isEmailValid = useState(true);
     final emailErrorMessage = useState<String?>(null);
 
+    // Loading state tracking for form disabling
+    final isLoading = forgotPasswordState.maybeWhen(
+      loading: () => true,
+      orElse: () => false,
+    );
+
+    // State management: Reset state when leaving screen
+    useEffect(() {
+      return () {
+        Future(() {
+          forgotPasswordNotifier.resetState();
+        });
+      };
+    }, []);
+
     // Listen to email changes for real-time validation
     useEffect(() {
       void onEmailChanged() {
@@ -46,7 +61,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
       return () => emailController.removeListener(onEmailChanged);
     }, [emailController]);
 
-    // Listen to state changes for UI feedback
+    // Listen to state changes - only show non-validation errors
     ref.listen<ForgotPasswordState>(forgotPasswordNotifierProvider, (
       previous,
       next,
@@ -55,18 +70,26 @@ class ForgotPasswordScreen extends HookConsumerWidget {
         initial: () {},
         loading: () {},
         success: (email) {
-          // Show success message
+          // Show success snackbar and automatically navigate to sign-in
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Password reset email sent to $email. Please check your inbox.',
+                'Password reset instructions have been sent to $email. Please check your inbox.',
               ),
               backgroundColor: Colors.green,
+              duration: const Duration(seconds: 3),
             ),
           );
+          
+          // Automatically navigate back to sign-in after a short delay
+          Future.delayed(const Duration(milliseconds: 500), () {
+            if (context.mounted) {
+              context.router.pop();
+            }
+          });
         },
         error: (message) {
-          // Show error message
+          // Only show network/authentication errors, not validation errors
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(message), backgroundColor: Colors.red),
           );
@@ -120,6 +143,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                       autofillHints: const [AutofillHints.email],
                       enableSuggestions: true,
                       hasError: !isEmailValid.value,
+                      enabled: !isLoading, // Disable form during loading
                     ),
 
                     // Email validation message
@@ -140,17 +164,21 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                     AuthButtonWidget(
                       text: 'Recover Password',
                       showArrow: true,
-                      isLoading: forgotPasswordState.maybeWhen(
-                        loading: () => true,
-                        orElse: () => false,
-                      ),
+                      isLoading: isLoading,
                       onPressed: () {
                         // Dismiss keyboard before handling password recovery
                         FocusScope.of(context).unfocus();
 
-                        // Send password reset email
+                        // Send password reset email with validation callback
                         forgotPasswordNotifier.sendPasswordResetEmail(
                           email: emailController.text,
+                          onValidationError: (emailError) {
+                            // Force validation display
+                            if (emailError != null) {
+                              isEmailValid.value = false;
+                              emailErrorMessage.value = emailError;
+                            }
+                          },
                         );
                       },
                     ),
@@ -169,7 +197,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                     const YMargin(0),
 
                     Text(
-                      'A password recovery link will be forwarded to your email.',
+                      'If an account exists with this email, you will receive password reset instructions.',
                       style: textStylew400.copyWith(
                         fontSize: 11,
                         color: AppColors.textLabel,

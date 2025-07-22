@@ -28,8 +28,7 @@ abstract class AuthRepository {
 
   Future<User?> getCurrentUser();
 
-  // New method to check if user exists
-  Future<bool> isUserRegistered({required String email});
+  // Removed: isUserRegistered method completely (security fix #1 & #2)
 }
 
 @LazySingleton(as: AuthRepository)
@@ -54,7 +53,7 @@ class AuthRepositoryImpl implements AuthRepository {
       debug('Attempting sign up for: $email');
 
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
+        email: email.trim(), // Consistent input sanitization (fix #7)
         password: password,
       );
 
@@ -104,7 +103,7 @@ class AuthRepositoryImpl implements AuthRepository {
       debug('Attempting sign in for: $email');
 
       final credential = await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
+        email: email.trim(), // Consistent input sanitization (fix #7)
         password: password,
       );
 
@@ -223,9 +222,11 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       debug('Attempting to send password reset email to: $email');
 
-      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      // Always attempt to send email - Firebase will handle non-existent users silently
+      // This prevents user enumeration attacks (Security fix #1)
+      await _firebaseAuth.sendPasswordResetEmail(email: email.trim()); // Consistent sanitization (fix #7)
 
-      info('Password reset email sent successfully to: $email');
+      info('Password reset email request processed for: $email');
     } on firebase_auth.FirebaseAuthException catch (e) {
       error('Firebase Auth Exception - Code: ${e.code}, Message: ${e.message}');
       error('Failed to send password reset email to: $email - ${e.message}');
@@ -233,41 +234,6 @@ class AuthRepositoryImpl implements AuthRepository {
     } catch (e) {
       error('Unexpected error in sendPasswordResetEmail: ${e.toString()}');
       throw Exception('Failed to send password reset email: ${e.toString()}');
-    }
-  }
-
-  @override
-  Future<bool> isUserRegistered({required String email}) async {
-    try {
-      debug('Checking if user is registered for: $email');
-
-      // Since fetchSignInMethodsForEmail is deprecated, we'll use a different approach
-      // Try to send a password reset email - if the user doesn't exist, it will fail
-      // This is a more secure approach that doesn't reveal if an email is registered
-      await _firebaseAuth.sendPasswordResetEmail(email: email);
-      
-      // If we reach here, the email exists (no exception was thrown)
-      debug('User exists for $email: true');
-      return true;
-    } on firebase_auth.FirebaseAuthException catch (e) {
-      error('Firebase Auth Exception in isUserRegistered - Code: ${e.code}, Message: ${e.message}');
-      
-      // Handle specific error codes
-      if (e.code == 'invalid-email') {
-        throw Exception('The email address is not valid.');
-      } else if (e.code == 'user-not-found') {
-        // User doesn't exist
-        debug('User does not exist for $email');
-        return false;
-      }
-      
-      // For other errors, we can't determine if user exists
-      // Return false to be safe
-      debug('Cannot determine if user exists due to error: ${e.message}');
-      return false;
-    } catch (e) {
-      error('Unexpected error in isUserRegistered: ${e.toString()}');
-      return false;
     }
   }
 
@@ -399,9 +365,9 @@ class AuthRepositoryImpl implements AuthRepository {
       case 'invalid-email':
         return Exception('The email address is not valid.');
       case 'user-not-found':
-        return Exception('No user found for this email.');
+        return Exception('Invalid email or password. Please check your credentials and try again.');
       case 'wrong-password':
-        return Exception('Wrong password provided.');
+        return Exception('Invalid email or password. Please check your credentials and try again.');
       case 'user-disabled':
         return Exception('This user account has been disabled.');
       case 'too-many-requests':
@@ -414,14 +380,34 @@ class AuthRepositoryImpl implements AuthRepository {
         );
       case 'invalid-credential':
         return Exception(
-          'The credential received is malformed or has expired.',
+          'Invalid email or password. Please check your credentials and try again.',
         );
       case 'network-request-failed':
         return Exception(
           'Network error. Please check your connection and try again.',
         );
+      case 'requires-recent-login':
+        return Exception(
+          'This operation requires recent authentication. Please sign in again.',
+        );
+      case 'credential-already-in-use':
+        return Exception(
+          'This credential is already associated with a different user account.',
+        );
+      case 'invalid-verification-code':
+        return Exception(
+          'The verification code is invalid. Please try again.',
+        );
+      case 'invalid-verification-id':
+        return Exception(
+          'The verification ID is invalid. Please try again.',
+        );
+      case 'session-expired':
+        return Exception(
+          'Your session has expired. Please sign in again.',
+        );
       default:
-        return Exception('Authentication failed: ${e.message}');
+        return Exception('Authentication failed. Please try again.');
     }
   }
 }

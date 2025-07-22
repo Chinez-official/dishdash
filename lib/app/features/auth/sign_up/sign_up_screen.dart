@@ -8,7 +8,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dishdash/app/shared/shared.dart';
 import 'package:dishdash/app/shared/widgets/auth_textfield_widget.dart';
 import 'package:dishdash/app/shared/widgets/auth_button_widget.dart';
-import 'package:dishdash/app/shared/extensions/string_extensions.dart';
 
 @RoutePage()
 class SignUpScreen extends HookConsumerWidget {
@@ -44,17 +43,20 @@ class SignUpScreen extends HookConsumerWidget {
     final isPasswordObscured = useState(true);
     final isConfirmPasswordObscured = useState(true);
 
+    // Loading state tracking for form disabling
+    final isLoading = signUpState.maybeWhen(
+      loading: () => true,
+      orElse: () => false,
+    );
+
     // Listen to name changes for real-time validation
     useEffect(() {
       void onNameChanged() {
         final name = nameController.text;
         if (name.isNotEmpty) {
-          final isValid = name.trim().isValidName;
-          isNameValid.value = isValid;
-          nameErrorMessage.value =
-              isValid
-                  ? null
-                  : 'Please enter a valid name (at least 2 characters)';
+          final errorMessage = signUpNotifier.validateNameRealTime(name);
+          isNameValid.value = errorMessage == null;
+          nameErrorMessage.value = errorMessage;
         } else {
           isNameValid.value = true;
           nameErrorMessage.value = null;
@@ -70,10 +72,9 @@ class SignUpScreen extends HookConsumerWidget {
       void onEmailChanged() {
         final email = emailController.text;
         if (email.isNotEmpty) {
-          final isValid = email.isValidEmail;
-          isEmailValid.value = isValid;
-          emailErrorMessage.value =
-              isValid ? null : 'Please enter a valid email address';
+          final errorMessage = signUpNotifier.validateEmailRealTime(email);
+          isEmailValid.value = errorMessage == null;
+          emailErrorMessage.value = errorMessage;
         } else {
           isEmailValid.value = true;
           emailErrorMessage.value = null;
@@ -89,10 +90,9 @@ class SignUpScreen extends HookConsumerWidget {
       void onPasswordChanged() {
         final password = passwordController.text;
         if (password.isNotEmpty) {
-          final isValid = password.isPasswordStrong;
-          isPasswordValid.value = isValid;
-          passwordErrorMessage.value =
-              isValid ? null : password.passwordStrengthMessage;
+          final errorMessage = signUpNotifier.validatePasswordRealTime(password);
+          isPasswordValid.value = errorMessage == null;
+          passwordErrorMessage.value = errorMessage;
         } else {
           isPasswordValid.value = true;
           passwordErrorMessage.value = null;
@@ -109,10 +109,12 @@ class SignUpScreen extends HookConsumerWidget {
         final confirmPassword = confirmPasswordController.text;
         final password = passwordController.text;
         if (confirmPassword.isNotEmpty) {
-          final isValid = confirmPassword == password;
-          isConfirmPasswordValid.value = isValid;
-          confirmPasswordErrorMessage.value =
-              isValid ? null : 'Passwords do not match';
+          final errorMessage = signUpNotifier.validateConfirmPasswordRealTime(
+            password,
+            confirmPassword,
+          );
+          isConfirmPasswordValid.value = errorMessage == null;
+          confirmPasswordErrorMessage.value = errorMessage;
         } else {
           isConfirmPasswordValid.value = true;
           confirmPasswordErrorMessage.value = null;
@@ -124,7 +126,7 @@ class SignUpScreen extends HookConsumerWidget {
           confirmPasswordController.removeListener(onConfirmPasswordChanged);
     }, [confirmPasswordController, passwordController]);
 
-    // Handle state changes
+    // Handle state changes - only show non-validation errors
     ref.listen<SignUpState>(signUpNotifierProvider, (previous, next) {
       next.when(
         initial: () {},
@@ -144,7 +146,7 @@ class SignUpScreen extends HookConsumerWidget {
           context.router.replaceAll([const HomeRoute()]);
         },
         error: (message) {
-          // Show error message
+          // Only show network/authentication errors, not validation errors
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(message), backgroundColor: Colors.red),
           );
@@ -161,6 +163,25 @@ class SignUpScreen extends HookConsumerWidget {
         email: emailController.text,
         password: passwordController.text,
         confirmPassword: confirmPasswordController.text,
+        onValidationError: (nameError, emailError, passwordError, confirmPasswordError) {
+          // Force validation display
+          if (nameError != null) {
+            isNameValid.value = false;
+            nameErrorMessage.value = nameError;
+          }
+          if (emailError != null) {
+            isEmailValid.value = false;
+            emailErrorMessage.value = emailError;
+          }
+          if (passwordError != null) {
+            isPasswordValid.value = false;
+            passwordErrorMessage.value = passwordError;
+          }
+          if (confirmPasswordError != null) {
+            isConfirmPasswordValid.value = false;
+            confirmPasswordErrorMessage.value = confirmPasswordError;
+          }
+        },
       );
     }
 
@@ -214,8 +235,9 @@ class SignUpScreen extends HookConsumerWidget {
                       hintText: 'Enter Name',
                       controller: nameController,
                       focusNode: nameFocusNode,
-                      autofocus: false, // Explicitly set to false
+                      autofocus: false,
                       hasError: !isNameValid.value,
+                      enabled: !isLoading, // Disable form during loading
                     ),
 
                     // Name validation message
@@ -249,6 +271,7 @@ class SignUpScreen extends HookConsumerWidget {
                       autofillHints: const [AutofillHints.email],
                       enableSuggestions: true,
                       hasError: !isEmailValid.value,
+                      enabled: !isLoading, // Disable form during loading
                     ),
 
                     // Email validation message
@@ -284,6 +307,7 @@ class SignUpScreen extends HookConsumerWidget {
                       onPasswordToggle: () {
                         isPasswordObscured.value = !isPasswordObscured.value;
                       },
+                      enabled: !isLoading, // Disable form during loading
                     ),
 
                     // Password validation message
@@ -320,6 +344,7 @@ class SignUpScreen extends HookConsumerWidget {
                         isConfirmPasswordObscured.value =
                             !isConfirmPasswordObscured.value;
                       },
+                      enabled: !isLoading, // Disable form during loading
                     ),
 
                     // Confirm Password validation message
@@ -337,36 +362,13 @@ class SignUpScreen extends HookConsumerWidget {
                     const YMargin(40),
 
                     // Sign Up Button
-                    signUpState.when(
-                      initial:
-                          () => AuthButtonWidget(
-                            text: 'Sign Up',
-                            onPressed: handleSignUp,
-                            showArrow: true,
-                            backgroundColor: AppColors.primary100,
-                          ),
-                      loading:
-                          () => AuthButtonWidget(
-                            text: 'Creating Account...',
-                            onPressed: null, // Disabled during loading
-                            showArrow: false,
-                            backgroundColor: AppColors.grey2,
-                          ),
-                      success:
-                          (_) => AuthButtonWidget(
-                            text: 'Account Created!',
-                            onPressed: null,
-                            showArrow: false,
-                            backgroundColor: AppColors.primary100,
-                          ),
-                      error:
-                          (_) => AuthButtonWidget(
-                            text: 'Try Again',
-                            onPressed: handleSignUp,
-                            showArrow: true,
-                            backgroundColor: AppColors.primary100,
-                          ),
+                    AuthButtonWidget(
+                      text: 'Sign Up',
+                      onPressed: handleSignUp,
+                      showArrow: true,
+                      isLoading: isLoading,
                     ),
+
                     const YMargin(30),
 
                     // Sign In Link
