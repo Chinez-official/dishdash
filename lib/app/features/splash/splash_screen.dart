@@ -28,7 +28,7 @@ class SplashScreen extends HookConsumerWidget {
     ref.listen<GetUserState>(getUserNotifierProvider, (previous, current) {
       current.maybeWhen(
         success: (_) {
-          context.router.replaceAll([const HomeRoute()]);
+          context.router.replaceAll([const MainRoute()]);
         },
         error: () => context.router.replaceAll([const SignInRoute()]),
         orElse: () {},

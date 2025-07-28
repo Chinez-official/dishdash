@@ -11,6 +11,22 @@
 part of 'router.dart';
 
 /// generated route for
+/// [BookmarkScreen]
+class BookmarkRoute extends PageRouteInfo<void> {
+  const BookmarkRoute({List<PageRouteInfo>? children})
+    : super(BookmarkRoute.name, initialChildren: children);
+
+  static const String name = 'BookmarkRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const BookmarkScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [ForgotPasswordScreen]
 class ForgotPasswordRoute extends PageRouteInfo<void> {
   const ForgotPasswordRoute({List<PageRouteInfo>? children})
@@ -38,6 +54,70 @@ class HomeRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const HomeScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [MainScreen]
+class MainRoute extends PageRouteInfo<void> {
+  const MainRoute({List<PageRouteInfo>? children})
+    : super(MainRoute.name, initialChildren: children);
+
+  static const String name = 'MainRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MainScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [NotificationScreen]
+class NotificationRoute extends PageRouteInfo<void> {
+  const NotificationRoute({List<PageRouteInfo>? children})
+    : super(NotificationRoute.name, initialChildren: children);
+
+  static const String name = 'NotificationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const NotificationScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [PlusScreen]
+class PlusRoute extends PageRouteInfo<void> {
+  const PlusRoute({List<PageRouteInfo>? children})
+    : super(PlusRoute.name, initialChildren: children);
+
+  static const String name = 'PlusRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const PlusScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [ProfileScreen]
+class ProfileRoute extends PageRouteInfo<void> {
+  const ProfileRoute({List<PageRouteInfo>? children})
+    : super(ProfileRoute.name, initialChildren: children);
+
+  static const String name = 'ProfileRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ProfileScreen();
     },
   );
 }

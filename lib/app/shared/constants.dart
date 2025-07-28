@@ -14,6 +14,7 @@ class Images {
   static const String message = 'assets/icons/Message.svg';
   static const String more = 'assets/icons/More.svg';
   static const String notificationBing = 'assets/icons/Notification-Bing.svg';
+  static const String plus = 'assets/icons/Plus.svg';
   static const String profile = 'assets/icons/Profile.svg';
   static const String search = 'assets/icons/Search.svg';
   static const String setting = 'assets/icons/Setting.svg';

@@ -145,7 +145,7 @@ class SignUpScreen extends HookConsumerWidget {
           );
 
           // Navigate to home screen and clear the navigation stack
-          context.router.replaceAll([const HomeRoute()]);
+          context.router.replaceAll([const MainRoute()]);
         },
         error: (message) {
           // Only show network/authentication errors, not validation errors

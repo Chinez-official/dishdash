@@ -126,7 +126,7 @@ class SignInScreen extends HookConsumerWidget {
         googleLoading: () {},
         success: (firstName) {
           // Navigate to home screen
-          context.router.replaceAll([const HomeRoute()]);
+          context.router.replaceAll([const MainRoute()]);
           // Show success message with consistent success color
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

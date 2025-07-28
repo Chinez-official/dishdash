@@ -3,6 +3,11 @@ import 'package:dishdash/app/features/auth/sign_up/sign_up_screen.dart';
 import 'package:dishdash/app/features/auth/sign_in/sign_in_screen.dart';
 import 'package:dishdash/app/features/auth/forgot_password/forgot_password_screen.dart';
 import 'package:dishdash/app/features/home/home_screen.dart';
+import 'package:dishdash/app/features/bookmark/bookmark_screen.dart';
+import 'package:dishdash/app/features/main_screen.dart';
+import 'package:dishdash/app/features/plus/plus_screen.dart';
+import 'package:dishdash/app/features/notification/notification_screen.dart';
+import 'package:dishdash/app/features/profile/profile_screen.dart';
 import 'package:dishdash/app/features/splash/splash_screen.dart';
 
 part 'router.gr.dart';
@@ -36,7 +41,19 @@ class AppRouter extends RootStackRouter {
       page: ForgotPasswordRoute.page,
     ),
 
-    // Home Route
+    // Main Screen with nested routes for bottom navigation
+    CustomRoute(
+      page: MainRoute.page,
+      children: [
+        CustomRoute(page: HomeRoute.page),
+        CustomRoute(page: BookmarkRoute.page),
+        CustomRoute(page: PlusRoute.page),
+        CustomRoute(page: NotificationRoute.page),
+        CustomRoute(page: ProfileRoute.page),
+      ],
+    ),
+
+    // Standalone Home Route (for direct navigation from auth)
     CustomRoute(
       path: '/home',
       transitionsBuilder: TransitionsBuilders.slideLeft,
