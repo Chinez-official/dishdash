@@ -23,6 +23,25 @@ class MainScreen extends HookConsumerWidget {
           NotificationRoute(),
           ProfileRoute(),
         ],
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            currentIndex.value = 2;
+            final tabsRouter = AutoTabsRouter.of(context);
+            tabsRouter.setActiveIndex(2);
+          },
+          backgroundColor: AppColors.primary100,
+          elevation: 0,
+          child: SvgPicture.asset(
+            Images.plus,
+            width: 24,
+            height: 24,
+            colorFilter: const ColorFilter.mode(
+              AppColors.backgroundBody,
+              BlendMode.srcIn,
+            ),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBuilder: (context, tabsRouter) {
           return Container(
             decoration: const BoxDecoration(
@@ -34,35 +53,26 @@ class MainScreen extends HookConsumerWidget {
                 ),
               ),
             ),
-            child: BottomNavigationBar(
-              backgroundColor: AppColors.backgroundBody,
-              currentIndex: currentIndex.value,
-              selectedItemColor: AppColors.primary100,
-              unselectedItemColor: AppColors.grey4,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              type: BottomNavigationBarType.fixed,
+            child: BottomAppBar(
+              shape: const CircularNotchedRectangle(),
+              notchMargin: 8.0,
+              color: AppColors.backgroundBody,
               elevation: 0,
-              onTap: (i) {
-                // sets variable of active bottom nav index for icon switch
-                currentIndex.value = i;
-
-                if (tabsRouter.activeIndex == i) {
-                  tabsRouter.stackRouterOfIndex(i)?.popUntilRoot();
-                } else {
-                  tabsRouter.setActiveIndex(i);
-                }
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: currentIndex.value == 0
-                        ? BoxDecoration(
-                            color: AppColors.primary40,
-                            borderRadius: BorderRadius.circular(12),
-                          )
-                        : null,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  // Home Icon
+                  _buildNavItem(
+                    index: 0,
+                    currentIndex: currentIndex.value,
+                    onTap: () {
+                      currentIndex.value = 0;
+                      if (tabsRouter.activeIndex == 0) {
+                        tabsRouter.stackRouterOfIndex(0)?.popUntilRoot();
+                      } else {
+                        tabsRouter.setActiveIndex(0);
+                      }
+                    },
                     child: SvgPicture.asset(
                       Images.home,
                       width: 24,
@@ -75,17 +85,18 @@ class MainScreen extends HookConsumerWidget {
                       ),
                     ),
                   ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: currentIndex.value == 1
-                        ? BoxDecoration(
-                            color: AppColors.primary40,
-                            borderRadius: BorderRadius.circular(12),
-                          )
-                        : null,
+                  // Bookmark Icon
+                  _buildNavItem(
+                    index: 1,
+                    currentIndex: currentIndex.value,
+                    onTap: () {
+                      currentIndex.value = 1;
+                      if (tabsRouter.activeIndex == 1) {
+                        tabsRouter.stackRouterOfIndex(1)?.popUntilRoot();
+                      } else {
+                        tabsRouter.setActiveIndex(1);
+                      }
+                    },
                     child: SvgPicture.asset(
                       Images.inactive,
                       width: 24,
@@ -98,39 +109,20 @@ class MainScreen extends HookConsumerWidget {
                       ),
                     ),
                   ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: Container(
-                    width: 56,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary100,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: SvgPicture.asset(
-                        Images.plus,
-                        width: 24,
-                        height: 24,
-                        colorFilter: const ColorFilter.mode(
-                          AppColors.backgroundBody,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    ),
-                  ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: currentIndex.value == 3
-                        ? BoxDecoration(
-                            color: AppColors.primary40,
-                            borderRadius: BorderRadius.circular(12),
-                          )
-                        : null,
+                  // Empty space for FAB
+                  const SizedBox(width: 56),
+                  // Notification Icon
+                  _buildNavItem(
+                    index: 3,
+                    currentIndex: currentIndex.value,
+                    onTap: () {
+                      currentIndex.value = 3;
+                      if (tabsRouter.activeIndex == 3) {
+                        tabsRouter.stackRouterOfIndex(3)?.popUntilRoot();
+                      } else {
+                        tabsRouter.setActiveIndex(3);
+                      }
+                    },
                     child: SvgPicture.asset(
                       Images.notificationBing,
                       width: 24,
@@ -143,17 +135,18 @@ class MainScreen extends HookConsumerWidget {
                       ),
                     ),
                   ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: currentIndex.value == 4
-                        ? BoxDecoration(
-                            color: AppColors.primary40,
-                            borderRadius: BorderRadius.circular(12),
-                          )
-                        : null,
+                  // Profile Icon
+                  _buildNavItem(
+                    index: 4,
+                    currentIndex: currentIndex.value,
+                    onTap: () {
+                      currentIndex.value = 4;
+                      if (tabsRouter.activeIndex == 4) {
+                        tabsRouter.stackRouterOfIndex(4)?.popUntilRoot();
+                      } else {
+                        tabsRouter.setActiveIndex(4);
+                      }
+                    },
                     child: SvgPicture.asset(
                       Images.profile,
                       width: 24,
@@ -166,12 +159,27 @@ class MainScreen extends HookConsumerWidget {
                       ),
                     ),
                   ),
-                  label: '',
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildNavItem({
+    required int index,
+    required int currentIndex,
+    required VoidCallback onTap,
+    required Widget child,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        child: child,
       ),
     );
   }
