@@ -23,35 +23,47 @@ class MainScreen extends HookConsumerWidget {
           NotificationRoute(),
           ProfileRoute(),
         ],
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            currentIndex.value = 2;
-            final tabsRouter = AutoTabsRouter.of(context);
-            tabsRouter.setActiveIndex(2);
-          },
-          backgroundColor: AppColors.primary100,
-          elevation: 0,
-          child: SvgPicture.asset(
-            Images.plus,
-            width: 24,
-            height: 24,
-            colorFilter: const ColorFilter.mode(
-              AppColors.backgroundBody,
-              BlendMode.srcIn,
+        floatingActionButton: Container(
+          width: 56,
+          height: 56,
+          decoration: const BoxDecoration(
+            color: AppColors.primary100,
+            shape: BoxShape.circle,
+          ),
+          child: FloatingActionButton(
+            onPressed: () {
+              // Temporarily disabled to prevent AutoTabsRouter error
+              // currentIndex.value = 2;
+              // final tabsRouter = AutoTabsRouter.of(context);
+              // tabsRouter.setActiveIndex(2);
+            },
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            shape: const CircleBorder(),
+            child: SvgPicture.asset(
+              Images.plus,
+              width: 24,
+              height: 24,
+              colorFilter: const ColorFilter.mode(
+                AppColors.backgroundBody,
+                BlendMode.srcIn,
+              ),
             ),
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBuilder: (context, tabsRouter) {
           return Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: AppColors.backgroundBody,
-              border: Border(
-                top: BorderSide(
-                  color: AppColors.grey4,
-                  width: 0.5,
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(0, 0),
+                  blurRadius: 8,
+                  spreadRadius: 0,
+                  color: const Color(0xFF6C6C6C).withValues(alpha: 0.08),
                 ),
-              ),
+              ],
             ),
             child: BottomAppBar(
               shape: const CircularNotchedRectangle(),
@@ -73,16 +85,9 @@ class MainScreen extends HookConsumerWidget {
                         tabsRouter.setActiveIndex(0);
                       }
                     },
-                    child: SvgPicture.asset(
+                    child: _buildIcon(
                       Images.home,
-                      width: 24,
-                      height: 24,
-                      colorFilter: ColorFilter.mode(
-                        currentIndex.value == 0
-                            ? AppColors.primary100
-                            : AppColors.grey4,
-                        BlendMode.srcIn,
-                      ),
+                      isSelected: currentIndex.value == 0,
                     ),
                   ),
                   // Bookmark Icon
@@ -97,16 +102,9 @@ class MainScreen extends HookConsumerWidget {
                         tabsRouter.setActiveIndex(1);
                       }
                     },
-                    child: SvgPicture.asset(
+                    child: _buildIcon(
                       Images.inactive,
-                      width: 24,
-                      height: 24,
-                      colorFilter: ColorFilter.mode(
-                        currentIndex.value == 1
-                            ? AppColors.primary100
-                            : AppColors.grey4,
-                        BlendMode.srcIn,
-                      ),
+                      isSelected: currentIndex.value == 1,
                     ),
                   ),
                   // Empty space for FAB
@@ -123,16 +121,9 @@ class MainScreen extends HookConsumerWidget {
                         tabsRouter.setActiveIndex(3);
                       }
                     },
-                    child: SvgPicture.asset(
+                    child: _buildIcon(
                       Images.notificationBing,
-                      width: 24,
-                      height: 24,
-                      colorFilter: ColorFilter.mode(
-                        currentIndex.value == 3
-                            ? AppColors.primary100
-                            : AppColors.grey4,
-                        BlendMode.srcIn,
-                      ),
+                      isSelected: currentIndex.value == 3,
                     ),
                   ),
                   // Profile Icon
@@ -147,16 +138,9 @@ class MainScreen extends HookConsumerWidget {
                         tabsRouter.setActiveIndex(4);
                       }
                     },
-                    child: SvgPicture.asset(
+                    child: _buildIcon(
                       Images.profile,
-                      width: 24,
-                      height: 24,
-                      colorFilter: ColorFilter.mode(
-                        currentIndex.value == 4
-                            ? AppColors.primary100
-                            : AppColors.grey4,
-                        BlendMode.srcIn,
-                      ),
+                      isSelected: currentIndex.value == 4,
                     ),
                   ),
                 ],
@@ -180,6 +164,18 @@ class MainScreen extends HookConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: child,
+      ),
+    );
+  }
+
+  Widget _buildIcon(String iconPath, {required bool isSelected}) {
+    return SvgPicture.asset(
+      iconPath,
+      width: 24,
+      height: 24,
+      colorFilter: ColorFilter.mode(
+        isSelected ? AppColors.primary100 : AppColors.grey4,
+        BlendMode.srcIn,
       ),
     );
   }
