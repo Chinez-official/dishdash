@@ -91,22 +91,6 @@ class NotificationRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [PlusScreen]
-class PlusRoute extends PageRouteInfo<void> {
-  const PlusRoute({List<PageRouteInfo>? children})
-    : super(PlusRoute.name, initialChildren: children);
-
-  static const String name = 'PlusRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const PlusScreen();
-    },
-  );
-}
-
-/// generated route for
 /// [ProfileScreen]
 class ProfileRoute extends PageRouteInfo<void> {
   const ProfileRoute({List<PageRouteInfo>? children})

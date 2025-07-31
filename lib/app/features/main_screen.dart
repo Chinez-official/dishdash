@@ -19,7 +19,6 @@ class MainScreen extends HookConsumerWidget {
         routes: const [
           HomeRoute(),
           BookmarkRoute(),
-          PlusRoute(),
           NotificationRoute(),
           ProfileRoute(),
         ],
@@ -111,36 +110,45 @@ class MainScreen extends HookConsumerWidget {
                   const SizedBox(width: 56),
                   // Notification Icon
                   _buildNavItem(
-                    index: 3,
+                    index: 2, // ✅ Changed from 3 to 2
                     currentIndex: currentIndex.value,
                     onTap: () {
-                      currentIndex.value = 3;
-                      if (tabsRouter.activeIndex == 3) {
-                        tabsRouter.stackRouterOfIndex(3)?.popUntilRoot();
+                      currentIndex.value = 2; // ✅ Changed from 3 to 2
+                      if (tabsRouter.activeIndex == 2) {
+                        // ✅ Changed from 3 to 2
+                        tabsRouter
+                            .stackRouterOfIndex(2)
+                            ?.popUntilRoot(); // ✅ Changed from 3 to 2
                       } else {
-                        tabsRouter.setActiveIndex(3);
+                        tabsRouter.setActiveIndex(2); // ✅ Changed from 3 to 2
                       }
                     },
                     child: _buildIcon(
                       Images.notificationBing,
-                      isSelected: currentIndex.value == 3,
+                      isSelected:
+                          currentIndex.value == 2, // ✅ Changed from 3 to 2
                     ),
                   ),
-                  // Profile Icon
+
+                  // Profile Icon - FIXED VERSION
                   _buildNavItem(
-                    index: 4,
+                    index: 3, // ✅ Changed from 4 to 3
                     currentIndex: currentIndex.value,
                     onTap: () {
-                      currentIndex.value = 4;
-                      if (tabsRouter.activeIndex == 4) {
-                        tabsRouter.stackRouterOfIndex(4)?.popUntilRoot();
+                      currentIndex.value = 3; // ✅ Changed from 4 to 3
+                      if (tabsRouter.activeIndex == 3) {
+                        // ✅ Changed from 4 to 3
+                        tabsRouter
+                            .stackRouterOfIndex(3)
+                            ?.popUntilRoot(); // ✅ Changed from 4 to 3
                       } else {
-                        tabsRouter.setActiveIndex(4);
+                        tabsRouter.setActiveIndex(3); // ✅ Changed from 4 to 3
                       }
                     },
                     child: _buildIcon(
                       Images.profile,
-                      isSelected: currentIndex.value == 4,
+                      isSelected:
+                          currentIndex.value == 3, // ✅ Changed from 4 to 3
                     ),
                   ),
                 ],

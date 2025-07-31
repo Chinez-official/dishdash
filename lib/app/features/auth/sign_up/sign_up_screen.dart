@@ -134,17 +134,7 @@ class SignUpScreen extends HookConsumerWidget {
         initial: () {},
         loading: () {},
         success: (firstName) {
-          // Show success message
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Welcome, $firstName! Account created successfully.',
-              ),
-              backgroundColor: AppColors.primary100,
-            ),
-          );
-
-          // Navigate to home screen and clear the navigation stack
+          // Navigate to home screen without showing snackbar
           context.router.replaceAll([const MainRoute()]);
         },
         error: (message) {

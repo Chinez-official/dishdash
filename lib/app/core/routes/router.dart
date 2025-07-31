@@ -5,7 +5,6 @@ import 'package:dishdash/app/features/auth/forgot_password/forgot_password_scree
 import 'package:dishdash/app/features/home/home_screen.dart';
 import 'package:dishdash/app/features/bookmark/bookmark_screen.dart';
 import 'package:dishdash/app/features/main_screen.dart';
-import 'package:dishdash/app/features/plus/plus_screen.dart';
 import 'package:dishdash/app/features/notification/notification_screen.dart';
 import 'package:dishdash/app/features/profile/profile_screen.dart';
 import 'package:dishdash/app/features/splash/splash_screen.dart';
@@ -47,7 +46,6 @@ class AppRouter extends RootStackRouter {
       children: [
         CustomRoute(page: HomeRoute.page),
         CustomRoute(page: BookmarkRoute.page),
-        CustomRoute(page: PlusRoute.page),
         CustomRoute(page: NotificationRoute.page),
         CustomRoute(page: ProfileRoute.page),
       ],
@@ -59,7 +57,5 @@ class AppRouter extends RootStackRouter {
       transitionsBuilder: TransitionsBuilders.slideLeft,
       page: HomeRoute.page,
     ),
-
-    // Add other routes as needed
   ];
 }

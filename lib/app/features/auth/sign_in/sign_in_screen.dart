@@ -125,26 +125,12 @@ class SignInScreen extends HookConsumerWidget {
         loading: () {},
         googleLoading: () {},
         success: (firstName) {
-          // Navigate to home screen
+          // Navigate to home screen without showing snackbar
           context.router.replaceAll([const MainRoute()]);
-          // Show success message with consistent success color
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Welcome back, $firstName!'),
-              backgroundColor: AppColors.primary100,
-            ),
-          );
         },
         googleSuccess: (firstName) {
-          // Navigate to home screen
+          // Navigate to home screen without showing snackbar
           context.router.replaceAll([const MainRoute()]);
-          // Show success message with consistent success color
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Welcome back, $firstName!'),
-              backgroundColor: AppColors.primary100,
-            ),
-          );
         },
         error: (message) {
           // Only show network/authentication errors, not validation errors

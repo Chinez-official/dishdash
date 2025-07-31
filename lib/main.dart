@@ -8,16 +8,26 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
+  // Ensure that Flutter bindings are initialized before calling native code.
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Setup dependency injection
   await serviceLocator();
 
+  // Set preferred device orientations
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
+  // Set the system navigation bar style
+  // This makes the navigation bar color match the app's body background.
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    systemNavigationBarColor: AppColors.backgroundBody,
+    systemNavigationBarIconBrightness: Brightness.dark, // Ensures icons are visible on a light background
+  ));
+
 
   runApp(ProviderScope(child: MyApp()));
 }
