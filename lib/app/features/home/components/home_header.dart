@@ -24,6 +24,11 @@ class HomeHeader extends ConsumerWidget {
                   : user.fullName.split(' ').first;
         }
 
+        // Truncate name if it exceeds 8 characters
+        String displayName = firstName.length > 8 
+            ? '${firstName.substring(0, 8)}...' 
+            : firstName;
+
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: Row(
@@ -35,9 +40,9 @@ class HomeHeader extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hello $firstName',
+                      'Hello $displayName',
                       style: textStylew600.copyWith(
-                        fontSize: 24,
+                        fontSize: 20,
                         color: AppColors.textMain,
                       ),
                     ),
@@ -45,8 +50,8 @@ class HomeHeader extends ConsumerWidget {
                     Text(
                       'What are you cooking today?',
                       style: textStylew400.copyWith(
-                        fontSize: 16,
-                        color: AppColors.textLabel,
+                        fontSize: 11,
+                        color: AppColors.grey3,
                       ),
                     ),
                   ],
@@ -59,15 +64,16 @@ class HomeHeader extends ConsumerWidget {
                   // TODO: Implement avatar tap functionality
                 },
                 child: Container(
-                  width: 50,
-                  height: 50,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: AppColors.secondary40,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(Images.avatar, fit: BoxFit.cover),
+                    child: Image.asset(Images.avatar,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
