@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dishdash/app/features/home/components/home_header.dart';
+import 'package:dishdash/app/features/home/components/search_section.dart';
 import 'package:dishdash/app/shared/shared.dart';
 // TODO: Import these components when they're created
 // import 'package:dishdash/app/features/home/components/categories_section.dart';
@@ -37,56 +38,46 @@ class HomeScreen extends HookConsumerWidget {
     }, []);
 
     return StatusBarWidget(
-      child: Scaffold(
-        backgroundColor: AppColors.backgroundBody,
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                const HomeHeader(),
-                Expanded(
-                  child: RefreshIndicator(
-                    displacement: 250,
-                    backgroundColor: AppColors.grey1,
-                    color: Colors.white,
-                    strokeWidth: 3,
-                    triggerMode: RefreshIndicatorTriggerMode.onEdge,
-                    onRefresh: () async => updateNotifiers(),
-                    child: ListView(
-                      children: [
-                        // TODO: Add banner image when available
-                        // ClipRRect(
-                        //   borderRadius: BorderRadius.circular(16),
-                        //   child: Image.asset(Images.sampleBanner),
-                        // ),
-                        // const YMargin(24),
+      child: GestureDetector(
+        onTap: () {
+          // Unfocus any focused text fields when tapping outside
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          backgroundColor: AppColors.backgroundBody,
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  const HomeHeader(),
+                  const SearchSection(),
+                  Expanded(
+                    child: RefreshIndicator(
+                      displacement: 250,
+                      backgroundColor: AppColors.grey1,
+                      color: Colors.white,
+                      strokeWidth: 3,
+                      triggerMode: RefreshIndicatorTriggerMode.onEdge,
+                      onRefresh: () async => updateNotifiers(),
+                      child: ListView(
+                        children: [
+                          // TODO: Add banner image when available
+                          // ClipRRect(
+                          //   borderRadius: BorderRadius.circular(16),
+                          //   child: Image.asset(Images.sampleBanner),
+                          // ),
+                          // const YMargin(24),
 
-                        // TODO: Uncomment when components are created
-                        // const TopChoiceSection(),
-                        // const CategoriesSection(),
-
-                        // Temporary placeholder content
-                        Container(
-                          height: 200,
-                          decoration: BoxDecoration(
-                            color: AppColors.primary20,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Content sections will be added here',
-                              style: textStylew500.copyWith(
-                                color: AppColors.textLabel,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                          // TODO: Uncomment when components are created
+                          // const TopChoiceSection(),
+                          // const CategoriesSection(),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

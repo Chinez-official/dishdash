@@ -51,6 +51,8 @@ class MainScreen extends HookConsumerWidget {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // Add this property to prevent FAB from moving
+        resizeToAvoidBottomInset: false,
         bottomNavigationBuilder: (context, tabsRouter) {
           return Container(
             decoration: BoxDecoration(

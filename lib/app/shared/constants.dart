@@ -3,7 +3,6 @@ class Images {
   static const String arrowLeft = 'assets/icons/Arrow-Left.svg';
   static const String arrowRight = 'assets/icons/Arrow-Right.svg';
   static const String arrowUp = 'assets/icons/Arrow-Up.svg';
-  static const String avatar = 'assets/images/avatar.png';
   static const String favorite = 'assets/icons/Document-Favorite.svg';
   static const String copy = 'assets/icons/Document-Text.svg';
   static const String filter = 'assets/icons/Filter.svg';

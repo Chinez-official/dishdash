@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:avatar_plus/avatar_plus.dart'; // Add this import
 import 'package:dishdash/app/core/models/user/user.dart';
 import 'package:dishdash/app/shared/shared.dart';
 import 'package:dishdash/providers/use_case_providers.dart';
@@ -15,6 +16,7 @@ class HomeHeader extends ConsumerWidget {
       future: authUseCase.getCurrentUser(),
       builder: (context, snapshot) {
         String firstName = 'User';
+        String avatarSeed = 'DefaultUser'; // Seed for avatar generation
 
         if (snapshot.hasData && snapshot.data != null) {
           final user = snapshot.data!;
@@ -22,12 +24,16 @@ class HomeHeader extends ConsumerWidget {
               user.firstName.isNotEmpty
                   ? user.firstName
                   : user.fullName.split(' ').first;
+
+          // Use the user's full name or email as seed for consistent avatar
+          avatarSeed = user.fullName.isNotEmpty ? user.fullName : user.email;
         }
 
         // Truncate name if it exceeds 8 characters
-        String displayName = firstName.length > 8 
-            ? '${firstName.substring(0, 8)}...' 
-            : firstName;
+        String displayName =
+            firstName.length > 8
+                ? '${firstName.substring(0, 8)}...'
+                : firstName;
 
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 20),
@@ -58,7 +64,7 @@ class HomeHeader extends ConsumerWidget {
                 ),
               ),
 
-              // Right side - User avatar
+              // Right side - User avatar using AvatarPlus
               GestureDetector(
                 onTap: () {
                   // TODO: Implement avatar tap functionality
@@ -67,12 +73,16 @@ class HomeHeader extends ConsumerWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: AppColors.secondary40,
+                    color:
+                        AppColors.secondary40, // Your desired background color
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: ClipRRect(
-                    child: Image.asset(Images.avatar,
-                      fit: BoxFit.cover,
+                    child: AvatarPlus(
+                      avatarSeed,
+                      height: 40,
+                      width: 40,
+                      trBackground: true, // Make avatar background transparent
                     ),
                   ),
                 ),
