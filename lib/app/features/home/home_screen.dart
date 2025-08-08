@@ -4,9 +4,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dishdash/app/features/home/components/home_header.dart';
 import 'package:dishdash/app/features/home/components/search_section.dart';
+import 'package:dishdash/app/features/home/components/categories_section.dart';
+import 'package:dishdash/app/features/home/components/recipes_section.dart';
 import 'package:dishdash/app/shared/shared.dart';
 // TODO: Import these components when they're created
-// import 'package:dishdash/app/features/home/components/categories_section.dart';
 // import 'package:dishdash/app/features/home/components/top_choice_section.dart';
 // import 'package:dishdash/providers/notifier_providers.dart';
 
@@ -52,6 +53,9 @@ class HomeScreen extends HookConsumerWidget {
                 children: [
                   const HomeHeader(),
                   const SearchSection(),
+                  const SizedBox(height: 16), // Add spacing after search
+                  const CategoriesSection(),
+                  const SizedBox(height: 16), // Add spacing after categories
                   Expanded(
                     child: RefreshIndicator(
                       displacement: 250,
@@ -69,9 +73,12 @@ class HomeScreen extends HookConsumerWidget {
                           // ),
                           // const YMargin(24),
 
+                          // Main Recipes Section
+                          const RecipesSection(),
+                          const SizedBox(height: 24),
+
                           // TODO: Uncomment when components are created
                           // const TopChoiceSection(),
-                          // const CategoriesSection(),
                         ],
                       ),
                     ),

@@ -41,9 +41,7 @@ class SearchSection extends StatelessWidget {
                       Images.search,
                       width: 18,
                       height: 18,
-                      fit:
-                          BoxFit
-                              .contain, // Ensures the SVG maintains its size
+                      fit: BoxFit.contain, // Ensures the SVG maintains its size
                       colorFilter: ColorFilter.mode(
                         AppColors.grey4,
                         BlendMode.srcIn,
