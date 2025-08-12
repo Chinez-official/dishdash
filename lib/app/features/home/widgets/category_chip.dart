@@ -20,17 +20,14 @@ class CategoryChip extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 8,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary100 : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          border: isSelected ? Border.all(
-            color: AppColors.primary100,
-            width: 1,
-          ) : null,
+          border:
+              isSelected
+                  ? Border.all(color: AppColors.primary100, width: 1)
+                  : null,
         ),
         child: Center(
           child: Text(
@@ -38,7 +35,8 @@ class CategoryChip extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: isSelected ? Colors.white : AppColors.primary100,
+              color:
+                  isSelected ? AppColors.backgroundBody : AppColors.primary100,
             ),
           ),
         ),

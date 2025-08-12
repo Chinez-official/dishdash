@@ -8,7 +8,7 @@ class RecipeCard extends StatelessWidget {
 
   const RecipeCard({super.key, required this.index});
 
-  // Updated data model with all required fields
+  // Data model with all required fields
   static final List<Map<String, dynamic>> recipes = [
     {
       "name": "Classic Greek Salad",
@@ -53,7 +53,7 @@ class RecipeCard extends StatelessWidget {
 
     return SizedBox(
       width: 150,
-      height: 250, // Increased height to accommodate expanded card
+      height: 231, // Increased height to accommodate expanded card
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.topCenter,
@@ -63,17 +63,10 @@ class RecipeCard extends StatelessWidget {
             top: 55, // Push down to make room for image
             child: Container(
               width: 150,
-              height: 195, // Increased height for expanded card
+              height: 176, // Increased height for expanded card
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.5),
+                color: AppColors.grey4.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -122,7 +115,7 @@ class RecipeCard extends StatelessWidget {
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 11,
-                                color: AppColors.grey1
+                                color: AppColors.grey1,
                               ),
                             ),
                           ],
@@ -151,9 +144,7 @@ class RecipeCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(
-                      0x26202020,
-                    ), // #202020 with 15% opacity
+                    color: AppColors.textMain.withValues(alpha: 0.15),
                     offset: const Offset(0, 8),
                     blurRadius: 25,
                     spreadRadius: 0,
@@ -163,15 +154,15 @@ class RecipeCard extends StatelessWidget {
               child: CircleAvatar(
                 radius: 54.5, // Half of 109
                 backgroundImage: NetworkImage(recipe['image']!),
-                backgroundColor: Colors.white,
+                backgroundColor: AppColors.backgroundBody,
               ),
             ),
           ),
 
           // 3. The Rating Badge - positioned at center of image, beside it
           Positioned(
-            top: 35, // Center of the image (55 top position of image)
-            right: 1, // Beside the image with some overlap
+            top: 27, // Center of the image
+            right: 0, // Beside the image with some overlap
             child: RatingBadge(rating: recipe['rating']),
           ),
         ],

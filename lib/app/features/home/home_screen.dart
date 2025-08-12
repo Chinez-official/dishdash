@@ -60,7 +60,7 @@ class HomeScreen extends HookConsumerWidget {
                     child: RefreshIndicator(
                       displacement: 250,
                       backgroundColor: AppColors.grey1,
-                      color: Colors.white,
+                      color: AppColors.backgroundBody,
                       strokeWidth: 3,
                       triggerMode: RefreshIndicatorTriggerMode.onEdge,
                       onRefresh: () async => updateNotifiers(),
