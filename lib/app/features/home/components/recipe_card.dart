@@ -1,140 +1,180 @@
-import 'package:flutter/material.dart';
-import 'package:dishdash/app/features/home/widgets/recipe_rating.dart';
-import 'package:dishdash/app/features/home/widgets/bookmark_button.dart';
+import 'package:dishdash/app/features/home/widgets/bookmark_icon.dart';
+import 'package:dishdash/app/features/home/widgets/rating_badge.dart';
 import 'package:dishdash/app/shared/shared.dart';
+import 'package:flutter/material.dart';
 
 class RecipeCard extends StatelessWidget {
   final int index;
-  
+
   const RecipeCard({super.key, required this.index});
 
-  static const List<String> recipeNames = [
-    'Classic Greek Salad',
-    'Crunchy Nut Coleslaw',
-    'Shrimp Chicken Andouille Sausage Jambalaya',
-    'Barbecue Chicken Jollof Rice',
-    'Portuguese Piri Piri Chicken',
+  // Updated data model with all required fields
+  static final List<Map<String, dynamic>> recipes = [
+    {
+      "name": "Classic Greek Salad",
+      "image":
+          "https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "rating": 4.5,
+      "time": 15,
+    },
+    {
+      "name": "Crunchy Nut Coleslaw",
+      "image":
+          "https://images.unsplash.com/photo-1602881916963-5daf2d97c06e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzF8fEJvd2wlMjBvZiUyMGNvbGVzbGF3fGVufDB8fDB8fHww",
+      "rating": 3.5,
+      "time": 10,
+    },
+    {
+      "name": "Shrimp Chicken Andouille Sausage Jambalaya",
+      "image":
+          "https://images.unsplash.com/photo-1602881917760-7379db593981?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "rating": 3.0,
+      "time": 10,
+    },
+    {
+      "name": "Barbecue Chicken Jollof Rice",
+      "image":
+          "https://images.unsplash.com/photo-1623064260108-4cd9a1880773?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzZ8fFBsYXRlJTIwb2YlMjBCYXJiZWN1ZSUyMENoaWNrZW4lMjBKb2xsb2YlMjBSaWNlfGVufDB8fDB8fHww",
+      "rating": 4.5,
+      "time": 10,
+    },
+    {
+      "name": "Portuguese Piri Piri Chicken",
+      "image":
+          "https://images.unsplash.com/photo-1611270630211-3a7e9496c24c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fFBsYXRlJTIwb2YlMjBQb3J0dWd1ZXNlJTIwUGlyaSUyMFBpcmklMjBDaGlja2VufGVufDB8fDB8fHww",
+      "rating": 4.5,
+      "time": 10,
+    },
   ];
-
-  static const List<double> ratings = [4.5, 4.2, 4.8, 4.3, 4.6];
-  static const List<String> cookTimes = ['15 mins', '10 mins', '35 mins', '25 mins', '30 mins'];
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // TODO: Navigate to recipe details
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Tapped on ${recipeNames[index]}'),
-            duration: const Duration(seconds: 1),
-          ),
-        );
-      },
-      child: Container(
-        width: 150,
-        height: 176,
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image with bookmark button
-            Stack(
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 110,
-                  margin: const EdgeInsets.only(top: 12, left: 20.5, right: 20.5),
-                  decoration: BoxDecoration(
-                    color: AppColors.grey4,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0x26202020), // #202020 with 15% opacity
-                        offset: const Offset(0, 8),
-                        blurRadius: 25,
-                        spreadRadius: 0,
-                      ),
-                    ],
+    final recipe = recipes[index];
+
+    return SizedBox(
+      width: 150,
+      height: 250, // Increased height to accommodate expanded card
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.topCenter,
+        children: [
+          // 1. The Card Container - expanded at bottom
+          Positioned(
+            top: 55, // Push down to make room for image
+            child: Container(
+              width: 150,
+              height: 195, // Increased height for expanded card
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Container(
-                      color: AppColors.primary40,
-                      child: Icon(
-                        Icons.restaurant,
-                        size: 40,
-                        color: AppColors.primary100,
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Space for the overlapping circular image
+                  const SizedBox(height: 65),
+
+                  // Recipe Title with horizontal padding
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      recipe['name']!,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
                       ),
                     ),
                   ),
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: BookmarkButton(
-                    recipeId: index.toString(),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            // Rating
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: RecipeRating(rating: ratings[index]),
-            ),
-            const SizedBox(height: 4),
-            // Recipe name
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                recipeNames[index],
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textMain,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const Spacer(),
-            // Cook time
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 16),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.access_time,
-                    size: 12,
-                    color: AppColors.grey2,
-                  ),
-                  SizedBox(width: 2),
-                  Text(
-                    cookTimes[index],
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: AppColors.grey2,
+
+                  // Spacer pushes the Row to the bottom
+                  const Spacer(),
+
+                  // Row for Time and Bookmark Icon - positioned at bottom edges
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Column for the Time Display
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Time',
+                              style: TextStyle(
+                                color: AppColors.grey3,
+                                fontSize: 11,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              '${recipe['time']} Mins',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 11,
+                                color: AppColors.grey1
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // Bookmark Icon - pushed down a bit
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: const BookmarkIcon(),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 8),
-          ],
-        ),
+          ),
+
+          // 2. The Overlapping Image
+          Positioned(
+            top: 0,
+            child: Container(
+              width: 109,
+              height: 110,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(
+                      0x26202020,
+                    ), // #202020 with 15% opacity
+                    offset: const Offset(0, 8),
+                    blurRadius: 25,
+                    spreadRadius: 0,
+                  ),
+                ],
+              ),
+              child: CircleAvatar(
+                radius: 54.5, // Half of 109
+                backgroundImage: NetworkImage(recipe['image']!),
+                backgroundColor: Colors.white,
+              ),
+            ),
+          ),
+
+          // 3. The Rating Badge - positioned at center of image, beside it
+          Positioned(
+            top: 35, // Center of the image (55 top position of image)
+            right: 1, // Beside the image with some overlap
+            child: RatingBadge(rating: recipe['rating']),
+          ),
+        ],
       ),
     );
   }

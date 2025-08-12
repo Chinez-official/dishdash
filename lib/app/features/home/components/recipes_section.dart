@@ -7,7 +7,7 @@ class RecipesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 220, // Increased height to accommodate image above card
+      height: 250, // Increased height to accommodate expanded cards
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.only(left: 16),
@@ -15,7 +15,9 @@ class RecipesSection extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) {
           return Padding(
-            padding: EdgeInsets.only(right: index < 4 ? 15 : 16),
+            padding: EdgeInsets.only(
+              right: index < 4 ? 15 : 16,
+            ), // 15px gap between cards
             child: RecipeCard(index: index),
           );
         },
