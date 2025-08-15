@@ -7,10 +7,8 @@ class CategoriesSection extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // State for selected category
     final selectedCategory = useState<String>('All');
 
-    // Categories data
     final categories = [
       'All',
       'Indian',
@@ -27,13 +25,12 @@ class CategoriesSection extends HookWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Horizontal scrollable categories
         SizedBox(
           height: 40,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categories.length,
-            padding: const EdgeInsets.symmetric(horizontal: 0),
+            padding: const EdgeInsets.symmetric(horizontal: 4), // Back to original - no padding
             itemBuilder: (context, index) {
               final category = categories[index];
               final isSelected = selectedCategory.value == category;
@@ -48,7 +45,6 @@ class CategoriesSection extends HookWidget {
                   onTap: () {
                     selectedCategory.value = category;
                     // TODO: Add callback to parent or use a provider to handle category selection
-                    // onCategorySelected?.call(category);
                   },
                 ),
               );

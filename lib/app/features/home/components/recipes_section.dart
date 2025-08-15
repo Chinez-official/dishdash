@@ -7,17 +7,17 @@ class RecipesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 250, // Increased height to accommodate expanded cards
+      height: 250,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.only(left: 16),
+        padding: const EdgeInsets.only(left: 4), // Removed left padding
         itemCount: 5,
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) {
           return Padding(
             padding: EdgeInsets.only(
               right: index < 4 ? 15 : 16,
-            ), // 15px gap between cards
+            ),
             child: RecipeCard(index: index),
           );
         },
