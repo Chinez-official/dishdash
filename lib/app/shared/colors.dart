@@ -32,4 +32,7 @@ class AppColors {
 
   static const Color success = Color(0XFF31B057);
   static const Color successLight = Color(0XFFCEECD7);
+
+  // New recipe drop shadow color
+  static const Color recipeDrop = Color(0xFF202020);
 }

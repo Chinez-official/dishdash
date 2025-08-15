@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dishdash/app/features/home/components/new_recipe_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -75,6 +76,10 @@ class HomeScreen extends HookConsumerWidget {
 
                           // Main Recipes Section
                           const RecipesSection(),
+                          const SizedBox(height: 1),
+
+                          // New Recipes Section
+                          const NewRecipesSection(),
                           const SizedBox(height: 24),
 
                           // TODO: Uncomment when components are created
