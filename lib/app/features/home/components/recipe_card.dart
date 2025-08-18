@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dishdash/app/features/home/widgets/bookmark_icon.dart';
 import 'package:dishdash/app/features/home/widgets/rating_badge.dart';
 import 'package:dishdash/app/shared/shared.dart';
@@ -41,7 +42,7 @@ class RecipeCard extends StatelessWidget {
     {
       "name": "Portuguese Piri Piri Chicken",
       "image":
-          "https://images.unsplash.com/photo-1611270630211-3a7e9496c24c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fFBsYXRlJTIwb2YlMjBQb3J0dWd1ZXNlJTIwUGlyaSUyMFBpcmklMjBDaGlja2VufGVufDB8fDB8fHww",
+          "https://images.unsplash.com/photo-1611270630211-3a7e9496c24c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fVBsYXRlJTIwb2YlMjBQb3J0dWd1ZXNlJTIwUGlyaSUyMFBpcmklMjBDaGlja2VufGVufDB8fDB8fHww",
       "rating": 4.5,
       "time": 10,
     },
@@ -53,17 +54,17 @@ class RecipeCard extends StatelessWidget {
 
     return SizedBox(
       width: 150,
-      height: 231, // Increased height to accommodate expanded card
+      height: 231,
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.topCenter,
         children: [
-          // 1. The Card Container - expanded at bottom
+          // 1. The Card Container
           Positioned(
-            top: 55, // Push down to make room for image
+            top: 55,
             child: Container(
               width: 150,
-              height: 176, // Increased height for expanded card
+              height: 176,
               decoration: BoxDecoration(
                 color: AppColors.grey4.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(12),
@@ -92,7 +93,7 @@ class RecipeCard extends StatelessWidget {
                   // Spacer pushes the Row to the bottom
                   const Spacer(),
 
-                  // Row for Time and Bookmark Icon - positioned at bottom edges
+                  // Row for Time and Bookmark Icon
                   Padding(
                     padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
                     child: Row(
@@ -121,7 +122,7 @@ class RecipeCard extends StatelessWidget {
                           ],
                         ),
 
-                        // Bookmark Icon - pushed down a bit
+                        // Bookmark Icon
                         Padding(
                           padding: const EdgeInsets.only(top: 8),
                           child: const BookmarkIcon(),
@@ -134,7 +135,7 @@ class RecipeCard extends StatelessWidget {
             ),
           ),
 
-          // 2. The Overlapping Image
+          // 2. The Overlapping Image with caching
           Positioned(
             top: 0,
             child: Container(
@@ -152,17 +153,57 @@ class RecipeCard extends StatelessWidget {
                 ],
               ),
               child: CircleAvatar(
-                radius: 54.5, // Half of 109
-                backgroundImage: NetworkImage(recipe['image']!),
+                radius: 54.5,
                 backgroundColor: AppColors.backgroundBody,
+                child: ClipOval(
+                  child: CachedNetworkImage(
+                    imageUrl: recipe['image']!,
+                    width: 109,
+                    height: 110,
+                    fit: BoxFit.cover,
+                    placeholder:
+                        (context, url) => Container(
+                          width: 109,
+                          height: 110,
+                          decoration: const BoxDecoration(
+                            color: AppColors.backgroundBody,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: SizedBox(
+                              width: 32,
+                              height: 32,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 3,
+                                color: AppColors.primary100,
+                              ),
+                            ),
+                          ),
+                        ),
+                    errorWidget:
+                        (context, url, error) => Container(
+                          width: 109,
+                          height: 110,
+                          decoration: const BoxDecoration(
+                            color: AppColors.backgroundBody,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.image_not_supported,
+                            color: AppColors.grey3,
+                            size: 32,
+                          ),
+                        ),
+                  ),
+                ),
               ),
             ),
           ),
 
-          // 3. The Rating Badge - positioned at center of image, beside it
+          // 3. The Rating Badge
           Positioned(
-            top: 27, // Center of the image
-            right: 0, // Beside the image with some overlap
+            top: 27,
+            right: 0,
             child: RatingBadge(rating: recipe['rating']),
           ),
         ],

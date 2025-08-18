@@ -1,5 +1,5 @@
-// home/components/new_recipes_card.dart
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dishdash/app/shared/shared.dart';
 import 'package:dishdash/app/features/home/models/recipe.dart';
 
@@ -71,12 +71,72 @@ class NewRecipeCard extends StatelessWidget {
 
                   const Spacer(),
 
-                  // Creator Info only (timer moved to bottom right)
+                  // Creator Info with cached image
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 12.5,
-                        backgroundImage: NetworkImage(recipe.creatorImageUrl),
+                      // Creator Avatar with caching
+                      Container(
+                        width: 25,
+                        height: 25,
+                        decoration: const BoxDecoration(shape: BoxShape.circle),
+                        child:
+                            recipe.creatorImageUrl.isEmpty
+                                ? CircleAvatar(
+                                  radius: 12.5,
+                                  backgroundColor: AppColors.grey4,
+                                  child: const Icon(
+                                    Icons.person,
+                                    color: AppColors.grey3,
+                                    size: 16,
+                                  ),
+                                )
+                                : CircleAvatar(
+                                  radius: 12.5,
+                                  backgroundColor: AppColors.grey4,
+                                  child: ClipOval(
+                                    child: CachedNetworkImage(
+                                      imageUrl: recipe.creatorImageUrl,
+                                      width: 25,
+                                      height: 25,
+                                      fit: BoxFit.cover,
+                                      placeholder:
+                                          (context, url) => Container(
+                                            width: 25,
+                                            height: 25,
+                                            decoration: const BoxDecoration(
+                                              color: AppColors.grey4,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: const Center(
+                                              child: SizedBox(
+                                                width: 12,
+                                                height: 12,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                      color:
+                                                          AppColors.primary100,
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+                                      errorWidget:
+                                          (context, url, error) => Container(
+                                            width: 25,
+                                            height: 25,
+                                            decoration: const BoxDecoration(
+                                              color: AppColors.grey4,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: const Icon(
+                                              Icons.person,
+                                              color: AppColors.grey3,
+                                              size: 16,
+                                            ),
+                                          ),
+                                    ),
+                                  ),
+                                ),
                       ),
                       const SizedBox(width: 6),
                       Expanded(
@@ -99,33 +159,74 @@ class NewRecipeCard extends StatelessWidget {
             ),
           ),
 
-          // 2. The Recipe Image - circular and positioned properly at top right
+          // 2. The Recipe Image with caching
           Positioned(
-            top: -25, // Half of the image height above the card
+            top: -25,
             right: 8,
             child: Container(
               width: 79.95,
-              height: 75.95, // Make it square for perfect circle
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                // Removed boxShadow to eliminate shadows
-              ),
-              child: CircleAvatar(
-                radius: 39.975, // Half of width/height
-                backgroundImage: NetworkImage(recipe.imageUrl),
-                backgroundColor: AppColors.grey4,
-                child:
-                    recipe.imageUrl.isEmpty
-                        ? const Icon(
+              height: 75.95,
+              decoration: const BoxDecoration(shape: BoxShape.circle),
+              child:
+                  recipe.imageUrl.isEmpty
+                      ? CircleAvatar(
+                        radius: 39.975,
+                        backgroundColor: AppColors.grey4,
+                        child: const Icon(
                           Icons.image_not_supported,
                           color: AppColors.grey3,
-                        )
-                        : null,
-              ),
+                          size: 24,
+                        ),
+                      )
+                      : CircleAvatar(
+                        radius: 39.975,
+                        backgroundColor: AppColors.grey4,
+                        child: ClipOval(
+                          child: CachedNetworkImage(
+                            imageUrl: recipe.imageUrl,
+                            width: 79.95,
+                            height: 75.95,
+                            fit: BoxFit.cover,
+                            placeholder:
+                                (context, url) => Container(
+                                  width: 79.95,
+                                  height: 75.95,
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.grey4,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Center(
+                                    child: SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 3,
+                                        color: AppColors.primary100,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            errorWidget:
+                                (context, url, error) => Container(
+                                  width: 79.95,
+                                  height: 75.95,
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.grey4,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.image_not_supported,
+                                    color: AppColors.grey3,
+                                    size: 24,
+                                  ),
+                                ),
+                          ),
+                        ),
+                      ),
             ),
           ),
 
-          // 3. Cook Time - positioned at bottom right, aligned with creator info
+          // 3. Cook Time - positioned at bottom right
           Positioned(
             bottom: 28,
             right: 12,
@@ -135,7 +236,7 @@ class NewRecipeCard extends StatelessWidget {
                 const Icon(Icons.schedule, size: 12, color: AppColors.grey3),
                 const SizedBox(width: 2),
                 Text(
-                  '${recipe.cookTimeInMinutes} mins', // Removed space before "mins"
+                  '${recipe.cookTimeInMinutes} mins',
                   style: const TextStyle(
                     color: AppColors.grey3,
                     fontSize: 11,
