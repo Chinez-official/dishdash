@@ -1,7 +1,7 @@
 import 'package:dishdash/app/features/home/components/new_recipe_card.dart';
 import 'package:flutter/material.dart';
 import 'package:dishdash/app/shared/shared.dart';
-import 'package:dishdash/app/features/home/models/recipe.dart';
+import 'package:dishdash/app/core/models/recipes/recipe.dart';
 
 class NewRecipesSection extends StatelessWidget {
   const NewRecipesSection({super.key});

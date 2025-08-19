@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dishdash/app/shared/shared.dart';
-import 'package:dishdash/app/features/home/models/recipe.dart';
+import 'package:dishdash/app/core/models/recipes/recipe.dart';
 
 class NewRecipeCard extends StatelessWidget {
   final Recipe recipe;

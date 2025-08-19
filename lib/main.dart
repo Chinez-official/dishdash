@@ -23,11 +23,13 @@ Future<void> main() async {
 
   // Set the system navigation bar style
   // This makes the navigation bar color match the app's body background.
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    systemNavigationBarColor: AppColors.backgroundBody,
-    systemNavigationBarIconBrightness: Brightness.dark, // Ensures icons are visible on a light background
-  ));
-
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      systemNavigationBarColor: AppColors.backgroundBody,
+      systemNavigationBarIconBrightness:
+          Brightness.dark, // Ensures icons are visible on a light background
+    ),
+  );
 
   runApp(ProviderScope(child: MyApp()));
 }
