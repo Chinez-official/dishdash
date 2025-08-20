@@ -16,6 +16,7 @@ import 'package:injectable/injectable.dart' as _i526;
 
 import '../../features/splash/notifiers/get_user_notifier.dart' as _i566;
 import '../repositories/auth_repository.dart' as _i1002;
+import '../services/api/api_service.dart' as _i561;
 import '../services/storage/database.dart' as _i363;
 import '../services/storage/offline_client.dart' as _i548;
 import '../usecases/auth_use_case.dart' as _i67;
@@ -36,6 +37,7 @@ _i174.GetIt $initGetIt(
   gh.lazySingleton<_i548.OfflineClient>(
     () => _i548.OfflineClientImpl(gh<_i363.AppDatabase>()),
   );
+  gh.factory<_i561.ApiService>(() => _i561.ApiServiceImpl());
   gh.lazySingleton<_i1002.AuthRepository>(
     () => _i1002.AuthRepositoryImpl(
       gh<_i59.FirebaseAuth>(),
