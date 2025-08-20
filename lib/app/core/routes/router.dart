@@ -8,6 +8,7 @@ import 'package:dishdash/app/features/main_screen.dart';
 import 'package:dishdash/app/features/notification/notification_screen.dart';
 import 'package:dishdash/app/features/profile/profile_screen.dart';
 import 'package:dishdash/app/features/splash/splash_screen.dart';
+import 'package:dishdash/app/features/search/search_screen.dart';
 
 part 'router.gr.dart';
 
@@ -56,6 +57,11 @@ class AppRouter extends RootStackRouter {
       path: '/home',
       transitionsBuilder: TransitionsBuilders.slideLeft,
       page: HomeRoute.page,
+    ),
+    CustomRoute(
+      path: '/search',
+      transitionsBuilder: TransitionsBuilders.slideLeft,
+      page: SearchRoute.page,
     ),
   ];
 }
