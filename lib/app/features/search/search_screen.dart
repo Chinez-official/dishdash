@@ -1,5 +1,7 @@
+// Updated search_screen.dart with integrated grid
 import 'package:auto_route/auto_route.dart';
 import 'package:dishdash/app/features/search/components/search_input_section.dart';
+import 'package:dishdash/app/features/search/components/search_result_grid.dart';
 import 'package:dishdash/app/features/search/components/search_state_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -15,6 +17,32 @@ class SearchScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
+
+    // Sample data for demonstration - replace with your actual data
+    final sampleRecipes = [
+      const Recipe(id: '1', name: 'Traditional spare ribs baked', rating: 4.0),
+      const Recipe(
+        id: '2',
+        name: 'Lamb chops with fruity couscous and mint...',
+        rating: 4.0,
+      ),
+      const Recipe(
+        id: '3',
+        name: 'Spice roasted chicken with flavored rice',
+        rating: 4.0,
+      ),
+      const Recipe(
+        id: '4',
+        name: 'Chinese style Egg fried rice with sliced pork...',
+        rating: 4.0,
+      ),
+      const Recipe(
+        id: '5',
+        name: 'Lamb chops with fruity couscous and mint...',
+        rating: 4.0,
+      ),
+      const Recipe(id: '6', name: 'Traditional spare ribs baked', rating: 4.0),
+    ];
 
     void updateNotifiers() {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
@@ -92,7 +120,17 @@ class SearchScreen extends HookConsumerWidget {
                             onRefresh: () async => updateNotifiers(),
                             child: ListView(
                               controller: scrollController,
-                              children: [const SizedBox(height: 24)],
+                              children: [
+                                const SizedBox(height: 8),
+                                // Recipe Grid
+                                Center(
+                                  child: SearchResultGrid(
+                                    recipes: sampleRecipes,
+                                    isLoading:
+                                        false, // TODO: Replace with actual loading state
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
