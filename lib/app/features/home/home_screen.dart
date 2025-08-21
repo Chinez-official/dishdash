@@ -8,9 +8,6 @@ import 'package:dishdash/app/features/home/components/search_section.dart';
 import 'package:dishdash/app/features/home/components/categories_section.dart';
 import 'package:dishdash/app/features/home/components/recipes_section.dart';
 import 'package:dishdash/app/shared/shared.dart';
-// TODO: Import these components when they're created
-// import 'package:dishdash/app/features/home/components/top_choice_section.dart';
-// import 'package:dishdash/providers/notifier_providers.dart';
 
 @RoutePage()
 class HomeScreen extends HookConsumerWidget {
@@ -18,20 +15,8 @@ class HomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: Uncomment when notifier providers are available
-    // final notifier = ref.watch(getUserNotifierProvider.notifier);
-    // final getProductsNotifier = ref.watch(getProductsNotifierProvider.notifier);
-    // final getCategoriesNotifier = ref.watch(getCategoriesNotifierProvider.notifier);
-    // final getProductTypeNotifier = ref.watch(getProductTypeNotifierProvider.notifier);
-
     void updateNotifiers() {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        // TODO: Uncomment when notifier providers are available
-        // notifier.call();
-        // getProductsNotifier.getProducts();
-        // getCategoriesNotifier.call();
-        // getProductTypeNotifier.call();
-      });
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
     }
 
     useEffect(() {
@@ -67,13 +52,6 @@ class HomeScreen extends HookConsumerWidget {
                       onRefresh: () async => updateNotifiers(),
                       child: ListView(
                         children: [
-                          // TODO: Add banner image when available
-                          // ClipRRect(
-                          //   borderRadius: BorderRadius.circular(16),
-                          //   child: Image.asset(Images.sampleBanner),
-                          // ),
-                          // const YMargin(24),
-
                           // Main Recipes Section
                           const RecipesSection(),
                           const SizedBox(height: 1),
@@ -81,9 +59,6 @@ class HomeScreen extends HookConsumerWidget {
                           // New Recipes Section
                           const NewRecipesSection(),
                           const SizedBox(height: 24),
-
-                          // TODO: Uncomment when components are created
-                          // const TopChoiceSection(),
                         ],
                       ),
                     ),
