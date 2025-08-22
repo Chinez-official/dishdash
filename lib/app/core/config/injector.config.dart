@@ -16,10 +16,12 @@ import 'package:injectable/injectable.dart' as _i526;
 
 import '../../features/splash/notifiers/get_user_notifier.dart' as _i566;
 import '../repositories/auth_repository.dart' as _i1002;
+import '../repositories/recipes_repository.dart' as _i14;
 import '../services/api/api_service.dart' as _i561;
 import '../services/storage/database.dart' as _i363;
 import '../services/storage/offline_client.dart' as _i548;
 import '../usecases/auth_use_case.dart' as _i67;
+import '../usecases/recipes_use_case.dart' as _i197;
 import 'injector.dart' as _i811;
 
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -44,6 +46,15 @@ _i174.GetIt $initGetIt(
       gh<_i116.GoogleSignIn>(),
       gh<_i548.OfflineClient>(),
     ),
+  );
+  gh.lazySingleton<_i14.SearchRepository>(
+    () => _i14.SearchRepositoryImpl(
+      gh<_i561.ApiService>(),
+      gh<_i548.OfflineClient>(),
+    ),
+  );
+  gh.lazySingleton<_i197.RecipeUseCase>(
+    () => _i197.RecipeUseCase(gh<_i14.SearchRepository>()),
   );
   gh.lazySingleton<_i67.AuthUseCase>(
     () => _i67.AuthUseCase(gh<_i1002.AuthRepository>()),

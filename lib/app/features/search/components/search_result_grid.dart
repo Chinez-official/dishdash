@@ -1,25 +1,69 @@
 // components/search_results_grid.dart
 import 'package:dishdash/app/features/search/components/search_recipe_card.dart';
+import 'package:dishdash/app/core/models/recipes/meal.dart';
 import 'package:flutter/material.dart';
+import 'package:dishdash/app/shared/shared.dart';
 
 class SearchResultGrid extends StatelessWidget {
-  final List<Recipe> recipes;
+  final List<Meal> meals;
   final bool isLoading;
+  final Function(Meal)? onMealTap;
+  final String? emptyStateMessage;
 
   const SearchResultGrid({
     super.key,
-    required this.recipes,
+    required this.meals,
     this.isLoading = false,
+    this.onMealTap,
+    this.emptyStateMessage,
   });
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(50.0),
+          child: CircularProgressIndicator(
+            color: AppColors.primary100,
+            strokeWidth: 3,
+          ),
+        ),
+      );
     }
 
-    if (recipes.isEmpty) {
-      return const Center(child: Text('No recipes found'));
+    if (meals.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(50.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.search_off, size: 60, color: AppColors.grey3),
+              const SizedBox(height: 16),
+              Text(
+                emptyStateMessage ?? 'No recipes found',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.grey3,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Try searching with different keywords',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.grey3.withValues(alpha: 0.8),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     return SizedBox(
@@ -33,26 +77,15 @@ class SearchResultGrid extends StatelessWidget {
           crossAxisSpacing: 15, // Horizontal gap
           mainAxisSpacing: 15, // Vertical gap
         ),
-        itemCount: recipes.length,
+        itemCount: meals.length,
         itemBuilder: (context, index) {
-          return SearchRecipeCard(recipe: recipes[index]);
+          final meal = meals[index];
+          return SearchRecipeCard(
+            meal: meal,
+            onTap: onMealTap != null ? () => onMealTap!(meal) : null,
+          );
         },
       ),
     );
   }
-}
-
-// Temporary Recipe model - replace with your actual model
-class Recipe {
-  final String id;
-  final String name;
-  final String? imageUrl;
-  final double rating;
-
-  const Recipe({
-    required this.id,
-    required this.name,
-    this.imageUrl,
-    required this.rating,
-  });
 }

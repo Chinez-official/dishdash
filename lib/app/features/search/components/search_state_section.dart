@@ -4,15 +4,22 @@ import 'package:dishdash/app/shared/shared.dart';
 class SearchStateSection extends StatelessWidget {
   final bool isSearchActive;
   final int? resultsCount;
+  final bool isLastSearchLoaded;
 
   const SearchStateSection({
     super.key,
     required this.isSearchActive,
     this.resultsCount,
+    this.isLastSearchLoaded = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Don't show the section header when showing last search results
+    if (isLastSearchLoaded && !isSearchActive) {
+      return const SizedBox.shrink();
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0, left: 4.0, right: 4.0),
       child: Row(

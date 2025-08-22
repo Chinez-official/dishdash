@@ -30,7 +30,9 @@ class CategoriesSection extends HookWidget {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categories.length,
-            padding: const EdgeInsets.symmetric(horizontal: 4), // Back to original - no padding
+            padding: const EdgeInsets.symmetric(
+              horizontal: 4,
+            ), // Back to original - no padding
             itemBuilder: (context, index) {
               final category = categories[index];
               final isSelected = selectedCategory.value == category;
