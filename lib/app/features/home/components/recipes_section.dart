@@ -15,9 +15,7 @@ class RecipesSection extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) {
           return Padding(
-            padding: EdgeInsets.only(
-              right: index < 4 ? 15 : 16,
-            ),
+            padding: EdgeInsets.only(right: index < 4 ? 15 : 16),
             child: RecipeCard(index: index),
           );
         },

@@ -8,11 +8,7 @@ class SearchRecipeCard extends StatelessWidget {
   final Meal meal;
   final VoidCallback? onTap;
 
-  const SearchRecipeCard({
-    super.key, 
-    required this.meal,
-    this.onTap,
-  });
+  const SearchRecipeCard({super.key, required this.meal, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -43,49 +39,50 @@ class SearchRecipeCard extends StatelessWidget {
                   color: AppColors.grey4,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: meal.strMealThumb != null
-                    ? Image.network(
-                        meal.strMealThumb!,
-                        width: 150,
-                        height: 150,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Container(
-                            width: 150,
-                            height: 150,
-                            color: AppColors.grey4,
-                            child: const Center(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: AppColors.primary100,
+                child:
+                    meal.strMealThumb != null
+                        ? Image.network(
+                          meal.strMealThumb!,
+                          width: 150,
+                          height: 150,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Container(
+                              width: 150,
+                              height: 150,
+                              color: AppColors.grey4,
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.primary100,
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            width: 150,
-                            height: 150,
-                            color: AppColors.grey4,
-                            child: const Icon(
-                              Icons.image_not_supported,
-                              color: AppColors.grey3,
-                              size: 30,
-                            ),
-                          );
-                        },
-                      )
-                    : Container(
-                        width: 150,
-                        height: 150,
-                        color: AppColors.grey4,
-                        child: const Icon(
-                          Icons.restaurant,
-                          color: AppColors.grey3,
-                          size: 30,
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              width: 150,
+                              height: 150,
+                              color: AppColors.grey4,
+                              child: const Icon(
+                                Icons.image_not_supported,
+                                color: AppColors.grey3,
+                                size: 30,
+                              ),
+                            );
+                          },
+                        )
+                        : Container(
+                          width: 150,
+                          height: 150,
+                          color: AppColors.grey4,
+                          child: const Icon(
+                            Icons.restaurant,
+                            color: AppColors.grey3,
+                            size: 30,
+                          ),
                         ),
-                      ),
               ),
 
               // Gradient overlay
@@ -110,7 +107,9 @@ class SearchRecipeCard extends StatelessWidget {
               Positioned(
                 top: 8,
                 right: 8,
-                child: SearchRatingBadge(rating: 4.5), // Default rating since MealDB doesn't provide ratings
+                child: SearchRatingBadge(
+                  rating: 4.5,
+                ), // Default rating since MealDB doesn't provide ratings
               ),
 
               // Recipe name and creator (bottom)

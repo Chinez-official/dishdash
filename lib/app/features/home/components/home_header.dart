@@ -34,7 +34,10 @@ class HomeHeader extends ConsumerWidget {
                 : firstName;
 
         return Container(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 4), // Back to original - no left/right padding
+          padding: const EdgeInsets.symmetric(
+            vertical: 20,
+            horizontal: 4,
+          ), // Back to original - no left/right padding
 
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,9 +65,7 @@ class HomeHeader extends ConsumerWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {
-                  // TODO: Implement avatar tap functionality
-                },
+                onTap: () {},
                 child: Container(
                   width: 40,
                   height: 40,

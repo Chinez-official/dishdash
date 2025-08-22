@@ -1,4 +1,3 @@
-// home/models/recipe.dart
 class Recipe {
   final String name;
   final String imageUrl;

@@ -73,9 +73,7 @@ class SearchSection extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: IconButton(
-              onPressed: () {
-                // TODO: Implement filter functionality
-              },
+              onPressed: () {},
               icon: SvgPicture.asset(
                 Images.filter,
                 width: 20,

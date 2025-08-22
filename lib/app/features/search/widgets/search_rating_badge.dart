@@ -11,7 +11,7 @@ class SearchRatingBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 42, // Increased width to accommodate "4.0"
+      width: 42, // Increased width to accommodate "4.5"
       height: 16,
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
       decoration: BoxDecoration(

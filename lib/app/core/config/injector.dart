@@ -14,7 +14,6 @@ Future<void> serviceLocator() async {
   $initGetIt(getIt);
 }
 
-// Add this module alongside your existing FirebaseAuthModule
 @module
 abstract class DatabaseModule {
   @lazySingleton

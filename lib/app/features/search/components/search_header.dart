@@ -47,7 +47,7 @@ class SearchHeader extends StatelessWidget {
               style: const TextStyle(
                 color: AppColors.textMain,
                 fontSize: 18,
-                fontWeight: FontWeight.w600, // semibold
+                fontWeight: FontWeight.w600,
                 fontFamily: 'Poppins',
               ),
             ),

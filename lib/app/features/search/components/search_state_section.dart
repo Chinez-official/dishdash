@@ -15,7 +15,7 @@ class SearchStateSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Don't show the section header when showing last search results
+    // Don't show the section header when showing recent search results
     if (isLastSearchLoaded && !isSearchActive) {
       return const SizedBox.shrink();
     }

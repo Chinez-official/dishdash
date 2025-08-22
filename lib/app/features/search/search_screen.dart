@@ -66,7 +66,7 @@ class SearchScreen extends HookConsumerWidget {
       if (searchController.text.isNotEmpty) {
         handleSearch(searchController.text);
       } else {
-        // Load last search results instead of recent searches
+        // Load recent search results
         await searchNotifier.loadLastSearchResults();
       }
     }
@@ -92,13 +92,13 @@ class SearchScreen extends HookConsumerWidget {
                         // Search Input Section
                         SearchInputSection(
                           controller: searchController,
-                          hintText: 'Search recipe or enter first letter',
+                          hintText: 'Search recipe',
                           onChanged: (value) {
                             // Use debounced search for real-time searching
                             if (value.trim().isNotEmpty) {
                               searchNotifier.searchWithDebounce(value.trim());
                             } else {
-                              // Load last search results when input is cleared
+                              // Load recent search results when input is cleared
                               searchNotifier.loadLastSearchResults();
                             }
                           },
@@ -236,13 +236,15 @@ class SearchScreen extends HookConsumerWidget {
                                         ),
                                       ),
                                   recentSearchesLoaded:
-                                      (recentSearches) => const SizedBox.shrink(), // Hide recent searches
+                                      (recentSearches) =>
+                                          const SizedBox.shrink(), // Hide recent searches
                                   lastSearchLoaded:
                                       (results, query) => Center(
                                         child: SearchResultGrid(
                                           meals: results,
                                           onMealTap: handleMealTap,
-                                          emptyStateMessage: 'No previous search results',
+                                          emptyStateMessage:
+                                              'No previous search results',
                                         ),
                                       ),
                                 ),

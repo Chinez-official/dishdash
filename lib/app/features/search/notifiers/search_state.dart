@@ -16,7 +16,6 @@ class SearchState with _$SearchState {
       _Error;
   const factory SearchState.recentSearchesLoaded(List<String> recentSearches) =
       _RecentSearchesLoaded;
-  // Add this new state for last search results
   const factory SearchState.lastSearchLoaded(List<Meal> results, String query) =
       _LastSearchLoaded;
 }

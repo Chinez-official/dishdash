@@ -46,7 +46,6 @@ class CategoriesSection extends HookWidget {
                   isSelected: isSelected,
                   onTap: () {
                     selectedCategory.value = category;
-                    // TODO: Add callback to parent or use a provider to handle category selection
                   },
                 ),
               );
