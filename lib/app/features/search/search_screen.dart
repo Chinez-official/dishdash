@@ -1,4 +1,3 @@
-// search_screen.dart - Updated with filter integration
 import 'package:auto_route/auto_route.dart';
 import 'package:dishdash/app/features/search/components/search_input_section.dart';
 import 'package:dishdash/app/features/search/components/search_result_grid.dart';
