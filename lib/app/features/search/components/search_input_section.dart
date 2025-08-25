@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dishdash/app/shared/shared.dart';
+import 'package:dishdash/app/features/search/components/filter_search_sheet.dart';
 
 class SearchInputSection extends StatefulWidget {
   final TextEditingController? controller;
@@ -8,6 +9,7 @@ class SearchInputSection extends StatefulWidget {
   final VoidCallback? onFilterTap;
   final Function(String)? onChanged;
   final Function(String)? onSubmitted;
+  final Function(Map<String, dynamic>)? onFiltersApplied;
 
   const SearchInputSection({
     super.key,
@@ -16,6 +18,7 @@ class SearchInputSection extends StatefulWidget {
     this.onFilterTap,
     this.onChanged,
     this.onSubmitted,
+    this.onFiltersApplied,
   });
 
   @override
@@ -40,6 +43,22 @@ class _SearchInputSectionState extends State<SearchInputSection> {
     }
     _focusNode.dispose();
     super.dispose();
+  }
+
+  void _showFilterSheet() async {
+    // Dismiss keyboard first
+    _focusNode.unfocus();
+
+    final result = await showModalBottomSheet<Map<String, dynamic>>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const FilterSearchSheet(),
+    );
+
+    if (result != null && widget.onFiltersApplied != null) {
+      widget.onFiltersApplied!(result);
+    }
   }
 
   @override
@@ -110,11 +129,7 @@ class _SearchInputSectionState extends State<SearchInputSection> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: IconButton(
-              onPressed:
-                  widget.onFilterTap ??
-                  () {
-                    // TODO: Implement filter functionality
-                  },
+              onPressed: widget.onFilterTap ?? _showFilterSheet,
               icon: SvgPicture.asset(
                 Images.filter,
                 width: 20,

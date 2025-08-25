@@ -1,4 +1,4 @@
-// Updated search_screen.dart with MealDB integration
+// search_screen.dart - Updated with filter integration
 import 'package:auto_route/auto_route.dart';
 import 'package:dishdash/app/features/search/components/search_input_section.dart';
 import 'package:dishdash/app/features/search/components/search_result_grid.dart';
@@ -22,6 +22,13 @@ class SearchScreen extends HookConsumerWidget {
     final searchController = useTextEditingController();
     final searchNotifier = ref.read(searchNotifierProvider.notifier);
     final searchState = ref.watch(searchNotifierProvider);
+
+    // State for current filters
+    final currentFilters = useState<Map<String, dynamic>>({
+      'time': 'Newest',
+      'rate': 4,
+      'category': 'Local Dish',
+    });
 
     // Handle initial load - load last search results instead of recent searches
     useEffect(() {
@@ -60,6 +67,26 @@ class SearchScreen extends HookConsumerWidget {
       info('Meal tapped: ${meal.displayName}');
       // TODO: Navigate to meal detail screen
       // context.router.push(MealDetailRoute(meal: meal));
+    }
+
+    void handleFiltersApplied(Map<String, dynamic> filters) {
+      info('Filters applied: $filters');
+      currentFilters.value = filters;
+
+      // Show a snackbar to confirm filters were applied
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Filters applied: ${filters['time']}, ${filters['rate']}★, ${filters['category']}',
+            style: const TextStyle(fontSize: 12),
+          ),
+          backgroundColor: AppColors.primary100,
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      );
     }
 
     void refreshData() async {
@@ -103,10 +130,7 @@ class SearchScreen extends HookConsumerWidget {
                             }
                           },
                           onSubmitted: handleSearch,
-                          onFilterTap: () {
-                            info('Filter button tapped');
-                            // TODO: Implement filter functionality
-                          },
+                          onFiltersApplied: handleFiltersApplied,
                         ),
 
                         const SizedBox(height: 16),
