@@ -9,7 +9,7 @@ import 'package:dishdash/app/features/search/notifiers/search_state.dart';
 import 'package:dishdash/app/features/splash/notifiers/get_user_notifier.dart';
 import 'package:dishdash/app/features/splash/notifiers/get_user_state.dart';
 import 'package:dishdash/providers/use_case_providers.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hooks_riverpod/legacy.dart';
 
 final signUpNotifierProvider =
     StateNotifierProvider<SignUpNotifier, SignUpState>(

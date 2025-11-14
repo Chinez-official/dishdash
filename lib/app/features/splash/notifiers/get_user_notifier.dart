@@ -1,5 +1,5 @@
 import 'package:dishdash/app/features/splash/notifiers/get_user_state.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hooks_riverpod/legacy.dart';
 import 'package:injectable/injectable.dart';
 import 'package:dishdash/app/core/usecases/auth_use_case.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dishdash/app/core/usecases/recipes_use_case.dart';
 import 'package:dishdash/app/core/models/recipes/meal.dart';
+import 'package:hooks_riverpod/legacy.dart';
 import 'search_state.dart';
 
 class SearchNotifier extends StateNotifier<SearchState> {
@@ -129,10 +129,10 @@ class SearchNotifier extends StateNotifier<SearchState> {
     return state.when(
       initial: () => [],
       loading: () => [],
-      success: (_, __, recentSearches) => recentSearches,
+      success: (_, _, recentSearches) => recentSearches,
       error: (_, recentSearches) => recentSearches,
       recentSearchesLoaded: (recentSearches) => recentSearches,
-      lastSearchLoaded: (_, __) => [],
+      lastSearchLoaded: (_, _) => [],
     );
   }
 

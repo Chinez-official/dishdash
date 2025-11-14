@@ -420,8 +420,5 @@ abstract class AuthModule {
       firebase_auth.FirebaseAuth.instance;
 
   @lazySingleton
-  GoogleSignIn get googleSignIn => GoogleSignIn(
-    // Optional: Add scopes if needed
-    scopes: ['email', 'profile'],
-  );
+  GoogleSignIn get googleSignIn => GoogleSignIn(scopes: ['email', 'profile']);
 }

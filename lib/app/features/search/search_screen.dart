@@ -152,7 +152,7 @@ class SearchScreen extends HookConsumerWidget {
                                 resultsCount: results.length,
                               ),
                           error:
-                              (_, __) => const SearchStateSection(
+                              (_, _) => const SearchStateSection(
                                 isSearchActive: true,
                                 resultsCount: 0,
                               ),

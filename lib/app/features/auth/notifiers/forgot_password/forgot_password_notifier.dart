@@ -1,6 +1,6 @@
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dishdash/app/core/usecases/auth_use_case.dart';
 import 'package:dishdash/app/shared/extensions/string_extensions.dart';
+import 'package:hooks_riverpod/legacy.dart';
 import 'forgot_password_state.dart';
 
 class ForgotPasswordNotifier extends StateNotifier<ForgotPasswordState> {
