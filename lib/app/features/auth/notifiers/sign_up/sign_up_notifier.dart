@@ -1,3 +1,4 @@
+import 'package:dishdash/app/core/models/data.dart';
 import 'package:dishdash/app/core/usecases/auth_use_case.dart';
 import 'package:dishdash/app/shared/extensions/string_extensions.dart';
 import 'package:hooks_riverpod/legacy.dart';
@@ -21,11 +22,22 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     final nameError = validateNameRealTime(fullName);
     final emailError = validateEmailRealTime(email);
     final passwordError = validatePasswordRealTime(password);
-    final confirmPasswordError = validateConfirmPasswordRealTime(password, confirmPassword);
+    final confirmPasswordError = validateConfirmPasswordRealTime(
+      password,
+      confirmPassword,
+    );
 
-    if (nameError != null || emailError != null || passwordError != null || confirmPasswordError != null) {
+    if (nameError != null ||
+        emailError != null ||
+        passwordError != null ||
+        confirmPasswordError != null) {
       // Trigger validation display in UI
-      onValidationError(nameError, emailError, passwordError, confirmPasswordError);
+      onValidationError(
+        nameError,
+        emailError,
+        passwordError,
+        confirmPasswordError,
+      );
       return;
     }
 
@@ -92,7 +104,10 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     return null;
   }
 
-  String? validateConfirmPasswordRealTime(String password, String confirmPassword) {
+  String? validateConfirmPasswordRealTime(
+    String password,
+    String confirmPassword,
+  ) {
     if (confirmPassword.isEmpty) {
       return 'Confirm password is required';
     }

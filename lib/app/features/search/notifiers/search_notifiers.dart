@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dishdash/app/core/models/data.dart';
 import 'package:dishdash/app/core/usecases/recipes_use_case.dart';
 import 'package:dishdash/app/core/models/recipes/meal.dart';
 import 'package:hooks_riverpod/legacy.dart';

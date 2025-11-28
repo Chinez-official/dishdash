@@ -6,6 +6,8 @@ import 'package:dishdash/app/features/auth/notifiers/forgot_password/forgot_pass
 import 'package:dishdash/app/features/auth/notifiers/forgot_password/forgot_password_state.dart';
 import 'package:dishdash/app/features/search/notifiers/search_notifiers.dart';
 import 'package:dishdash/app/features/search/notifiers/search_state.dart';
+import 'package:dishdash/app/features/recipe_detail/notifiers/recipe_detail_notifier.dart';
+import 'package:dishdash/app/features/recipe_detail/notifiers/recipe_detail_state.dart';
 import 'package:dishdash/app/features/splash/notifiers/get_user_notifier.dart';
 import 'package:dishdash/app/features/splash/notifiers/get_user_state.dart';
 import 'package:dishdash/providers/use_case_providers.dart';
@@ -35,3 +37,16 @@ final searchNotifierProvider =
     StateNotifierProvider<SearchNotifier, SearchState>(
       (ref) => SearchNotifier(recipeUseCase: ref.read(recipeUseCaseProvider)),
     );
+
+final recipeDetailNotifierProvider = StateNotifierProvider.family<
+  RecipeDetailNotifier,
+  RecipeDetailState,
+  String
+>((ref, mealId) {
+  final notifier = RecipeDetailNotifier(
+    recipeUseCase: ref.read(recipeUseCaseProvider),
+  );
+  // Load meal details immediately when provider is created
+  notifier.loadMealDetails(mealId);
+  return notifier;
+});

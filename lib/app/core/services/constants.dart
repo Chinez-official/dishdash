@@ -10,6 +10,7 @@ class Constants {
   static String listCategories = '/list.php';
   static String filterByIngredient = '/filter.php';
   static String filterByCategory = '/filter.php';
+  static String lookupMealById = '/lookup.php';
 
   // API Key for development (as mentioned in the API docs)
   static String apiKey = '1';
@@ -38,6 +39,8 @@ class Constants {
   static Map<String, dynamic> filterByCategoryParams(String category) => {
     'c': category,
   };
+
+  static Map<String, dynamic> lookupByIdParams(String mealId) => {'i': mealId};
 
   // Helper methods for image URLs
   static String getIngredientImageUrl(

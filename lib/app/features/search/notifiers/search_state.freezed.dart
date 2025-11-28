@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,1249 +9,562 @@ part of 'search_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
-
 /// @nodoc
 mixin _$SearchState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )
-    success,
-    required TResult Function(String message, List<String> recentSearches)
-    error,
-    required TResult Function(List<String> recentSearches) recentSearchesLoaded,
-    required TResult Function(List<Meal> results, String query)
-    lastSearchLoaded,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult? Function(String message, List<String> recentSearches)? error,
-    TResult? Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult? Function(List<Meal> results, String query)? lastSearchLoaded,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult Function(String message, List<String> recentSearches)? error,
-    TResult Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult Function(List<Meal> results, String query)? lastSearchLoaded,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Success value) success,
-    required TResult Function(_Error value) error,
-    required TResult Function(_RecentSearchesLoaded value) recentSearchesLoaded,
-    required TResult Function(_LastSearchLoaded value) lastSearchLoaded,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Success value)? success,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult? Function(_LastSearchLoaded value)? lastSearchLoaded,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Success value)? success,
-    TResult Function(_Error value)? error,
-    TResult Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult Function(_LastSearchLoaded value)? lastSearchLoaded,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SearchState);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'SearchState()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $SearchStateCopyWith<$Res> {
-  factory $SearchStateCopyWith(
-    SearchState value,
-    $Res Function(SearchState) then,
-  ) = _$SearchStateCopyWithImpl<$Res, SearchState>;
+class $SearchStateCopyWith<$Res>  {
+$SearchStateCopyWith(SearchState _, $Res Function(SearchState) __);
 }
 
-/// @nodoc
-class _$SearchStateCopyWithImpl<$Res, $Val extends SearchState>
-    implements $SearchStateCopyWith<$Res> {
-  _$SearchStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [SearchState].
+extension SearchStatePatterns on SearchState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
 
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Success value)?  success,TResult Function( _Error value)?  error,TResult Function( _RecentSearchesLoaded value)?  recentSearchesLoaded,TResult Function( _LastSearchLoaded value)?  lastSearchLoaded,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _Success() when success != null:
+return success(_that);case _Error() when error != null:
+return error(_that);case _RecentSearchesLoaded() when recentSearchesLoaded != null:
+return recentSearchesLoaded(_that);case _LastSearchLoaded() when lastSearchLoaded != null:
+return lastSearchLoaded(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Success value)  success,required TResult Function( _Error value)  error,required TResult Function( _RecentSearchesLoaded value)  recentSearchesLoaded,required TResult Function( _LastSearchLoaded value)  lastSearchLoaded,}){
+final _that = this;
+switch (_that) {
+case _Initial():
+return initial(_that);case _Loading():
+return loading(_that);case _Success():
+return success(_that);case _Error():
+return error(_that);case _RecentSearchesLoaded():
+return recentSearchesLoaded(_that);case _LastSearchLoaded():
+return lastSearchLoaded(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Success value)?  success,TResult? Function( _Error value)?  error,TResult? Function( _RecentSearchesLoaded value)?  recentSearchesLoaded,TResult? Function( _LastSearchLoaded value)?  lastSearchLoaded,}){
+final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _Success() when success != null:
+return success(_that);case _Error() when error != null:
+return error(_that);case _RecentSearchesLoaded() when recentSearchesLoaded != null:
+return recentSearchesLoaded(_that);case _LastSearchLoaded() when lastSearchLoaded != null:
+return lastSearchLoaded(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Meal> results,  String query,  List<String> recentSearches)?  success,TResult Function( String message,  List<String> recentSearches)?  error,TResult Function( List<String> recentSearches)?  recentSearchesLoaded,TResult Function( List<Meal> results,  String query)?  lastSearchLoaded,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial();case _Loading() when loading != null:
+return loading();case _Success() when success != null:
+return success(_that.results,_that.query,_that.recentSearches);case _Error() when error != null:
+return error(_that.message,_that.recentSearches);case _RecentSearchesLoaded() when recentSearchesLoaded != null:
+return recentSearchesLoaded(_that.recentSearches);case _LastSearchLoaded() when lastSearchLoaded != null:
+return lastSearchLoaded(_that.results,_that.query);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Meal> results,  String query,  List<String> recentSearches)  success,required TResult Function( String message,  List<String> recentSearches)  error,required TResult Function( List<String> recentSearches)  recentSearchesLoaded,required TResult Function( List<Meal> results,  String query)  lastSearchLoaded,}) {final _that = this;
+switch (_that) {
+case _Initial():
+return initial();case _Loading():
+return loading();case _Success():
+return success(_that.results,_that.query,_that.recentSearches);case _Error():
+return error(_that.message,_that.recentSearches);case _RecentSearchesLoaded():
+return recentSearchesLoaded(_that.recentSearches);case _LastSearchLoaded():
+return lastSearchLoaded(_that.results,_that.query);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Meal> results,  String query,  List<String> recentSearches)?  success,TResult? Function( String message,  List<String> recentSearches)?  error,TResult? Function( List<String> recentSearches)?  recentSearchesLoaded,TResult? Function( List<Meal> results,  String query)?  lastSearchLoaded,}) {final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial();case _Loading() when loading != null:
+return loading();case _Success() when success != null:
+return success(_that.results,_that.query,_that.recentSearches);case _Error() when error != null:
+return error(_that.message,_that.recentSearches);case _RecentSearchesLoaded() when recentSearchesLoaded != null:
+return recentSearchesLoaded(_that.recentSearches);case _LastSearchLoaded() when lastSearchLoaded != null:
+return lastSearchLoaded(_that.results,_that.query);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$InitialImplCopyWith<$Res> {
-  factory _$$InitialImplCopyWith(
-    _$InitialImpl value,
-    $Res Function(_$InitialImpl) then,
-  ) = __$$InitialImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$InitialImplCopyWithImpl<$Res>
-    extends _$SearchStateCopyWithImpl<$Res, _$InitialImpl>
-    implements _$$InitialImplCopyWith<$Res> {
-  __$$InitialImplCopyWithImpl(
-    _$InitialImpl _value,
-    $Res Function(_$InitialImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$InitialImpl implements _Initial {
-  const _$InitialImpl();
-
-  @override
-  String toString() {
-    return 'SearchState.initial()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$InitialImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )
-    success,
-    required TResult Function(String message, List<String> recentSearches)
-    error,
-    required TResult Function(List<String> recentSearches) recentSearchesLoaded,
-    required TResult Function(List<Meal> results, String query)
-    lastSearchLoaded,
-  }) {
-    return initial();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult? Function(String message, List<String> recentSearches)? error,
-    TResult? Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult? Function(List<Meal> results, String query)? lastSearchLoaded,
-  }) {
-    return initial?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult Function(String message, List<String> recentSearches)? error,
-    TResult Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult Function(List<Meal> results, String query)? lastSearchLoaded,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Success value) success,
-    required TResult Function(_Error value) error,
-    required TResult Function(_RecentSearchesLoaded value) recentSearchesLoaded,
-    required TResult Function(_LastSearchLoaded value) lastSearchLoaded,
-  }) {
-    return initial(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Success value)? success,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult? Function(_LastSearchLoaded value)? lastSearchLoaded,
-  }) {
-    return initial?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Success value)? success,
-    TResult Function(_Error value)? error,
-    TResult Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult Function(_LastSearchLoaded value)? lastSearchLoaded,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Initial implements SearchState {
-  const factory _Initial() = _$InitialImpl;
-}
-
-/// @nodoc
-abstract class _$$LoadingImplCopyWith<$Res> {
-  factory _$$LoadingImplCopyWith(
-    _$LoadingImpl value,
-    $Res Function(_$LoadingImpl) then,
-  ) = __$$LoadingImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$SearchStateCopyWithImpl<$Res, _$LoadingImpl>
-    implements _$$LoadingImplCopyWith<$Res> {
-  __$$LoadingImplCopyWithImpl(
-    _$LoadingImpl _value,
-    $Res Function(_$LoadingImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$LoadingImpl implements _Loading {
-  const _$LoadingImpl();
 
-  @override
-  String toString() {
-    return 'SearchState.loading()';
-  }
+class _Initial implements SearchState {
+  const _Initial();
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoadingImpl);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )
-    success,
-    required TResult Function(String message, List<String> recentSearches)
-    error,
-    required TResult Function(List<String> recentSearches) recentSearchesLoaded,
-    required TResult Function(List<Meal> results, String query)
-    lastSearchLoaded,
-  }) {
-    return loading();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult? Function(String message, List<String> recentSearches)? error,
-    TResult? Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult? Function(List<Meal> results, String query)? lastSearchLoaded,
-  }) {
-    return loading?.call();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult Function(String message, List<String> recentSearches)? error,
-    TResult Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult Function(List<Meal> results, String query)? lastSearchLoaded,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Success value) success,
-    required TResult Function(_Error value) error,
-    required TResult Function(_RecentSearchesLoaded value) recentSearchesLoaded,
-    required TResult Function(_LastSearchLoaded value) lastSearchLoaded,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Success value)? success,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult? Function(_LastSearchLoaded value)? lastSearchLoaded,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Success value)? success,
-    TResult Function(_Error value)? error,
-    TResult Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult Function(_LastSearchLoaded value)? lastSearchLoaded,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial);
 }
 
-abstract class _Loading implements SearchState {
-  const factory _Loading() = _$LoadingImpl;
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'SearchState.initial()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _Loading implements SearchState {
+  const _Loading();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'SearchState.loading()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _Success implements SearchState {
+  const _Success(final  List<Meal> results, this.query, final  List<String> recentSearches): _results = results,_recentSearches = recentSearches;
+  
+
+ final  List<Meal> _results;
+ List<Meal> get results {
+  if (_results is EqualUnmodifiableListView) return _results;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_results);
+}
+
+ final  String query;
+ final  List<String> _recentSearches;
+ List<String> get recentSearches {
+  if (_recentSearches is EqualUnmodifiableListView) return _recentSearches;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_recentSearches);
+}
+
+
+/// Create a copy of SearchState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SuccessCopyWith<_Success> get copyWith => __$SuccessCopyWithImpl<_Success>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&const DeepCollectionEquality().equals(other._results, _results)&&(identical(other.query, query) || other.query == query)&&const DeepCollectionEquality().equals(other._recentSearches, _recentSearches));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_results),query,const DeepCollectionEquality().hash(_recentSearches));
+
+@override
+String toString() {
+  return 'SearchState.success(results: $results, query: $query, recentSearches: $recentSearches)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$SuccessImplCopyWith<$Res> {
-  factory _$$SuccessImplCopyWith(
-    _$SuccessImpl value,
-    $Res Function(_$SuccessImpl) then,
-  ) = __$$SuccessImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({List<Meal> results, String query, List<String> recentSearches});
+abstract mixin class _$SuccessCopyWith<$Res> implements $SearchStateCopyWith<$Res> {
+  factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) = __$SuccessCopyWithImpl;
+@useResult
+$Res call({
+ List<Meal> results, String query, List<String> recentSearches
+});
+
+
+
+
+}
+/// @nodoc
+class __$SuccessCopyWithImpl<$Res>
+    implements _$SuccessCopyWith<$Res> {
+  __$SuccessCopyWithImpl(this._self, this._then);
+
+  final _Success _self;
+  final $Res Function(_Success) _then;
+
+/// Create a copy of SearchState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? results = null,Object? query = null,Object? recentSearches = null,}) {
+  return _then(_Success(
+null == results ? _self._results : results // ignore: cast_nullable_to_non_nullable
+as List<Meal>,null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
+as String,null == recentSearches ? _self._recentSearches : recentSearches // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
 }
 
-/// @nodoc
-class __$$SuccessImplCopyWithImpl<$Res>
-    extends _$SearchStateCopyWithImpl<$Res, _$SuccessImpl>
-    implements _$$SuccessImplCopyWith<$Res> {
-  __$$SuccessImplCopyWithImpl(
-    _$SuccessImpl _value,
-    $Res Function(_$SuccessImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? results = null,
-    Object? query = null,
-    Object? recentSearches = null,
-  }) {
-    return _then(
-      _$SuccessImpl(
-        null == results
-            ? _value._results
-            : results // ignore: cast_nullable_to_non_nullable
-                as List<Meal>,
-        null == query
-            ? _value.query
-            : query // ignore: cast_nullable_to_non_nullable
-                as String,
-        null == recentSearches
-            ? _value._recentSearches
-            : recentSearches // ignore: cast_nullable_to_non_nullable
-                as List<String>,
-      ),
-    );
-  }
 }
 
 /// @nodoc
 
-class _$SuccessImpl implements _Success {
-  const _$SuccessImpl(
-    final List<Meal> results,
-    this.query,
-    final List<String> recentSearches,
-  ) : _results = results,
-      _recentSearches = recentSearches;
 
-  final List<Meal> _results;
-  @override
-  List<Meal> get results {
-    if (_results is EqualUnmodifiableListView) return _results;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_results);
-  }
+class _Error implements SearchState {
+  const _Error(this.message, final  List<String> recentSearches): _recentSearches = recentSearches;
+  
 
-  @override
-  final String query;
-  final List<String> _recentSearches;
-  @override
-  List<String> get recentSearches {
-    if (_recentSearches is EqualUnmodifiableListView) return _recentSearches;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_recentSearches);
-  }
-
-  @override
-  String toString() {
-    return 'SearchState.success(results: $results, query: $query, recentSearches: $recentSearches)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SuccessImpl &&
-            const DeepCollectionEquality().equals(other._results, _results) &&
-            (identical(other.query, query) || other.query == query) &&
-            const DeepCollectionEquality().equals(
-              other._recentSearches,
-              _recentSearches,
-            ));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    const DeepCollectionEquality().hash(_results),
-    query,
-    const DeepCollectionEquality().hash(_recentSearches),
-  );
-
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
-      __$$SuccessImplCopyWithImpl<_$SuccessImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )
-    success,
-    required TResult Function(String message, List<String> recentSearches)
-    error,
-    required TResult Function(List<String> recentSearches) recentSearchesLoaded,
-    required TResult Function(List<Meal> results, String query)
-    lastSearchLoaded,
-  }) {
-    return success(results, query, recentSearches);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult? Function(String message, List<String> recentSearches)? error,
-    TResult? Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult? Function(List<Meal> results, String query)? lastSearchLoaded,
-  }) {
-    return success?.call(results, query, recentSearches);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult Function(String message, List<String> recentSearches)? error,
-    TResult Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult Function(List<Meal> results, String query)? lastSearchLoaded,
-    required TResult orElse(),
-  }) {
-    if (success != null) {
-      return success(results, query, recentSearches);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Success value) success,
-    required TResult Function(_Error value) error,
-    required TResult Function(_RecentSearchesLoaded value) recentSearchesLoaded,
-    required TResult Function(_LastSearchLoaded value) lastSearchLoaded,
-  }) {
-    return success(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Success value)? success,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult? Function(_LastSearchLoaded value)? lastSearchLoaded,
-  }) {
-    return success?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Success value)? success,
-    TResult Function(_Error value)? error,
-    TResult Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult Function(_LastSearchLoaded value)? lastSearchLoaded,
-    required TResult orElse(),
-  }) {
-    if (success != null) {
-      return success(this);
-    }
-    return orElse();
-  }
+ final  String message;
+ final  List<String> _recentSearches;
+ List<String> get recentSearches {
+  if (_recentSearches is EqualUnmodifiableListView) return _recentSearches;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_recentSearches);
 }
 
-abstract class _Success implements SearchState {
-  const factory _Success(
-    final List<Meal> results,
-    final String query,
-    final List<String> recentSearches,
-  ) = _$SuccessImpl;
 
-  List<Meal> get results;
-  String get query;
-  List<String> get recentSearches;
+/// Create a copy of SearchState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ErrorCopyWith<_Error> get copyWith => __$ErrorCopyWithImpl<_Error>(this, _$identity);
 
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.message, message) || other.message == message)&&const DeepCollectionEquality().equals(other._recentSearches, _recentSearches));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message,const DeepCollectionEquality().hash(_recentSearches));
+
+@override
+String toString() {
+  return 'SearchState.error(message: $message, recentSearches: $recentSearches)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$ErrorImplCopyWith<$Res> {
-  factory _$$ErrorImplCopyWith(
-    _$ErrorImpl value,
-    $Res Function(_$ErrorImpl) then,
-  ) = __$$ErrorImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String message, List<String> recentSearches});
+abstract mixin class _$ErrorCopyWith<$Res> implements $SearchStateCopyWith<$Res> {
+  factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) = __$ErrorCopyWithImpl;
+@useResult
+$Res call({
+ String message, List<String> recentSearches
+});
+
+
+
+
+}
+/// @nodoc
+class __$ErrorCopyWithImpl<$Res>
+    implements _$ErrorCopyWith<$Res> {
+  __$ErrorCopyWithImpl(this._self, this._then);
+
+  final _Error _self;
+  final $Res Function(_Error) _then;
+
+/// Create a copy of SearchState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,Object? recentSearches = null,}) {
+  return _then(_Error(
+null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,null == recentSearches ? _self._recentSearches : recentSearches // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
 }
 
-/// @nodoc
-class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$SearchStateCopyWithImpl<$Res, _$ErrorImpl>
-    implements _$$ErrorImplCopyWith<$Res> {
-  __$$ErrorImplCopyWithImpl(
-    _$ErrorImpl _value,
-    $Res Function(_$ErrorImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? message = null, Object? recentSearches = null}) {
-    return _then(
-      _$ErrorImpl(
-        null == message
-            ? _value.message
-            : message // ignore: cast_nullable_to_non_nullable
-                as String,
-        null == recentSearches
-            ? _value._recentSearches
-            : recentSearches // ignore: cast_nullable_to_non_nullable
-                as List<String>,
-      ),
-    );
-  }
 }
 
 /// @nodoc
 
-class _$ErrorImpl implements _Error {
-  const _$ErrorImpl(this.message, final List<String> recentSearches)
-    : _recentSearches = recentSearches;
 
-  @override
-  final String message;
-  final List<String> _recentSearches;
-  @override
-  List<String> get recentSearches {
-    if (_recentSearches is EqualUnmodifiableListView) return _recentSearches;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_recentSearches);
-  }
+class _RecentSearchesLoaded implements SearchState {
+  const _RecentSearchesLoaded(final  List<String> recentSearches): _recentSearches = recentSearches;
+  
 
-  @override
-  String toString() {
-    return 'SearchState.error(message: $message, recentSearches: $recentSearches)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ErrorImpl &&
-            (identical(other.message, message) || other.message == message) &&
-            const DeepCollectionEquality().equals(
-              other._recentSearches,
-              _recentSearches,
-            ));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    message,
-    const DeepCollectionEquality().hash(_recentSearches),
-  );
-
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
-      __$$ErrorImplCopyWithImpl<_$ErrorImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )
-    success,
-    required TResult Function(String message, List<String> recentSearches)
-    error,
-    required TResult Function(List<String> recentSearches) recentSearchesLoaded,
-    required TResult Function(List<Meal> results, String query)
-    lastSearchLoaded,
-  }) {
-    return error(message, recentSearches);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult? Function(String message, List<String> recentSearches)? error,
-    TResult? Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult? Function(List<Meal> results, String query)? lastSearchLoaded,
-  }) {
-    return error?.call(message, recentSearches);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult Function(String message, List<String> recentSearches)? error,
-    TResult Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult Function(List<Meal> results, String query)? lastSearchLoaded,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(message, recentSearches);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Success value) success,
-    required TResult Function(_Error value) error,
-    required TResult Function(_RecentSearchesLoaded value) recentSearchesLoaded,
-    required TResult Function(_LastSearchLoaded value) lastSearchLoaded,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Success value)? success,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult? Function(_LastSearchLoaded value)? lastSearchLoaded,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Success value)? success,
-    TResult Function(_Error value)? error,
-    TResult Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult Function(_LastSearchLoaded value)? lastSearchLoaded,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
+ final  List<String> _recentSearches;
+ List<String> get recentSearches {
+  if (_recentSearches is EqualUnmodifiableListView) return _recentSearches;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_recentSearches);
 }
 
-abstract class _Error implements SearchState {
-  const factory _Error(
-    final String message,
-    final List<String> recentSearches,
-  ) = _$ErrorImpl;
 
-  String get message;
-  List<String> get recentSearches;
+/// Create a copy of SearchState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$RecentSearchesLoadedCopyWith<_RecentSearchesLoaded> get copyWith => __$RecentSearchesLoadedCopyWithImpl<_RecentSearchesLoaded>(this, _$identity);
 
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RecentSearchesLoaded&&const DeepCollectionEquality().equals(other._recentSearches, _recentSearches));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_recentSearches));
+
+@override
+String toString() {
+  return 'SearchState.recentSearchesLoaded(recentSearches: $recentSearches)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$RecentSearchesLoadedImplCopyWith<$Res> {
-  factory _$$RecentSearchesLoadedImplCopyWith(
-    _$RecentSearchesLoadedImpl value,
-    $Res Function(_$RecentSearchesLoadedImpl) then,
-  ) = __$$RecentSearchesLoadedImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({List<String> recentSearches});
+abstract mixin class _$RecentSearchesLoadedCopyWith<$Res> implements $SearchStateCopyWith<$Res> {
+  factory _$RecentSearchesLoadedCopyWith(_RecentSearchesLoaded value, $Res Function(_RecentSearchesLoaded) _then) = __$RecentSearchesLoadedCopyWithImpl;
+@useResult
+$Res call({
+ List<String> recentSearches
+});
+
+
+
+
+}
+/// @nodoc
+class __$RecentSearchesLoadedCopyWithImpl<$Res>
+    implements _$RecentSearchesLoadedCopyWith<$Res> {
+  __$RecentSearchesLoadedCopyWithImpl(this._self, this._then);
+
+  final _RecentSearchesLoaded _self;
+  final $Res Function(_RecentSearchesLoaded) _then;
+
+/// Create a copy of SearchState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? recentSearches = null,}) {
+  return _then(_RecentSearchesLoaded(
+null == recentSearches ? _self._recentSearches : recentSearches // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
 }
 
-/// @nodoc
-class __$$RecentSearchesLoadedImplCopyWithImpl<$Res>
-    extends _$SearchStateCopyWithImpl<$Res, _$RecentSearchesLoadedImpl>
-    implements _$$RecentSearchesLoadedImplCopyWith<$Res> {
-  __$$RecentSearchesLoadedImplCopyWithImpl(
-    _$RecentSearchesLoadedImpl _value,
-    $Res Function(_$RecentSearchesLoadedImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? recentSearches = null}) {
-    return _then(
-      _$RecentSearchesLoadedImpl(
-        null == recentSearches
-            ? _value._recentSearches
-            : recentSearches // ignore: cast_nullable_to_non_nullable
-                as List<String>,
-      ),
-    );
-  }
 }
 
 /// @nodoc
 
-class _$RecentSearchesLoadedImpl implements _RecentSearchesLoaded {
-  const _$RecentSearchesLoadedImpl(final List<String> recentSearches)
-    : _recentSearches = recentSearches;
 
-  final List<String> _recentSearches;
-  @override
-  List<String> get recentSearches {
-    if (_recentSearches is EqualUnmodifiableListView) return _recentSearches;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_recentSearches);
-  }
+class _LastSearchLoaded implements SearchState {
+  const _LastSearchLoaded(final  List<Meal> results, this.query): _results = results;
+  
 
-  @override
-  String toString() {
-    return 'SearchState.recentSearchesLoaded(recentSearches: $recentSearches)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$RecentSearchesLoadedImpl &&
-            const DeepCollectionEquality().equals(
-              other._recentSearches,
-              _recentSearches,
-            ));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    const DeepCollectionEquality().hash(_recentSearches),
-  );
-
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$RecentSearchesLoadedImplCopyWith<_$RecentSearchesLoadedImpl>
-  get copyWith =>
-      __$$RecentSearchesLoadedImplCopyWithImpl<_$RecentSearchesLoadedImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )
-    success,
-    required TResult Function(String message, List<String> recentSearches)
-    error,
-    required TResult Function(List<String> recentSearches) recentSearchesLoaded,
-    required TResult Function(List<Meal> results, String query)
-    lastSearchLoaded,
-  }) {
-    return recentSearchesLoaded(recentSearches);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult? Function(String message, List<String> recentSearches)? error,
-    TResult? Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult? Function(List<Meal> results, String query)? lastSearchLoaded,
-  }) {
-    return recentSearchesLoaded?.call(recentSearches);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult Function(String message, List<String> recentSearches)? error,
-    TResult Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult Function(List<Meal> results, String query)? lastSearchLoaded,
-    required TResult orElse(),
-  }) {
-    if (recentSearchesLoaded != null) {
-      return recentSearchesLoaded(recentSearches);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Success value) success,
-    required TResult Function(_Error value) error,
-    required TResult Function(_RecentSearchesLoaded value) recentSearchesLoaded,
-    required TResult Function(_LastSearchLoaded value) lastSearchLoaded,
-  }) {
-    return recentSearchesLoaded(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Success value)? success,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult? Function(_LastSearchLoaded value)? lastSearchLoaded,
-  }) {
-    return recentSearchesLoaded?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Success value)? success,
-    TResult Function(_Error value)? error,
-    TResult Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult Function(_LastSearchLoaded value)? lastSearchLoaded,
-    required TResult orElse(),
-  }) {
-    if (recentSearchesLoaded != null) {
-      return recentSearchesLoaded(this);
-    }
-    return orElse();
-  }
+ final  List<Meal> _results;
+ List<Meal> get results {
+  if (_results is EqualUnmodifiableListView) return _results;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_results);
 }
 
-abstract class _RecentSearchesLoaded implements SearchState {
-  const factory _RecentSearchesLoaded(final List<String> recentSearches) =
-      _$RecentSearchesLoadedImpl;
+ final  String query;
 
-  List<String> get recentSearches;
+/// Create a copy of SearchState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$LastSearchLoadedCopyWith<_LastSearchLoaded> get copyWith => __$LastSearchLoadedCopyWithImpl<_LastSearchLoaded>(this, _$identity);
 
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$RecentSearchesLoadedImplCopyWith<_$RecentSearchesLoadedImpl>
-  get copyWith => throw _privateConstructorUsedError;
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LastSearchLoaded&&const DeepCollectionEquality().equals(other._results, _results)&&(identical(other.query, query) || other.query == query));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_results),query);
+
+@override
+String toString() {
+  return 'SearchState.lastSearchLoaded(results: $results, query: $query)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$LastSearchLoadedImplCopyWith<$Res> {
-  factory _$$LastSearchLoadedImplCopyWith(
-    _$LastSearchLoadedImpl value,
-    $Res Function(_$LastSearchLoadedImpl) then,
-  ) = __$$LastSearchLoadedImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({List<Meal> results, String query});
-}
+abstract mixin class _$LastSearchLoadedCopyWith<$Res> implements $SearchStateCopyWith<$Res> {
+  factory _$LastSearchLoadedCopyWith(_LastSearchLoaded value, $Res Function(_LastSearchLoaded) _then) = __$LastSearchLoadedCopyWithImpl;
+@useResult
+$Res call({
+ List<Meal> results, String query
+});
 
+
+
+
+}
 /// @nodoc
-class __$$LastSearchLoadedImplCopyWithImpl<$Res>
-    extends _$SearchStateCopyWithImpl<$Res, _$LastSearchLoadedImpl>
-    implements _$$LastSearchLoadedImplCopyWith<$Res> {
-  __$$LastSearchLoadedImplCopyWithImpl(
-    _$LastSearchLoadedImpl _value,
-    $Res Function(_$LastSearchLoadedImpl) _then,
-  ) : super(_value, _then);
+class __$LastSearchLoadedCopyWithImpl<$Res>
+    implements _$LastSearchLoadedCopyWith<$Res> {
+  __$LastSearchLoadedCopyWithImpl(this._self, this._then);
 
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? results = null, Object? query = null}) {
-    return _then(
-      _$LastSearchLoadedImpl(
-        null == results
-            ? _value._results
-            : results // ignore: cast_nullable_to_non_nullable
-                as List<Meal>,
-        null == query
-            ? _value.query
-            : query // ignore: cast_nullable_to_non_nullable
-                as String,
-      ),
-    );
-  }
+  final _LastSearchLoaded _self;
+  final $Res Function(_LastSearchLoaded) _then;
+
+/// Create a copy of SearchState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? results = null,Object? query = null,}) {
+  return _then(_LastSearchLoaded(
+null == results ? _self._results : results // ignore: cast_nullable_to_non_nullable
+as List<Meal>,null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
 
-class _$LastSearchLoadedImpl implements _LastSearchLoaded {
-  const _$LastSearchLoadedImpl(final List<Meal> results, this.query)
-    : _results = results;
-
-  final List<Meal> _results;
-  @override
-  List<Meal> get results {
-    if (_results is EqualUnmodifiableListView) return _results;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_results);
-  }
-
-  @override
-  final String query;
-
-  @override
-  String toString() {
-    return 'SearchState.lastSearchLoaded(results: $results, query: $query)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LastSearchLoadedImpl &&
-            const DeepCollectionEquality().equals(other._results, _results) &&
-            (identical(other.query, query) || other.query == query));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    const DeepCollectionEquality().hash(_results),
-    query,
-  );
-
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LastSearchLoadedImplCopyWith<_$LastSearchLoadedImpl> get copyWith =>
-      __$$LastSearchLoadedImplCopyWithImpl<_$LastSearchLoadedImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )
-    success,
-    required TResult Function(String message, List<String> recentSearches)
-    error,
-    required TResult Function(List<String> recentSearches) recentSearchesLoaded,
-    required TResult Function(List<Meal> results, String query)
-    lastSearchLoaded,
-  }) {
-    return lastSearchLoaded(results, query);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult? Function(String message, List<String> recentSearches)? error,
-    TResult? Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult? Function(List<Meal> results, String query)? lastSearchLoaded,
-  }) {
-    return lastSearchLoaded?.call(results, query);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(
-      List<Meal> results,
-      String query,
-      List<String> recentSearches,
-    )?
-    success,
-    TResult Function(String message, List<String> recentSearches)? error,
-    TResult Function(List<String> recentSearches)? recentSearchesLoaded,
-    TResult Function(List<Meal> results, String query)? lastSearchLoaded,
-    required TResult orElse(),
-  }) {
-    if (lastSearchLoaded != null) {
-      return lastSearchLoaded(results, query);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Success value) success,
-    required TResult Function(_Error value) error,
-    required TResult Function(_RecentSearchesLoaded value) recentSearchesLoaded,
-    required TResult Function(_LastSearchLoaded value) lastSearchLoaded,
-  }) {
-    return lastSearchLoaded(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Success value)? success,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult? Function(_LastSearchLoaded value)? lastSearchLoaded,
-  }) {
-    return lastSearchLoaded?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Success value)? success,
-    TResult Function(_Error value)? error,
-    TResult Function(_RecentSearchesLoaded value)? recentSearchesLoaded,
-    TResult Function(_LastSearchLoaded value)? lastSearchLoaded,
-    required TResult orElse(),
-  }) {
-    if (lastSearchLoaded != null) {
-      return lastSearchLoaded(this);
-    }
-    return orElse();
-  }
 }
 
-abstract class _LastSearchLoaded implements SearchState {
-  const factory _LastSearchLoaded(
-    final List<Meal> results,
-    final String query,
-  ) = _$LastSearchLoadedImpl;
-
-  List<Meal> get results;
-  String get query;
-
-  /// Create a copy of SearchState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LastSearchLoadedImplCopyWith<_$LastSearchLoadedImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

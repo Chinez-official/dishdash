@@ -5,6 +5,7 @@ import 'package:dishdash/app/core/services/storage/storage_keys.dart';
 import 'package:injectable/injectable.dart';
 import 'package:dishdash/app/core/services/api/api_service.dart';
 import 'package:dishdash/app/core/services/storage/offline_client.dart';
+import 'package:dishdash/app/core/services/constants.dart';
 import 'package:dishdash/app/core/custom_printer.dart';
 
 abstract class SearchRepository {
@@ -37,6 +38,12 @@ abstract class SearchRepository {
 
   /// Search meals by first letter
   Future<List<Meal>> searchMealsByFirstLetter(String letter);
+
+  /// Get meal details by ID
+  Future<Meal?> getMealDetailsById(String mealId);
+
+  /// Get ingredient image URL
+  String getIngredientImageUrl(String ingredientName, {String size = ''});
 }
 
 @LazySingleton(as: SearchRepository)
@@ -332,6 +339,63 @@ class SearchRepositoryImpl implements SearchRepository {
     } catch (e) {
       error('Error searching by first letter: ${e.toString()}');
       return [];
+    }
+  }
+
+  @override
+  Future<Meal?> getMealDetailsById(String mealId) async {
+    try {
+      if (mealId.trim().isEmpty) {
+        debug('Meal ID is empty');
+        return null;
+      }
+
+      debug('Getting meal details for ID: $mealId');
+
+      final response = await _apiService.getMealDetailsById(mealId.trim());
+
+      if (response == null) {
+        info('No response received from API for meal ID: $mealId');
+        return null;
+      }
+
+      // Wrap the single meal object in the expected API response format
+      final mealResponse = MealResponse.fromJson({
+        'meals': [response],
+      });
+      final meals = mealResponse.meals;
+
+      if (meals != null && meals.isNotEmpty) {
+        info('Retrieved meal details: ${meals.first.displayName}');
+        return meals.first;
+      }
+
+      info('No meal found with ID: $mealId');
+      return null;
+    } catch (e) {
+      error('Error getting meal details by ID: ${e.toString()}');
+      return null;
+    }
+  }
+
+  @override
+  String getIngredientImageUrl(String ingredientName, {String size = ''}) {
+    try {
+      if (ingredientName.trim().isEmpty) {
+        debug('Ingredient name is empty');
+        return '';
+      }
+
+      // Sanitize the ingredient name
+      final sanitized = ingredientName.trim();
+
+      debug('Getting image URL for ingredient: $sanitized');
+
+      // Use the Constants helper to generate the image URL
+      return Constants.getIngredientImageUrl(sanitized, size: size);
+    } catch (e) {
+      error('Error getting ingredient image URL: ${e.toString()}');
+      return '';
     }
   }
 }

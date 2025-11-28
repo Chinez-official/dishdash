@@ -1,4 +1,6 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dishdash/app/core/models/recipes/meal.dart';
+import 'package:flutter/material.dart';
 import 'package:dishdash/app/features/auth/sign_up/sign_up_screen.dart';
 import 'package:dishdash/app/features/auth/sign_in/sign_in_screen.dart';
 import 'package:dishdash/app/features/auth/forgot_password/forgot_password_screen.dart';
@@ -9,7 +11,7 @@ import 'package:dishdash/app/features/notification/notification_screen.dart';
 import 'package:dishdash/app/features/profile/profile_screen.dart';
 import 'package:dishdash/app/features/splash/splash_screen.dart';
 import 'package:dishdash/app/features/search/search_screen.dart';
-
+import 'package:dishdash/app/features/recipe_detail/recipe_detail_screen.dart';
 part 'router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen,Route')
@@ -62,6 +64,11 @@ class AppRouter extends RootStackRouter {
       path: '/search',
       transitionsBuilder: TransitionsBuilders.slideLeft,
       page: SearchRoute.page,
+    ),
+    CustomRoute(
+      path: '/recipe-detail',
+      transitionsBuilder: TransitionsBuilders.slideLeft,
+      page: RecipeDetailRoute.page,
     ),
   ];
 }

@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dishdash/app/core/routes/router.dart';
 import 'package:dishdash/app/features/search/components/search_input_section.dart';
 import 'package:dishdash/app/features/search/components/search_result_grid.dart';
 import 'package:dishdash/app/features/search/components/search_state_section.dart';
+import 'package:dishdash/app/features/search/notifiers/search_state.dart';
 import 'package:dishdash/providers/notifier_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -64,8 +66,8 @@ class SearchScreen extends HookConsumerWidget {
 
     void handleMealTap(Meal meal) {
       info('Meal tapped: ${meal.displayName}');
-      // TODO: Navigate to meal detail screen
-      // context.router.push(MealDetailRoute(meal: meal));
+      // Navigate to meal detail screen
+      context.router.push(RecipeDetailRoute(meal: meal));
     }
 
     void handleFiltersApplied(Map<String, dynamic> filters) {

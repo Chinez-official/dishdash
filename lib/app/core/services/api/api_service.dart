@@ -14,6 +14,7 @@ abstract class ApiService {
   Future<dynamic> listAreas();
   Future<dynamic> listIngredients();
   Future<dynamic> searchMealsByFirstLetter(String letter);
+  Future<Map<String, dynamic>?> getMealDetailsById(String mealId);
 }
 
 @Injectable(as: ApiService)
@@ -157,5 +158,81 @@ class ApiServiceImpl implements ApiService {
         queryParameters: Constants.searchByFirstLetterParams(letter),
       ),
     );
+  }
+
+  @override
+  Future<Map<String, dynamic>?> getMealDetailsById(String mealId) async {
+    info('Getting meal details by ID: $mealId');
+
+    try {
+      final response = await _handleRequest(
+        _dio.get(
+          Constants.lookupMealById,
+          queryParameters: Constants.lookupByIdParams(mealId),
+        ),
+      );
+
+      if (response == null) {
+        error('No response received for meal ID: $mealId');
+        return null;
+      }
+
+      // The API returns {"meals": [meal_object]} or {"meals": null}
+      if (response is Map<String, dynamic>) {
+        final meals = response['meals'];
+        if (meals != null && meals is List && meals.isNotEmpty) {
+          final mealData = meals[0] as Map<String, dynamic>;
+
+          // Parse ingredient images and add them to the response
+          mealData['ingredientImages'] = _parseIngredientImages(mealData);
+
+          info('Successfully retrieved meal details for ID: $mealId');
+          return mealData;
+        } else {
+          error('No meal found with ID: $mealId');
+          return null;
+        }
+      }
+
+      error('Unexpected response format for meal ID: $mealId');
+      return null;
+    } catch (e) {
+      error('Error getting meal details for ID $mealId: $e');
+      return null;
+    }
+  }
+
+  /// Helper method to parse ingredient images from meal data
+  List<Map<String, String>> _parseIngredientImages(
+    Map<String, dynamic> mealData,
+  ) {
+    final ingredientImages = <Map<String, String>>[];
+
+    for (int i = 1; i <= 20; i++) {
+      final ingredient = mealData['strIngredient$i'];
+      final measure = mealData['strMeasure$i'];
+
+      if (ingredient != null &&
+          ingredient.toString().trim().isNotEmpty &&
+          ingredient.toString().trim() != 'null') {
+        ingredientImages.add({
+          'name': ingredient.toString().trim(),
+          'measure': measure?.toString().trim() ?? '',
+          'imageUrl': Constants.getIngredientImageUrl(
+            ingredient.toString().trim(),
+          ),
+          'smallImageUrl': Constants.getIngredientImageUrl(
+            ingredient.toString().trim(),
+            size: 'Small',
+          ),
+          'mediumImageUrl': Constants.getIngredientImageUrl(
+            ingredient.toString().trim(),
+            size: 'Medium',
+          ),
+        });
+      }
+    }
+
+    return ingredientImages;
   }
 }

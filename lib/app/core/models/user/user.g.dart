@@ -24,8 +24,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
   'email': instance.email,
   'fullName': instance.fullName,
   'firstName': instance.firstName,
-  if (instance.photoUrl case final value?) 'photoUrl': value,
+  'photoUrl': instance.photoUrl,
   'isEmailVerified': instance.isEmailVerified,
-  if (instance.createdAt?.toIso8601String() case final value?)
-    'createdAt': value,
+  'createdAt': instance.createdAt?.toIso8601String(),
 };

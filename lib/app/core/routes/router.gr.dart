@@ -107,6 +107,53 @@ class ProfileRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [RecipeDetailScreen]
+class RecipeDetailRoute extends PageRouteInfo<RecipeDetailRouteArgs> {
+  RecipeDetailRoute({
+    Key? key,
+    required Meal meal,
+    List<PageRouteInfo>? children,
+  }) : super(
+         RecipeDetailRoute.name,
+         args: RecipeDetailRouteArgs(key: key, meal: meal),
+         initialChildren: children,
+       );
+
+  static const String name = 'RecipeDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<RecipeDetailRouteArgs>();
+      return RecipeDetailScreen(key: args.key, meal: args.meal);
+    },
+  );
+}
+
+class RecipeDetailRouteArgs {
+  const RecipeDetailRouteArgs({this.key, required this.meal});
+
+  final Key? key;
+
+  final Meal meal;
+
+  @override
+  String toString() {
+    return 'RecipeDetailRouteArgs{key: $key, meal: $meal}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! RecipeDetailRouteArgs) return false;
+    return key == other.key && meal == other.meal;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ meal.hashCode;
+}
+
+/// generated route for
 /// [SearchScreen]
 class SearchRoute extends PageRouteInfo<void> {
   const SearchRoute({List<PageRouteInfo>? children})

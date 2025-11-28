@@ -1,3 +1,4 @@
+import 'package:dishdash/app/core/models/data.dart';
 import 'package:dishdash/app/core/usecases/auth_use_case.dart';
 import 'package:dishdash/app/shared/extensions/string_extensions.dart';
 import 'package:hooks_riverpod/legacy.dart';

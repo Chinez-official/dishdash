@@ -228,4 +228,25 @@ class RecipeUseCase {
       return Data.error(message: 'Failed to search recipes: ${e.toString()}');
     }
   }
+
+  /// Get detailed meal information by ID
+  Future<Data<Meal>> getMealDetails(String mealId) async {
+    try {
+      // Validate mealId
+      if (mealId.trim().isEmpty) {
+        return const Data.error(message: 'Meal ID cannot be empty');
+      }
+
+      // Call repository to get meal details
+      final meal = await _repository.getMealDetailsById(mealId.trim());
+
+      if (meal == null) {
+        return const Data.error(message: 'Meal not found');
+      }
+
+      return Data.success(data: meal);
+    } catch (e) {
+      return Data.error(message: 'Failed to get meal details: ${e.toString()}');
+    }
+  }
 }
