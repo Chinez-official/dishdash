@@ -73,8 +73,27 @@ class SearchNotifier extends StateNotifier<SearchState> {
     await _performSearch(query.trim());
   }
 
+  /// Refresh search by clearing cache and re-executing
+  Future<void> refreshSearch(String query) async {
+    _debounceTimer?.cancel();
+    // Clear cache for this query to force fresh fetch
+    _searchCache.remove(query.trim().toLowerCase());
+    await _performSearch(query.trim(), preserveLastSearchState: false);
+  }
+
+  /// Refresh last search results
+  Future<void> refreshLastSearch(String query) async {
+    _debounceTimer?.cancel();
+    // Clear cache for this query to force fresh fetch
+    _searchCache.remove(query.trim().toLowerCase());
+    await _performSearch(query.trim(), preserveLastSearchState: true);
+  }
+
   /// Internal method to perform the actual search
-  Future<void> _performSearch(String query) async {
+  Future<void> _performSearch(
+    String query, {
+    bool preserveLastSearchState = false,
+  }) async {
     if (query.isEmpty) {
       _loadRecentSearches();
       return;
@@ -84,7 +103,15 @@ class SearchNotifier extends StateNotifier<SearchState> {
     if (_searchCache.containsKey(query.toLowerCase())) {
       final cachedResults = _searchCache[query.toLowerCase()]!;
       final currentRecentSearches = _getCurrentRecentSearches();
-      state = SearchState.success(cachedResults, query, currentRecentSearches);
+      if (preserveLastSearchState) {
+        state = SearchState.lastSearchLoaded(cachedResults, query);
+      } else {
+        state = SearchState.success(
+          cachedResults,
+          query,
+          currentRecentSearches,
+        );
+      }
       return;
     }
 
@@ -106,7 +133,11 @@ class SearchNotifier extends StateNotifier<SearchState> {
             error: (_) => <String>[],
           );
 
-          state = SearchState.success(meals, query, recentSearches);
+          if (preserveLastSearchState) {
+            state = SearchState.lastSearchLoaded(meals, query);
+          } else {
+            state = SearchState.success(meals, query, recentSearches);
+          }
         },
         error: (message) {
           final currentRecentSearches = _getCurrentRecentSearches();
@@ -245,6 +276,33 @@ class SearchNotifier extends StateNotifier<SearchState> {
 
   /// Search meals by first letter
   Future<void> searchMealsByFirstLetter(String letter) async {
+    await _searchByFirstLetter(letter, clearCache: false);
+  }
+
+  /// Refresh search by first letter (clears cache)
+  Future<void> refreshMealsByFirstLetter(String letter) async {
+    await _searchByFirstLetter(
+      letter,
+      clearCache: true,
+      preserveLastSearchState: false,
+    );
+  }
+
+  /// Refresh last search by first letter
+  Future<void> refreshLastSearchByFirstLetter(String letter) async {
+    await _searchByFirstLetter(
+      letter,
+      clearCache: true,
+      preserveLastSearchState: true,
+    );
+  }
+
+  /// Internal method to search by first letter
+  Future<void> _searchByFirstLetter(
+    String letter, {
+    bool clearCache = false,
+    bool preserveLastSearchState = false,
+  }) async {
     _debounceTimer?.cancel();
 
     final trimmedLetter = letter.trim();
@@ -253,16 +311,24 @@ class SearchNotifier extends StateNotifier<SearchState> {
       return;
     }
 
-    // Check cache first
+    // Check cache first (unless we're clearing it)
     final cacheKey = 'letter_${trimmedLetter.toLowerCase()}';
-    if (_searchCache.containsKey(cacheKey)) {
+    if (clearCache) {
+      _searchCache.remove(cacheKey);
+    }
+
+    if (!clearCache && _searchCache.containsKey(cacheKey)) {
       final cachedResults = _searchCache[cacheKey]!;
       final currentRecentSearches = _getCurrentRecentSearches();
-      state = SearchState.success(
-        cachedResults,
-        trimmedLetter,
-        currentRecentSearches,
-      );
+      if (preserveLastSearchState) {
+        state = SearchState.lastSearchLoaded(cachedResults, trimmedLetter);
+      } else {
+        state = SearchState.success(
+          cachedResults,
+          trimmedLetter,
+          currentRecentSearches,
+        );
+      }
       return;
     }
 
@@ -286,7 +352,11 @@ class SearchNotifier extends StateNotifier<SearchState> {
             error: (_) => <String>[],
           );
 
-          state = SearchState.success(meals, trimmedLetter, recentSearches);
+          if (preserveLastSearchState) {
+            state = SearchState.lastSearchLoaded(meals, trimmedLetter);
+          } else {
+            state = SearchState.success(meals, trimmedLetter, recentSearches);
+          }
         },
         error: (message) {
           final currentRecentSearches = _getCurrentRecentSearches();
@@ -344,7 +414,38 @@ class SearchNotifier extends StateNotifier<SearchState> {
   /// Load last search results from cache or storage
   Future<void> loadLastSearchResults() async {
     try {
-      // Get recent searches to find the last search query
+      // First, try to load from storage
+      final storageResult = await _recipeUseCase.getLastSearchResults();
+
+      storageResult.when(
+        success: (data) {
+          final query = data['query'] as String;
+          final meals = data['meals'] as List<Meal>;
+
+          if (query.isNotEmpty && meals.isNotEmpty) {
+            // Cache the results in memory
+            _searchCache[query.toLowerCase()] = meals;
+            state = SearchState.lastSearchLoaded(meals, query);
+            return;
+          }
+
+          // If no stored results, try to load from recent searches
+          _loadFromRecentSearches();
+        },
+        error: (message) {
+          // If failed to get from storage, try recent searches
+          _loadFromRecentSearches();
+        },
+      );
+    } catch (e) {
+      // If any error occurs, load recent searches instead
+      _loadRecentSearches();
+    }
+  }
+
+  /// Helper method to load results from recent searches
+  Future<void> _loadFromRecentSearches() async {
+    try {
       final recentSearchesResult = await _recipeUseCase.getRecentSearches();
 
       recentSearchesResult.when(

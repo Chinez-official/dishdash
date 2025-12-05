@@ -92,10 +92,50 @@ class SearchScreen extends HookConsumerWidget {
 
     void refreshData() async {
       if (searchController.text.isNotEmpty) {
-        handleSearch(searchController.text);
+        // Re-search with current query, forcing refresh
+        final query = searchController.text.trim();
+        if (query.length == 1) {
+          await searchNotifier.refreshMealsByFirstLetter(query);
+        } else {
+          await searchNotifier.refreshSearch(query);
+        }
       } else {
-        // Load recent search results
-        await searchNotifier.loadLastSearchResults();
+        // Get the last query from state and re-execute it with refresh
+        searchState.when(
+          initial: () {
+            // No previous search, do nothing
+          },
+          loading: () {
+            // Already loading, do nothing
+          },
+          success: (results, query, _) async {
+            // Re-execute the last successful search with cache clear
+            if (query.isNotEmpty) {
+              if (query.length == 1) {
+                await searchNotifier.refreshMealsByFirstLetter(query);
+              } else {
+                await searchNotifier.refreshSearch(query);
+              }
+            }
+          },
+          error: (message, _) {
+            // On error, try to reload last search results
+            searchNotifier.loadLastSearchResults();
+          },
+          recentSearchesLoaded: (_) {
+            // No active search, do nothing
+          },
+          lastSearchLoaded: (results, query) async {
+            // Re-execute the last loaded search with cache clear, preserving state
+            if (query.isNotEmpty) {
+              if (query.length == 1) {
+                await searchNotifier.refreshLastSearchByFirstLetter(query);
+              } else {
+                await searchNotifier.refreshLastSearch(query);
+              }
+            }
+          },
+        );
       }
     }
 

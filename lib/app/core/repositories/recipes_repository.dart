@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dishdash/app/core/models/recipes/category.dart';
 import 'package:dishdash/app/core/models/recipes/meal.dart';
 import 'package:dishdash/app/core/models/recipes/meal_response.dart';
@@ -44,6 +45,12 @@ abstract class SearchRepository {
 
   /// Get ingredient image URL
   String getIngredientImageUrl(String ingredientName, {String size = ''});
+
+  /// Save last search results to storage
+  Future<void> saveLastSearchResults(List<Meal> meals, String query);
+
+  /// Get last search results from storage
+  Future<Map<String, dynamic>> getLastSearchResults();
 }
 
 @LazySingleton(as: SearchRepository)
@@ -76,9 +83,10 @@ class SearchRepositoryImpl implements SearchRepository {
 
       info('Found ${meals.length} recipes for query: $query');
 
-      // Save successful search to recent searches
+      // Save successful search to recent searches and persist results
       if (meals.isNotEmpty) {
         await saveRecentSearch(query.trim());
+        await saveLastSearchResults(meals, query.trim());
       }
 
       return meals;
@@ -335,6 +343,12 @@ class SearchRepositoryImpl implements SearchRepository {
       final meals = mealResponse.meals ?? [];
 
       info('Found ${meals.length} recipes starting with letter: $firstChar');
+
+      // Save results if any found
+      if (meals.isNotEmpty) {
+        await saveLastSearchResults(meals, firstChar);
+      }
+
       return meals;
     } catch (e) {
       error('Error searching by first letter: ${e.toString()}');
@@ -396,6 +410,60 @@ class SearchRepositoryImpl implements SearchRepository {
     } catch (e) {
       error('Error getting ingredient image URL: ${e.toString()}');
       return '';
+    }
+  }
+
+  @override
+  Future<void> saveLastSearchResults(List<Meal> meals, String query) async {
+    try {
+      if (query.trim().isEmpty || meals.isEmpty) {
+        debug('Cannot save empty search results or query');
+        return;
+      }
+
+      // Convert meals to JSON and encode as string
+      final mealsJson = meals.map((meal) => meal.toJson()).toList();
+      final jsonString = jsonEncode(mealsJson);
+
+      // Save to storage
+      await _offlineClient.setString(StorageKeys.lastSearchResults, jsonString);
+      await _offlineClient.setString(StorageKeys.lastSearchQuery, query.trim());
+
+      debug(
+        'Saved last search results: ${meals.length} meals for query: $query',
+      );
+    } catch (e) {
+      error('Error saving last search results: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getLastSearchResults() async {
+    try {
+      final query = await _offlineClient.getString(StorageKeys.lastSearchQuery);
+      final resultsString = await _offlineClient.getString(
+        StorageKeys.lastSearchResults,
+      );
+
+      if (query.isEmpty || resultsString.isEmpty) {
+        debug('No last search results found in storage');
+        return {'query': '', 'meals': <Meal>[]};
+      }
+
+      // Decode JSON string back to List<Map>
+      final List<dynamic> decoded = jsonDecode(resultsString);
+
+      // Convert each map to Meal object
+      final meals =
+          decoded
+              .map((json) => Meal.fromJson(json as Map<String, dynamic>))
+              .toList();
+
+      debug('Retrieved ${meals.length} meals from last search');
+      return {'query': query, 'meals': meals};
+    } catch (e) {
+      error('Error getting last search results: ${e.toString()}');
+      return {'query': '', 'meals': <Meal>[]};
     }
   }
 }

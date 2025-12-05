@@ -249,4 +249,16 @@ class RecipeUseCase {
       return Data.error(message: 'Failed to get meal details: ${e.toString()}');
     }
   }
+
+  /// Get last search results from storage
+  Future<Data<Map<String, dynamic>>> getLastSearchResults() async {
+    try {
+      final results = await _repository.getLastSearchResults();
+      return Data.success(data: results);
+    } catch (e) {
+      return Data.error(
+        message: 'Failed to get last search results: ${e.toString()}',
+      );
+    }
+  }
 }
