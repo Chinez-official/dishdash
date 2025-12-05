@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dishdash/app/shared/shared.dart';
 import 'package:dishdash/app/core/models/recipes/recipe.dart';
@@ -233,7 +234,15 @@ class NewRecipeCard extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.schedule, size: 12, color: AppColors.grey3),
+                SvgPicture.asset(
+                  Images.timer,
+                  width: 12,
+                  height: 12,
+                  colorFilter: const ColorFilter.mode(
+                    AppColors.grey3,
+                    BlendMode.srcIn,
+                  ),
+                ),
                 const SizedBox(width: 2),
                 Text(
                   '${recipe.cookTimeInMinutes} mins',
