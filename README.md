@@ -9,10 +9,10 @@ A beautiful recipe discovery app built with Flutter that helps you find, save, a
 ## 📱 Screenshots
 
 <p align="center">
-  <img src="screenshots/home.png" width="200" alt="Home Screen"/>
-  <img src="screenshots/search.png" width="200" alt="Search Screen"/>
-  <img src="screenshots/recipe_detail.png" width="200" alt="Recipe Detail"/>
-  <img src="screenshots/bookmarks.png" width="200" alt="Bookmarks"/>
+  <img src="screenshots/home.jpeg" width="200" alt="Home Screen"/>
+  <img src="screenshots/search.jpeg" width="200" alt="Search Screen"/>
+  <img src="screenshots/recipe_detail.jpeg" width="200" alt="Recipe Detail"/>
+  <img src="screenshots/bookmarks.jpeg" width="200" alt="Bookmarks"/>
 </p>
 
 ## ✨ Features

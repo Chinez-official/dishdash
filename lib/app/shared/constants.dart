@@ -10,7 +10,7 @@ class Images {
   static const String home = 'assets/icons/Home.svg';
   static const String iconLauncher = 'assets/images/icon_launcher.png';
   static const String inactive = 'assets/icons/Inactive.svg';
-  static const String location = 'assets/icons/location.svg';
+  static const String location = 'assets/icons/Location.svg';
   static const String message = 'assets/icons/Message.svg';
   static const String more = 'assets/icons/More.svg';
   static const String notificationBing = 'assets/icons/Notification-Bing.svg';
