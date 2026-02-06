@@ -32,7 +32,7 @@ class RecipeTabSwitch extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: Text(
-              'Ingredient',
+              'Ingredients',
               style: TextStyle(
                 color:
                     selectedIndex == 0

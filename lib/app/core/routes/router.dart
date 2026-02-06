@@ -6,9 +6,9 @@ import 'package:dishdash/app/features/auth/sign_in/sign_in_screen.dart';
 import 'package:dishdash/app/features/auth/forgot_password/forgot_password_screen.dart';
 import 'package:dishdash/app/features/home/home_screen.dart';
 import 'package:dishdash/app/features/bookmark/bookmark_screen.dart';
+import 'package:dishdash/app/features/notes/notes_screen.dart';
+import 'package:dishdash/app/features/settings/settings_screen.dart';
 import 'package:dishdash/app/features/main_screen.dart';
-import 'package:dishdash/app/features/notification/notification_screen.dart';
-import 'package:dishdash/app/features/profile/profile_screen.dart';
 import 'package:dishdash/app/features/splash/splash_screen.dart';
 import 'package:dishdash/app/features/search/search_screen.dart';
 import 'package:dishdash/app/features/recipe_detail/recipe_detail_screen.dart';
@@ -49,8 +49,8 @@ class AppRouter extends RootStackRouter {
       children: [
         CustomRoute(page: HomeRoute.page),
         CustomRoute(page: BookmarkRoute.page),
-        CustomRoute(page: NotificationRoute.page),
-        CustomRoute(page: ProfileRoute.page),
+        CustomRoute(page: NotesRoute.page),
+        CustomRoute(page: SettingsRoute.page),
       ],
     ),
 

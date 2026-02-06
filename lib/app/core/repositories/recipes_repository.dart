@@ -173,7 +173,9 @@ class SearchRepositoryImpl implements SearchRepository {
   Future<void> clearRecentSearches() async {
     try {
       await _offlineClient.remove(StorageKeys.recentSearches);
-      debug('Cleared all recent searches');
+      await _offlineClient.remove(StorageKeys.lastSearchResults);
+      await _offlineClient.remove(StorageKeys.lastSearchQuery);
+      debug('Cleared all recent searches and last search results');
     } catch (e) {
       error('Error clearing recent searches: ${e.toString()}');
     }

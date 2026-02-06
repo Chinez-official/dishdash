@@ -108,7 +108,7 @@ class SearchRecipeCard extends StatelessWidget {
                 top: 8,
                 right: 8,
                 child: SearchRatingBadge(
-                  rating: 4.5,
+                  rating: 4.0,
                 ), // Default rating since MealDB doesn't provide ratings
               ),
 

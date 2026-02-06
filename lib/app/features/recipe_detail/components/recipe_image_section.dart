@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dishdash/app/shared/shared.dart';
 import 'package:dishdash/app/core/models/recipes/meal.dart';
+import 'package:dishdash/providers/notifier_providers.dart';
 
-class RecipeImageSection extends StatefulWidget {
+class RecipeImageSection extends ConsumerWidget {
   final Meal meal;
 
   const RecipeImageSection({super.key, required this.meal});
 
   @override
-  State<RecipeImageSection> createState() => _RecipeImageSectionState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bookmarkNotifier = ref.read(bookmarkNotifierProvider.notifier);
+    final bookmarkedMeals = ref.watch(bookmarkNotifierProvider);
+    final isBookmarked = bookmarkedMeals.any((m) => m.idMeal == meal.idMeal);
 
-class _RecipeImageSectionState extends State<RecipeImageSection> {
-  bool _isBookmarked = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final meal = widget.meal;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -170,9 +168,7 @@ class _RecipeImageSectionState extends State<RecipeImageSection> {
                 right: 8,
                 child: GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _isBookmarked = !_isBookmarked;
-                    });
+                    bookmarkNotifier.toggleBookmark(meal);
                   },
                   child: Container(
                     padding: const EdgeInsets.all(6),
@@ -185,7 +181,7 @@ class _RecipeImageSectionState extends State<RecipeImageSection> {
                       width: 16,
                       height: 16,
                       colorFilter: ColorFilter.mode(
-                        _isBookmarked ? AppColors.primary80 : AppColors.grey3,
+                        isBookmarked ? AppColors.primary80 : AppColors.grey3,
                         BlendMode.srcIn,
                       ),
                     ),

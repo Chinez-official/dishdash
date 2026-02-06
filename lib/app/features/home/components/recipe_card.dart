@@ -15,7 +15,7 @@ class RecipeCard extends StatelessWidget {
       "name": "Classic Greek Salad",
       "image":
           "https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      "rating": 4.5,
+      "rating": 4.0,
       "time": 15,
     },
     {
@@ -36,14 +36,14 @@ class RecipeCard extends StatelessWidget {
       "name": "Barbecue Chicken Jollof Rice",
       "image":
           "https://images.unsplash.com/photo-1623064260108-4cd9a1880773?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzZ8fFBsYXRlJTIwb2YlMjBCYXJiZWN1ZSUyMENoaWNrZW4lMjBKb2xsb2YlMjBSaWNlfGVufDB8fDB8fHww",
-      "rating": 4.5,
+      "rating": 4.0,
       "time": 10,
     },
     {
       "name": "Portuguese Piri Piri Chicken",
       "image":
           "https://images.unsplash.com/photo-1611270630211-3a7e9496c24c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fVBsYXRlJTIwb2YlMjBQb3J0dWd1ZXNlJTIwUGlyaSUyMFBpcmklMjBDaGlja2VufGVufDB8fDB8fHww",
-      "rating": 4.5,
+      "rating": 4.0,
       "time": 10,
     },
   ];

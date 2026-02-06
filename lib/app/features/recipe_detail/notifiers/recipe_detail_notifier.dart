@@ -25,7 +25,7 @@ class RecipeDetailNotifier extends StateNotifier<RecipeDetailState> {
           state = RecipeDetailState.loaded(
             meal: meal,
             activeTab: 0,
-            isBookmarked: false, // TODO: Check actual bookmark status
+            isBookmarked: false,
           );
         },
         error: (message) {
@@ -59,12 +59,10 @@ class RecipeDetailNotifier extends StateNotifier<RecipeDetailState> {
     );
   }
 
-  /// Toggle bookmark status (placeholder)
+  /// Toggle bookmark status
   void toggleBookmark() {
     state.maybeWhen(
       loaded: (meal, activeTab, isBookmarked) {
-        // TODO: Implement actual bookmark logic
-        // For now, just toggle the local state
         state = RecipeDetailState.loaded(
           meal: meal,
           activeTab: activeTab,

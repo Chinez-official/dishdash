@@ -18,7 +18,9 @@ import '../../features/splash/notifiers/get_user_notifier.dart' as _i566;
 import '../repositories/auth_repository.dart' as _i1002;
 import '../repositories/recipes_repository.dart' as _i14;
 import '../services/api/api_service.dart' as _i561;
+import '../services/storage/bookmark_dao.dart' as _i831;
 import '../services/storage/database.dart' as _i363;
+import '../services/storage/notes_dao.dart' as _i902;
 import '../services/storage/offline_client.dart' as _i548;
 import '../usecases/auth_use_case.dart' as _i67;
 import '../usecases/recipes_use_case.dart' as _i197;
@@ -38,6 +40,12 @@ _i174.GetIt $initGetIt(
   gh.lazySingleton<_i116.GoogleSignIn>(() => authModule.googleSignIn);
   gh.lazySingleton<_i548.OfflineClient>(
     () => _i548.OfflineClientImpl(gh<_i363.AppDatabase>()),
+  );
+  gh.lazySingleton<_i831.BookmarkDao>(
+    () => databaseModule.bookmarkDao(gh<_i363.AppDatabase>()),
+  );
+  gh.lazySingleton<_i902.NotesDao>(
+    () => databaseModule.notesDao(gh<_i363.AppDatabase>()),
   );
   gh.factory<_i561.ApiService>(() => _i561.ApiServiceImpl());
   gh.lazySingleton<_i1002.AuthRepository>(

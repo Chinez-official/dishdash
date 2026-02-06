@@ -10,6 +10,13 @@ import 'package:dishdash/app/features/recipe_detail/notifiers/recipe_detail_noti
 import 'package:dishdash/app/features/recipe_detail/notifiers/recipe_detail_state.dart';
 import 'package:dishdash/app/features/splash/notifiers/get_user_notifier.dart';
 import 'package:dishdash/app/features/splash/notifiers/get_user_state.dart';
+import 'package:dishdash/app/features/bookmark/notifiers/bookmark_notifier.dart';
+import 'package:dishdash/app/features/notes/notifiers/notes_notifier.dart';
+import 'package:dishdash/app/core/models/recipes/meal.dart';
+import 'package:dishdash/app/core/services/storage/database.dart';
+import 'package:dishdash/app/core/services/storage/bookmark_dao.dart';
+import 'package:dishdash/app/core/services/storage/notes_dao.dart';
+import 'package:dishdash/app/core/config/injector.dart';
 import 'package:dishdash/providers/use_case_providers.dart';
 import 'package:hooks_riverpod/legacy.dart';
 
@@ -50,3 +57,15 @@ final recipeDetailNotifierProvider = StateNotifierProvider.family<
   notifier.loadMealDetails(mealId);
   return notifier;
 });
+
+// Bookmark notifier provider
+final bookmarkNotifierProvider =
+    StateNotifierProvider<BookmarkNotifier, List<Meal>>((ref) {
+      return BookmarkNotifier(getIt<BookmarkDao>());
+    });
+
+// Notes notifier provider
+final notesNotifierProvider =
+    StateNotifierProvider<NotesNotifier, List<RecipeNote>>((ref) {
+      return NotesNotifier(getIt<NotesDao>());
+    });
