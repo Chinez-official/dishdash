@@ -27,7 +27,7 @@ Future<void> main() async {
     const SystemUiOverlayStyle(
       systemNavigationBarColor: AppColors.backgroundBody,
       systemNavigationBarIconBrightness:
-          Brightness.light, // White icons to match UI design
+          Brightness.dark, // White icons to match UI design
     ),
   );
 
