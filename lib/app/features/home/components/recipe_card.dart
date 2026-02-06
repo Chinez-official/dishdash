@@ -52,174 +52,180 @@ class RecipeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final recipe = recipes[index];
 
-    // Responsive dimensions
-    final cardWidth = context.wp(150);
-    final cardHeight = context.wp(231);
-    final containerHeight = context.wp(176);
-    final imageSize = context.wp(109);
-    final imageRadius = context.wp(54.5);
+    return ResponsiveBuilder(
+      builder: (context, sizing) {
+        // Responsive dimensions using SizingInformation
+        final cardWidth = sizing.wp(150);
+        final cardHeight = sizing.wp(231);
+        final containerHeight = sizing.wp(176);
+        final imageSize = sizing.wp(109);
+        final imageRadius = sizing.wp(54.5);
 
-    return SizedBox(
-      width: cardWidth,
-      height: cardHeight,
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.topCenter,
-        children: [
-          // 1. The Card Container
-          Positioned(
-            top: context.wp(55),
-            child: Container(
-              width: cardWidth,
-              height: containerHeight,
-              decoration: BoxDecoration(
-                color: AppColors.grey4.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(context.wp(12)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Space for the overlapping circular image
-                  SizedBox(height: context.wp(65)),
-
-                  // Recipe Title with horizontal padding
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: context.wp(20)),
-                    child: Text(
-                      recipe['name']!,
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: context.sp(14),
-                      ),
-                    ),
+        return SizedBox(
+          width: cardWidth,
+          height: cardHeight,
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.topCenter,
+            children: [
+              // 1. The Card Container
+              Positioned(
+                top: sizing.wp(55),
+                child: Container(
+                  width: cardWidth,
+                  height: containerHeight,
+                  decoration: BoxDecoration(
+                    color: AppColors.grey4.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(sizing.wp(12)),
                   ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Space for the overlapping circular image
+                      SizedBox(height: sizing.wp(65)),
 
-                  // Spacer pushes the Row to the bottom
-                  const Spacer(),
+                      // Recipe Title with horizontal padding
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: sizing.wp(20),
+                        ),
+                        child: Text(
+                          recipe['name']!,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: sizing.sp(14),
+                          ),
+                        ),
+                      ),
 
-                  // Row for Time and Bookmark Icon
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      context.wp(12),
-                      0,
-                      context.wp(12),
-                      context.wp(16),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Column for the Time Display
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      // Spacer pushes the Row to the bottom
+                      const Spacer(),
+
+                      // Row for Time and Bookmark Icon
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          sizing.wp(12),
+                          0,
+                          sizing.wp(12),
+                          sizing.wp(16),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Time',
-                              style: TextStyle(
-                                color: AppColors.grey3,
-                                fontSize: context.sp(11),
-                              ),
+                            // Column for the Time Display
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Time',
+                                  style: TextStyle(
+                                    color: AppColors.grey3,
+                                    fontSize: sizing.sp(11),
+                                  ),
+                                ),
+                                SizedBox(height: sizing.wp(2)),
+                                Text(
+                                  '${recipe['time']} Mins',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: sizing.sp(11),
+                                    color: AppColors.grey1,
+                                  ),
+                                ),
+                              ],
                             ),
-                            SizedBox(height: context.wp(2)),
-                            Text(
-                              '${recipe['time']} Mins',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: context.sp(11),
-                                color: AppColors.grey1,
-                              ),
+
+                            // Bookmark Icon
+                            Padding(
+                              padding: EdgeInsets.only(top: sizing.wp(8)),
+                              child: const BookmarkIcon(),
                             ),
                           ],
                         ),
-
-                        // Bookmark Icon
-                        Padding(
-                          padding: EdgeInsets.only(top: context.wp(8)),
-                          child: const BookmarkIcon(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // 2. The Overlapping Image with caching
-          Positioned(
-            top: 0,
-            child: Container(
-              width: imageSize,
-              height: imageSize + context.wp(1),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.textMain.withValues(alpha: 0.15),
-                    offset: Offset(0, context.wp(8)),
-                    blurRadius: context.wp(25),
-                    spreadRadius: 0,
-                  ),
-                ],
-              ),
-              child: CircleAvatar(
-                radius: imageRadius,
-                backgroundColor: AppColors.backgroundBody,
-                child: ClipOval(
-                  child: CachedNetworkImage(
-                    imageUrl: recipe['image']!,
-                    width: imageSize,
-                    height: imageSize + context.wp(1),
-                    fit: BoxFit.cover,
-                    placeholder:
-                        (context, url) => Container(
-                          width: imageSize,
-                          height: imageSize + context.wp(1),
-                          decoration: const BoxDecoration(
-                            color: AppColors.backgroundBody,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: SizedBox(
-                              width: context.wp(32),
-                              height: context.wp(32),
-                              child: const CircularProgressIndicator(
-                                strokeWidth: 3,
-                                color: AppColors.primary100,
-                              ),
-                            ),
-                          ),
-                        ),
-                    errorWidget:
-                        (context, url, error) => Container(
-                          width: imageSize,
-                          height: imageSize + context.wp(1),
-                          decoration: const BoxDecoration(
-                            color: AppColors.backgroundBody,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.image_not_supported,
-                            color: AppColors.grey3,
-                            size: context.wp(32),
-                          ),
-                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
-          ),
 
-          // 3. The Rating Badge
-          Positioned(
-            top: context.wp(27),
-            right: 0,
-            child: RatingBadge(rating: recipe['rating']),
+              // 2. The Overlapping Image with caching
+              Positioned(
+                top: 0,
+                child: Container(
+                  width: imageSize,
+                  height: imageSize + sizing.wp(1),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.textMain.withValues(alpha: 0.15),
+                        offset: Offset(0, sizing.wp(8)),
+                        blurRadius: sizing.wp(25),
+                        spreadRadius: 0,
+                      ),
+                    ],
+                  ),
+                  child: CircleAvatar(
+                    radius: imageRadius,
+                    backgroundColor: AppColors.backgroundBody,
+                    child: ClipOval(
+                      child: CachedNetworkImage(
+                        imageUrl: recipe['image']!,
+                        width: imageSize,
+                        height: imageSize + sizing.wp(1),
+                        fit: BoxFit.cover,
+                        placeholder:
+                            (context, url) => Container(
+                              width: imageSize,
+                              height: imageSize + sizing.wp(1),
+                              decoration: const BoxDecoration(
+                                color: AppColors.backgroundBody,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: SizedBox(
+                                  width: sizing.wp(32),
+                                  height: sizing.wp(32),
+                                  child: const CircularProgressIndicator(
+                                    strokeWidth: 3,
+                                    color: AppColors.primary100,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        errorWidget:
+                            (context, url, error) => Container(
+                              width: imageSize,
+                              height: imageSize + sizing.wp(1),
+                              decoration: const BoxDecoration(
+                                color: AppColors.backgroundBody,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.image_not_supported,
+                                color: AppColors.grey3,
+                                size: sizing.wp(32),
+                              ),
+                            ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              // 3. The Rating Badge
+              Positioned(
+                top: sizing.wp(27),
+                right: 0,
+                child: RatingBadge(rating: recipe['rating']),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

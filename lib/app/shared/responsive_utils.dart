@@ -1,66 +1,124 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
-/// Utility class for creating responsive layouts across different screen sizes.
-/// Uses a reference design width of 375dp (iPhone 11 width) as the baseline.
-class ResponsiveUtils {
-  static const double _designWidth = 375.0;
-  static const double _designHeight = 812.0;
+/// Device screen type classification
+enum DeviceScreenType { phone, tablet }
 
-  /// Gets the current screen width
-  static double screenWidth(BuildContext context) {
-    return MediaQuery.sizeOf(context).width;
+/// Determines device type based on shortest side of screen
+DeviceScreenType getDeviceType(MediaQueryData mediaQuery) {
+  double deviceWidth = mediaQuery.size.shortestSide;
+  if (deviceWidth > 600) {
+    return DeviceScreenType.tablet;
   }
+  return DeviceScreenType.phone;
+}
 
-  /// Gets the current screen height
-  static double screenHeight(BuildContext context) {
-    return MediaQuery.sizeOf(context).height;
-  }
+/// Contains sizing information for responsive layouts
+class SizingInformation {
+  final DeviceScreenType deviceScreenType;
+  final Size screenSize;
+  final Size localWidgetSize;
 
-  /// Scales a width value based on the screen width relative to design width.
-  /// Example: wp(150, context) on a 400dp wide screen returns 160dp
-  static double wp(double designPixels, BuildContext context) {
-    return designPixels * (screenWidth(context) / _designWidth);
-  }
+  SizingInformation({
+    required this.deviceScreenType,
+    required this.screenSize,
+    required this.localWidgetSize,
+  });
 
-  /// Scales a height value based on the screen height relative to design height.
-  static double hp(double designPixels, BuildContext context) {
-    return designPixels * (screenHeight(context) / _designHeight);
-  }
+  bool get isPhone => deviceScreenType == DeviceScreenType.phone;
+  bool get isTablet => deviceScreenType == DeviceScreenType.tablet;
 
-  /// Scales a font size based on screen width for consistent text sizing.
-  /// Uses a slightly less aggressive scaling to keep text readable.
-  static double sp(double designFontSize, BuildContext context) {
-    final scaleFactor = screenWidth(context) / _designWidth;
-    // Limit scaling between 0.85x and 1.15x to prevent extreme sizes
-    final clampedFactor = scaleFactor.clamp(0.85, 1.15);
-    return designFontSize * clampedFactor;
-  }
+  /// Scale factor based on reference width of 375dp (iPhone 11)
+  double get scaleFactor => screenSize.width / 375.0;
 
-  /// Returns true if the screen is considered "small" (width < 360dp)
-  static bool isSmallScreen(BuildContext context) {
-    return screenWidth(context) < 360;
-  }
+  /// Scale a width value proportionally
+  double wp(double value) => value * scaleFactor;
 
-  /// Returns true if the screen is considered "large" (width >= 400dp)
-  static bool isLargeScreen(BuildContext context) {
-    return screenWidth(context) >= 400;
+  /// Scale a font size with clamping for readability
+  double sp(double value) {
+    final clampedFactor = scaleFactor.clamp(0.85, 1.2);
+    return value * clampedFactor;
   }
 }
 
-/// Extension on BuildContext for easier access to responsive utilities
+/// Responsive builder that provides sizing information based on constraints
+class ResponsiveBuilder extends StatelessWidget {
+  final Widget Function(
+    BuildContext context,
+    SizingInformation sizingInformation,
+  )
+  builder;
+
+  const ResponsiveBuilder({super.key, required this.builder});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, boxConstraints) {
+        var mediaQuery = MediaQuery.of(context);
+        var sizingInformation = SizingInformation(
+          deviceScreenType: getDeviceType(mediaQuery),
+          screenSize: mediaQuery.size,
+          localWidgetSize: Size(
+            boxConstraints.maxWidth,
+            boxConstraints.maxHeight,
+          ),
+        );
+        return builder(context, sizingInformation);
+      },
+    );
+  }
+}
+
+/// Wrapper that provides different layouts for phone vs tablet
+class ResponsiveWrapper extends StatelessWidget {
+  final Widget child;
+  final Widget Function(BuildContext context, Widget? child) phoneBuilder;
+  final Widget Function(BuildContext context, Widget? child) tabletBuilder;
+
+  const ResponsiveWrapper({
+    super.key,
+    required this.child,
+    required this.phoneBuilder,
+    required this.tabletBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 600) {
+          return phoneBuilder(context, child);
+        } else {
+          return tabletBuilder(context, child);
+        }
+      },
+    );
+  }
+}
+
+/// Extension on BuildContext for quick access to sizing
 extension ResponsiveContext on BuildContext {
-  /// Shorthand for ResponsiveUtils.wp(value, context)
-  double wp(double value) => ResponsiveUtils.wp(value, this);
-
-  /// Shorthand for ResponsiveUtils.hp(value, context)
-  double hp(double value) => ResponsiveUtils.hp(value, this);
-
-  /// Shorthand for ResponsiveUtils.sp(value, context)
-  double sp(double value) => ResponsiveUtils.sp(value, this);
-
   /// Get screen width
-  double get screenWidth => ResponsiveUtils.screenWidth(this);
+  double get screenWidth => MediaQuery.sizeOf(this).width;
 
   /// Get screen height
-  double get screenHeight => ResponsiveUtils.screenHeight(this);
+  double get screenHeight => MediaQuery.sizeOf(this).height;
+
+  /// Scale factor based on 375dp reference width
+  double get scaleFactor => screenWidth / 375.0;
+
+  /// Shorthand for scaling width values
+  double wp(double value) => value * scaleFactor;
+
+  /// Shorthand for scaling font sizes (clamped)
+  double sp(double value) {
+    final clampedFactor = scaleFactor.clamp(0.85, 1.2);
+    return value * clampedFactor;
+  }
+
+  /// Check if device is a phone
+  bool get isPhone => MediaQuery.sizeOf(this).shortestSide <= 600;
+
+  /// Check if device is a tablet
+  bool get isTablet => MediaQuery.sizeOf(this).shortestSide > 600;
 }
