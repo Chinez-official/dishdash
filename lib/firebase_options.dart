@@ -53,10 +53,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB8MqO4oRcgpAmkTcGp_h9sYTcNS5nFzkg',
+    apiKey: 'AIzaSyA1WHJYWsU9xomnlW0rIND_3CZaU6Ymefc',
     appId: '1:516098197552:android:021843aec8b6e6de2c05f5',
     messagingSenderId: '516098197552',
     projectId: 'dishdash-25b0d',
     storageBucket: 'dishdash-25b0d.firebasestorage.app',
   );
+
 }
